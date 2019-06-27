@@ -1,0 +1,34 @@
+{
+    "name": "Mix Tab",
+    "version": "0.1",
+    "description": "control all tabs' audio via one simple extension!",
+
+    "permissions": ["storage"],
+
+    "options_page": "options/options.html",
+
+    "background": {
+        "scripts": ["TODO need to complete"],
+
+        "": "I think I need to remove the persistent tag",
+        "persistent": false
+    },
+
+    "page_action": {
+        "default_popup": "TODO need to complete",
+        "default_icon": {
+            "TODO need all 5 sizes, 16, 32, 48, 128, 256 as pngs": ""
+        }
+    },
+
+    "web_accessible_resouces": ["res/*.png"],
+
+
+    "icons": {
+        "TODO need to complete, again need all 5":""
+    },
+
+
+    "manifest version": 2
+
+}
