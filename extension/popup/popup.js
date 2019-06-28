@@ -5,11 +5,8 @@ let mute_test = document.getElementById('mute_test');
 mute_test.onclick = function(element) {
     console.log("button pressed");
 
-    chrome.tabCapture.capture(
-        {audio: true, video:false},
-        // call back function
-        function(stream){
-            console.log("got stream: ", stream);
-        }
-    );
+    // request the tab capture
+    chrome.runtime.sendMessage({
+        action: 'fetch_audio_stream'
+    });
 }

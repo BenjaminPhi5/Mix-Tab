@@ -3,7 +3,7 @@
     "version": "0.1",
     "description": "control all tabs' audio via one simple extension!",
 
-    "permissions": ["storage"],
+    "permissions": ["storage", "<all_urls>", "tabs", "activeTab"],
 
     "options_page": "options/options.html",
 
