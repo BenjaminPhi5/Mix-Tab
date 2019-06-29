@@ -8,7 +8,20 @@ chrome.runtime.onInstalled.addListener(function (){
     chrome.storage.sync.set({sliderValue: 100});
 });
 
-// will setup a demo storing slider state in here
+var popupPort;
+// port connection from popup for when popup closes
+chrome.runtime.onConnect.addListener(function(port){
+    popupPort = port;
+    popupPort.onMessage.addListener(function(message){
+        console.log("message that I got:", message)
+        // store all the state in the message
+    });
+
+    port.onDisconnect.addListener(function(message) {
+        // popup should have closed now
+        console.log("disconnect recieved: ", message);
+    });
+});
 
 
 // setup message listener, when tab audio requested, just output a log of the stream
