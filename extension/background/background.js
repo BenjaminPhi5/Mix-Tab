@@ -1,8 +1,8 @@
 // background script goes here, to inject content script eventually I imagine
+var audioContextsList = []; // the audio contexts of current live tabs
+var gainNodesList = [];     // gain nodes for current live tabs
+var tabsList = [];          // the tabs that are currently live
 
-// testing setup for a single audio context
-var audioContext = new AudioContext();
-var gainNode = audioContext.createGain();
 
 // on install, eventually should setup settings, for now just write to console
 chrome.runtime.onInstalled.addListener(function (){
@@ -27,7 +27,7 @@ chrome.runtime.onConnect.addListener(function(port){
 });
 
 
-// setup message listener, when tab audio requested, just output a log of the stream
+// setup message listener, check for different messages and act approporiately
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // the message listener will recieve a request message, who sent it and a callback? I think, not sure
     
@@ -35,40 +35,42 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     if(request.action === 'fetch_audio_stream') {
         console.log("my mesage for audio fetch recieved");
 
-        chrome.tabCapture.capture({
-			audio : true,
-			video : false
-		}, function(stream) {
-            console.log('slider value:', request.slider_value)
-			console.log('stream', stream);
-            //I can attach all my filter here...
+        try{
+            // capture the active tab
+            chrome.tabCapture.capture({
+			    audio : true,
+			    video : false
+		    }, function(stream) {
+			    //console.log('stream', stream);
+                //I can attach audio stuff here
 
-            // create an audio context
-            //var audioContext = new AudioContext();
-            //var gainNode = audioContext.createGain();
+                // create an audio context
+                var audioContext = new AudioContext();
+                var gainNode = audioContext.createGain();
 
-            // get a source
-            var source = audioContext.createMediaStreamSource(stream);
-            console.log('i managed to create an audio context.. yay')
+                // get a source, attach the gain node
+                var source = audioContext.createMediaStreamSource(stream);
+                source.connect(gainNode);
+                gainNode.connect(audioContext.destination);
             
-            
-            
-            source.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-
-            console.log("here is my audio context, source, and gain node: ", audioContext, source, gainNode);
-            console.log("min and max value", gainNode.gain.minValue, gainNode.gain.maxValue);
-            console.log("current value", gainNode.gain.value);
-            gainNode.gain.value = 0;
-            console.log("updated value", gainNode.gain.value);
-            
-
+                // now push the new nodes to the list store
+                audioContextsList.push(audioContext);
+                gainNodesList.push(gainNode);
         });
+
+        } catch(err) {
+            // in this case do nothing, since there is no audio context to capture
+            if(err.name !== 'TypeError'){
+                console.error("Not the error type I was expecting")
+            }
+        }
+
     // the recieve an update gain message    
     } else if (request.action === 'update-gain'){
         console.log("value recived: " + request.slider_value);
         gainNode.gain.value = parseInt(request.slider_value)/100;
     
+    // when asked to retrive a gain node    
     } else if(request.action == 'fetch-gain-node'){
             sendResponse(gainNode);
     }
