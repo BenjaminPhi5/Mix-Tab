@@ -1,5 +1,8 @@
 // background script goes here, to inject content script eventually I imagine
 
+// testing setup for a single audio context
+var audioContext = new AudioContext();
+var gainNode = audioContext.createGain();
 
 // on install, eventually should setup settings, for now just write to console
 chrome.runtime.onInstalled.addListener(function (){
@@ -25,7 +28,7 @@ chrome.runtime.onConnect.addListener(function(port){
 
 
 // setup message listener, when tab audio requested, just output a log of the stream
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // the message listener will recieve a request message, who sent it and a callback? I think, not sure
     
     // if its my message
@@ -41,9 +44,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
             //I can attach all my filter here...
 
             // create an audio context
-            var audioContext = new AudioContext();
-            var gainNode = audioContext.createGain();
-            //var destination = audioContext.createMediaStreamDestination();
+            //var audioContext = new AudioContext();
+            //var gainNode = audioContext.createGain();
 
             // get a source
             var source = audioContext.createMediaStreamSource(stream);
@@ -57,18 +59,21 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
             console.log("here is my audio context, source, and gain node: ", audioContext, source, gainNode);
             console.log("min and max value", gainNode.gain.minValue, gainNode.gain.maxValue);
             console.log("current value", gainNode.gain.value);
-            gainNode.gain.value *= 5;
+            gainNode.gain.value = 0;
             console.log("updated value", gainNode.gain.value);
             
 
-		});
-    } 
+        });
+    // the recieve an update gain message    
+    } else if (request.action === 'update-gain'){
+        console.log("value recived: " + request.slider_value);
+        gainNode.gain.value = parseInt(request.slider_value)/100;
+    
+    } else if(request.action == 'fetch-gain-node'){
+            sendResponse(gainNode);
+    }
 
 });
-
-
-
-
 
 
 

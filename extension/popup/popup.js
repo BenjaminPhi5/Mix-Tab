@@ -1,8 +1,11 @@
 // get html element
 let mute_test = document.getElementById('mute_test');
-let gain_slider = document.getElementById('gainslider');
+var gain_slider = document.getElementById('gainslider');
+let second_slider = document.getElementById('secondslider');
+let third_slider = document.getElementById('thirdslider');
 let label1 = document.getElementById('label1');
 let date = new Date();
+var gainNode;
 
 // IF I CAN EVER WORK OUT HOW TO GET THIS BACKGROUND PORT THING TO WORK
 // THE IDEA IS THAT YOU ONLY SAVE THE STATE WHEN THE POPUP ACTUALLY CLOSES, AND I THINK THIS THING ACHIEVES THIS
@@ -37,6 +40,12 @@ window.addEventListener("change", function(event){
 
     // however, we only want to store the value when popup is closed, but do!!
     // want to update audio values upon a slider change.
+    /*
+    chrome.runtime.sendMessage({
+        action: 'update-gain',
+        slider_value: gain_slider.value
+    });
+    */
     
 });
 
@@ -47,17 +56,14 @@ window.addEventListener("input", function(event){
     if(event.target.parentElement.className === "slider"){
         label1.innerHTML = "slider value: " + evvalue;
 
-
         // now update the audio gain in the two different ways with the two different sliders.
-        // version 1, by sending a message:
+        /*
         chrome.runtime.sendMessage({
-            action: 'gain-update',
-            // need to deal with is this a string not a number...?
-            value: evvalue
+            action: 'update-gain',
+            slider_value: evvalue
         });
-
-
-        // version 2 - where we already have the audio thing
+        */
+       gainNode.gain.value = parseInt(evvalue)/100;
     }
 });
 
@@ -73,6 +79,13 @@ window.addEventListener("load", function(){
         console.log("setting value to: ", data.sliderValue);
         gain_slider.value = data.sliderValue;
     });
+
+    // now fetch the gain node from the background...
+    // so yes, everything is going to be handled from the popup script now oh yes I know, its terrible.
+    console.log("background page: ", chrome.extension.getBackgroundPage().gainNode);
+    gainNode = chrome.extension.getBackgroundPage().gainNode;
+    console.log("background page2 :", chrome.extension.getBackgroundPage().gainNode);
+    
 
 });
 
