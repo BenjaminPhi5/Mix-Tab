@@ -31,6 +31,7 @@ window.addEventListener("change", function(event){
     
     if(event.target.parentElement.className === "slider"){
         chrome.storage.sync.set({'sliderValue': event.target.value});
+        label1.innerHTML = "slider value: " + event.target.value;
     }
     
 
@@ -39,6 +40,13 @@ window.addEventListener("change", function(event){
     
 });
 
+// input is the message used for sliders that gradually change their value
+window.addEventListener("input", function(event){
+    // if its a slider continually update a value
+    if(event.target.parentElement.className === "slider"){
+        label1.innerHTML = "slider value: " + event.target.value;
+    }
+});
 
 /*
     On load, setup the UI
