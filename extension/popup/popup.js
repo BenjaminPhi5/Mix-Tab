@@ -43,8 +43,21 @@ window.addEventListener("change", function(event){
 // input is the message used for sliders that gradually change their value
 window.addEventListener("input", function(event){
     // if its a slider continually update a value
+    let evvalue = event.target.value;
     if(event.target.parentElement.className === "slider"){
-        label1.innerHTML = "slider value: " + event.target.value;
+        label1.innerHTML = "slider value: " + evvalue;
+
+
+        // now update the audio gain in the two different ways with the two different sliders.
+        // version 1, by sending a message:
+        chrome.runtime.sendMessage({
+            action: 'gain-update',
+            // need to deal with is this a string not a number...?
+            value: evvalue
+        });
+
+
+        // version 2 - where we already have the audio thing
     }
 });
 
