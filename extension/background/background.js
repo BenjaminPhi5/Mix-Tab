@@ -1,9 +1,14 @@
 // background script goes here, to inject content script eventually I imagine
 
+
 // on install, eventually should setup settings, for now just write to console
 chrome.runtime.onInstalled.addListener(function (){
     console.log("extension installed");
+    // store the value for my slider:
+    chrome.storage.sync.set({sliderValue: 100});
 });
+
+// will setup a demo storing slider state in here
 
 
 // setup message listener, when tab audio requested, just output a log of the stream
@@ -18,6 +23,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 			audio : true,
 			video : false
 		}, function(stream) {
+            console.log('slider value:', request.slider_value)
 			console.log('stream', stream);
             //I can attach all my filter here...
 
@@ -43,7 +49,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
             
 
 		});
-    }
+    } 
 
 });
 
