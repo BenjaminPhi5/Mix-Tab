@@ -3,15 +3,14 @@
     "version": "0.1",
     "description": "control all tabs' audio via one simple extension!",
 
-    "permissions": ["storage", "<all_urls>", "tabs", "activeTab"],
+    "permissions": ["storage", "<all_urls>", "tabs", "activeTab", "tabCapture"],
 
     "options_page": "options/options.html",
 
     "background": {
         "scripts": ["background/background.js"],
 
-        "": "I think I need to remove the persistent tag",
-        "persistent": false
+        "": "I think I need to remove the persistent tag"
     },
 
     "browser_action": {
