@@ -1,6 +1,5 @@
 // background script goes here, to inject content script eventually I imagine
 
-
 // on install, eventually should setup settings, for now just write to console
 chrome.runtime.onInstalled.addListener(function (){
     console.log("extension installed");
@@ -15,26 +14,61 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
     if(request.action === 'fetch_audio_stream') {
         console.log("my mesage for audio fetch recieved");
 
-        chrome.loadofoldnonsense.capture({
+        chrome.tabCapture.capture({
 			audio : true,
 			video : false
 		}, function(stream) {
 			console.log('stream', stream);
-			//I can attach all my filter here...
+            //I can attach all my filter here...
+
+            // create an audio context
+            var audioContext = new AudioContext();
+            var gainNode = audioContext.createGain();
+            //var destination = audioContext.createMediaStreamDestination();
+
+            // get a source
+            var source = audioContext.createMediaStreamSource(stream);
+            console.log('i managed to create an audio context.. yay')
+            
+            
+            
+            source.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            console.log("here is my audio context, source, and gain node: ", audioContext, source, gainNode);
+            console.log("min and max value", gainNode.gain.minValue, gainNode.gain.maxValue);
+            console.log("current value", gainNode.gain.value);
+            gainNode.gain.value *= 5;
+            console.log("updated value", gainNode.gain.value);
+            
+
 		});
     }
 
 });
+
+
+
+
+
+
+
+
+
+
 /*
-// log the change of status of tabs
+// log the change of status of tabs may need this is a tab now has some audio to stream
 chrome.tabCapture.onStatusChanged.addListener(function (captureInfo){
     console.log("captureInfo: ", captureInfo);
 });
 */
-let callback = function(info){console.log("got some info");}
-chrome.browserAction.onClicked.addListener(function(request) {
-    console.log("well at least something happened");
-    chrome.tabs.getSelected(null, function(tab) {
-        chrome.tabCapture.capture({audio: true, video: true}, callback);
-    });
-});
+
+/*
+trigger the extension on certain websites where the audio is known to not work - e.g. to get netflix silverlight
+or something like that and make it all work via a browser action.
+chrome.runtime.onMessageExternal.addListener(
+    function(request, sender, response){
+        // verify `sender.url`, read `request` object, reply with `sednResponse(...)`
+    }
+)
+*/
