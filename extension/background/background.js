@@ -39,49 +39,61 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     if(request.action === 'fetch_audio_stream') {
         console.log("my mesage for audio fetch recieved");
 
-        chrome.tabCapture.capture({
-			audio : true,
-		    video : false
-	    }, function(stream) {
-            try{
+        // fetch tab id
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            var currTab = tabs[0];
+            if (currTab) { // Sanity check
+                // get id
+                var tabid = currTab.id;
 
-                console.log('slider value:', request.slider_value)
-			    console.log('stream', stream);
-                //I can attach all my filter here...
-                // create an audio context
-                var audioContext = new AudioContext();
-                var gainNode = audioContext.createGain();
+                // fetch audio
+                chrome.tabCapture.capture({
+			        audio : true,
+		            video : false
+	            }, function(stream) {
+                    try{
 
-                // get a source
-                var source = audioContext.createMediaStreamSource(stream);
-                console.log('i managed to create an audio context.. yay')
+                        console.log('slider value:', request.slider_value)
+			            console.log('stream', stream);
+                        //I can attach all my filter here...
+                        // create an audio context
+                        var audioContext = new AudioContext();
+                        var gainNode = audioContext.createGain();
+
+                        // get a source
+                        var source = audioContext.createMediaStreamSource(stream);
+                        console.log('i managed to create an audio context.. yay')
             
             
             
-                source.connect(gainNode);
-                gainNode.connect(audioContext.destination);
+                        source.connect(gainNode);
+                        gainNode.connect(audioContext.destination);
 
-                console.log("here is my audio context, source, and gain node: ", audioContext, source, gainNode);
-                console.log("min and max value", gainNode.gain.minValue, gainNode.gain.maxValue);
-                console.log("current value", gainNode.gain.value);
-                //gainNode.gain.value = 0;
-                console.log("updated value", gainNode.gain.value);
+                        console.log("here is my audio context, source, and gain node: ", audioContext, source, gainNode);
+                        console.log("min and max value", gainNode.gain.minValue, gainNode.gain.maxValue);
+                        console.log("current value", gainNode.gain.value);
+                        //gainNode.gain.value = 0;
+                        console.log("updated value", gainNode.gain.value);
 
-                // add gain node to audios list
-                audioControlList[stream.id] = {node: gainNode};
-                console.log("audioControl: ",audioControlList);
+                        // add gain node to audios list
+                        audioControlList[tabid] = {node: gainNode, streamid: stream.id, valid:true};
 
-                // send message to popup to add new slider
-                chrome.runtime.sendMessage({
-                    action: 'new-audio-control',
-                    key: stream.id
-                })
+                        console.log("audioControl: ",audioControlList);
 
-            } catch(err) {
-                console.log("audio stream cannot be fetched, which may be a good thing, cause:", err);
+                        // send message to popup to add new slider
+                        chrome.runtime.sendMessage({
+                            action: 'new-audio-control',
+                            key: tabid
+                        })
+                    } catch(err) {
+                        console.log("audio stream cannot be fetched, which may be a good thing, cause:", err);
+                    }
+
+                });
             }
-
         });
+
+        
 
         
     // the recieve an update gain message    
@@ -95,7 +107,27 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
 });
 
+/*
+Listen for closing tabs
+send message of a closed tab to the popup mebbe
+*/
+chrome.tabs.onRemoved.addListener(function(tabId, removeInfo){
+    console.log("removedTab id: ", tabId);
+    // now can't just remove the thing for concurrency issues a silder may try and undate and old thing,
+    // so I need to include some special valid state. set valid to false if the thing is not valid.
 
+    // now to send message to remove the slider with that particular id
+    // check if id is being used
+    if(audioControlList[tabId]){
+        audioControlList[tabId].valid = false;
+        
+        // send message saying audio value is to be removed
+        chrome.runtime.sendMessage({
+            action: 'tab-close',
+            key: tabId
+        })
+    }
+});
 
 
 

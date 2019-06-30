@@ -4,6 +4,7 @@ let testslider = document.getElementById('testslider');
 var tablist;
 
 let mute_test = document.getElementById('mute_test');
+let logbutton = document.getElementById('log');
 var gain_slider = document.getElementById('gainslider');
 let second_slider = document.getElementById('secondslider');
 let third_slider = document.getElementById('thirdslider');
@@ -30,6 +31,11 @@ mute_test.onclick = function(element) {
     });
 }
 
+// LOG ON CLICK
+logbutton.onclick = function(element) {
+    console.log("LOG: ", audios);
+}
+
 /*
     Getting updates from UI
 */
@@ -45,8 +51,14 @@ window.addEventListener("change", function(event){
 });
 
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
+    // if a new audio control has been clicked on and added
     if(request.action === 'new-audio-control'){
         addExtraTab(request.key);
+    }
+
+    // if an audio control has been removed, its slider needs to dissapear
+    if(request.action === 'tab-close'){
+        removeExtraTab(request.key);
     }
 });
 
@@ -81,7 +93,7 @@ window.addEventListener("input", function(event){
 function mkSlider(id, value){
     //template: <input id="gainslider" type="range" min="1" max="100" value="50"></input>
     let slider = document.createElement('input');
-    slider.id = id;
+    slider.id = String(id);
     slider.type = "range";
     slider.min = "0";
     slider.max = "100";
@@ -99,18 +111,27 @@ function loadCapturedTabs(){
 
     var i = 0;
     for(var key in audios){
-        mkSlider(key, audios[key].node.gain.value * 100);
+        // sanity check - if its valid
+        if(audios[key].valid){
+            mkSlider(key, audios[key].node.gain.value * 100);
+        }
     }
 
 }
 
 // load a new tab into the popup
 function addExtraTab(key){
-    // can also try passing in the audio node
-    index = audios.length - 1;
-    mkSlider(key, audios[key].node.gain.value * 100);
+    // sanity check - if its valid
+    if(audios[key].valid){
+        mkSlider(key, audios[key].node.gain.value * 100);
+    }
 }
 
+// remove slider for deleted audio.. can a tab just close in the background... it doesnt seem so but ill add it anyway
+function removeExtraTab(key){
+    // remove child element from the div section, by the id of the child.
+    testslider.removeChild(document.getElementById(String(key)));
+}
 
 window.addEventListener("load", function(){
     console.log("the popup was loaded on");
