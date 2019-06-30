@@ -1,7 +1,7 @@
 // background script goes here, to inject content script eventually I imagine
 // testing for creating multiple objects
 var tabstrings = ["label a", "lable b", "label c"];
-var audioControlList = [];
+var audioControlList = {};
 
 
 // testing setup for a single audio context
@@ -68,12 +68,13 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
                 console.log("updated value", gainNode.gain.value);
 
                 // add gain node to audios list
-                audioControlList.push(gainNode);
+                audioControlList[stream.id] = {node: gainNode};
                 console.log("audioControl: ",audioControlList);
 
                 // send message to popup to add new slider
                 chrome.runtime.sendMessage({
-                    action: 'new-audio-control'
+                    action: 'new-audio-control',
+                    key: stream.id
                 })
 
             } catch(err) {

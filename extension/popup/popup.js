@@ -34,7 +34,7 @@ mute_test.onclick = function(element) {
     Getting updates from UI
 */
 window.addEventListener("change", function(event){
-
+    console.log("audio object: ", audios);
     // if its a slider, set its value to the slider value
     
     if(event.target.parentElement.className === "slider"){
@@ -46,7 +46,7 @@ window.addEventListener("change", function(event){
 
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
     if(request.action === 'new-audio-control'){
-        addExtraTab();
+        addExtraTab(request.key);
     }
 });
 
@@ -56,28 +56,18 @@ window.addEventListener("input", function(event){
     let evvalue = event.target.value;
     if(event.target.parentElement.className === "slider"){
         label1.innerHTML = "slider value: " + evvalue;
-
-        // now update the audio gain in the two different ways with the two different sliders.
-        /*
-        chrome.runtime.sendMessage({
-            action: 'update-gain',
-            slider_value: evvalue
-        });
-        */
-       //gainNode.gain.value = parseInt(evvalue)/100;
     }
-
     if(event.target.parentElement.className === 'testslider'){
 
         // load from gain node list
         label1.innerHTML = "slider value: " + evvalue;
         
-        index = parseInt(event.target.id);
+        index = event.target.id;
 
         this.console.log("change gain in list: ", audios);
         this.console.log("current index:", index);
         this.console.log(testslider);
-        audios[index].gain.value = parseInt(evvalue)/100;
+        audios[index].node.gain.value = parseInt(evvalue)/100;
     }
 });
 
@@ -91,7 +81,7 @@ window.addEventListener("input", function(event){
 function mkSlider(id, value){
     //template: <input id="gainslider" type="range" min="1" max="100" value="50"></input>
     let slider = document.createElement('input');
-    slider.id = String(id);
+    slider.id = id;
     slider.type = "range";
     slider.min = "0";
     slider.max = "100";
@@ -108,17 +98,17 @@ function loadCapturedTabs(){
     console.log("html tags:", testslider);
 
     var i = 0;
-    for(i = 0; i < audios.length; i++){
-        mkSlider(i, audios[i].gain.value * 100);
+    for(var key in audios){
+        mkSlider(key, audios[key].node.gain.value * 100);
     }
 
 }
 
 // load a new tab into the popup
-function addExtraTab(){
+function addExtraTab(key){
     // can also try passing in the audio node
     index = audios.length - 1;
-    mkSlider(index, audios[index].gain.value * 100);
+    mkSlider(key, audios[key].node.gain.value * 100);
 }
 
 
