@@ -27,13 +27,19 @@ chrome.runtime.onConnect.addListener(function(port){
 });
 
 
+<<<<<<< HEAD
 // setup message listener, check for different messages and act approporiately
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
+=======
+// setup message listener, when tab audio requested, just output a log of the stream
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+>>>>>>> parent of b98dc9f... properly linked my gain node to my slider
     // the message listener will recieve a request message, who sent it and a callback? I think, not sure
     
     // if its my message
     if(request.action === 'fetch_audio_stream') {
         console.log("my mesage for audio fetch recieved");
+<<<<<<< HEAD
         console.log("request: ", request);
         console.log("send_resp: ", sendResponse);
 
@@ -66,6 +72,36 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
                     var source = audioContext.createMediaStreamSource(stream);
                     source.connect(gainNode);
                     gainNode.connect(audioContext.destination);
+=======
+
+        chrome.tabCapture.capture({
+			audio : true,
+			video : false
+		}, function(stream) {
+            console.log('slider value:', request.slider_value)
+			console.log('stream', stream);
+            //I can attach all my filter here...
+
+            // create an audio context
+            var audioContext = new AudioContext();
+            var gainNode = audioContext.createGain();
+            //var destination = audioContext.createMediaStreamDestination();
+
+            // get a source
+            var source = audioContext.createMediaStreamSource(stream);
+            console.log('i managed to create an audio context.. yay')
+            
+            
+            
+            source.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+
+            console.log("here is my audio context, source, and gain node: ", audioContext, source, gainNode);
+            console.log("min and max value", gainNode.gain.minValue, gainNode.gain.maxValue);
+            console.log("current value", gainNode.gain.value);
+            gainNode.gain.value *= 5;
+            console.log("updated value", gainNode.gain.value);
+>>>>>>> parent of b98dc9f... properly linked my gain node to my slider
             
                     // now push the new nodes to the list store
                     audioContextsList.push(audioContext);
@@ -85,6 +121,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         // now call the callback function:
         sendResponse(true);
 
+<<<<<<< HEAD
     // the recieve an update gain message    
     } else if (request.action === 'update-gain'){
         console.log("value recived: " + request.slider_value);
@@ -94,8 +131,16 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     } else if(request.action == 'fetch-gain-node'){
             sendResponse(gainNode);
     }
+=======
+		});
+    } 
+>>>>>>> parent of b98dc9f... properly linked my gain node to my slider
 
 });
+
+
+
+
 
 
 

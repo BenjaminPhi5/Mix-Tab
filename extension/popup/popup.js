@@ -1,13 +1,14 @@
 // get html element
 let mute_test = document.getElementById('mute_test');
-var gain_slider = document.getElementById('gainslider');
-let second_slider = document.getElementById('secondslider');
-let third_slider = document.getElementById('thirdslider');
+let gain_slider = document.getElementById('gainslider');
 let label1 = document.getElementById('label1');
 let date = new Date();
+<<<<<<< HEAD
 var gainNodes = [];
 var audioContexts = [];
 var tabs = [];
+=======
+>>>>>>> parent of b98dc9f... properly linked my gain node to my slider
 
 // IF I CAN EVER WORK OUT HOW TO GET THIS BACKGROUND PORT THING TO WORK
 // THE IDEA IS THAT YOU ONLY SAVE THE STATE WHEN THE POPUP ACTUALLY CLOSES, AND I THINK THIS THING ACHIEVES THIS
@@ -39,12 +40,6 @@ window.addEventListener("change", function(event){
 
     // however, we only want to store the value when popup is closed, but do!!
     // want to update audio values upon a slider change.
-    /*
-    chrome.runtime.sendMessage({
-        action: 'update-gain',
-        slider_value: gain_slider.value
-    });
-    */
     
 });
 
@@ -90,8 +85,22 @@ window.addEventListener("input", function(event){
     if(event.target.parentElement.className === "slider"){
         label1.innerHTML = "slider value: " + evvalue;
 
+<<<<<<< HEAD
         // now update the audio gain for the relevant tab
         gainNodes[parseInt(event.target.id)].gain.value = parseInt(evvalue)/100;
+=======
+
+        // now update the audio gain in the two different ways with the two different sliders.
+        // version 1, by sending a message:
+        chrome.runtime.sendMessage({
+            action: 'gain-update',
+            // need to deal with is this a string not a number...?
+            value: evvalue
+        });
+
+
+        // version 2 - where we already have the audio thing
+>>>>>>> parent of b98dc9f... properly linked my gain node to my slider
     }
 });
 
@@ -129,6 +138,7 @@ window.addEventListener("load", function(){
         gain_slider.value = data.sliderValue;
     });
 
+<<<<<<< HEAD
     // now fetch the gain node from the background...
     // so yes, everything is going to be handled from the popup script now oh yes I know, its terrible.
     // TODO need to replace with fetch the list, hopefully then can just access any nodes in it quite easily.
@@ -136,6 +146,8 @@ window.addEventListener("load", function(){
     //gainNode = chrome.extension.getBackgroundPage().gainNode;
     //console.log("background page2 :", chrome.extension.getBackgroundPage().gainNode);
 
+=======
+>>>>>>> parent of b98dc9f... properly linked my gain node to my slider
 });
 
 // now to ask for the audio info
