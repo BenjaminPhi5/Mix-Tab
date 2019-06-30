@@ -95,7 +95,7 @@ function mkSlider(id, value){
     slider.type = "range";
     slider.min = "0";
     slider.max = "100";
-    slider.value = value;
+    slider.value = String(value);
     testslider.appendChild(slider);
 }
 
@@ -109,7 +109,7 @@ function loadCapturedTabs(){
 
     var i = 0;
     for(i = 0; i < audios.length; i++){
-        mkSlider(i);
+        mkSlider(i, audios[i].gain.value * 100);
     }
 
 }
@@ -117,7 +117,8 @@ function loadCapturedTabs(){
 // load a new tab into the popup
 function addExtraTab(){
     // can also try passing in the audio node
-    mkSlider(audios.length - 1, "100");
+    index = audios.length - 1;
+    mkSlider(index, audios[index].gain.value * 100);
 }
 
 
