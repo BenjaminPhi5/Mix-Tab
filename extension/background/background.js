@@ -34,36 +34,56 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // if its my message
     if(request.action === 'fetch_audio_stream') {
         console.log("my mesage for audio fetch recieved");
+        console.log("request: ", request);
+        console.log("send_resp: ", sendResponse);
 
         try{
-            // capture the active tab
-            chrome.tabCapture.capture({
-			    audio : true,
-			    video : false
-		    }, function(stream) {
-			    //console.log('stream', stream);
-                //I can attach audio stuff here
+            // now check if tab is not in 'currently being tracked tabs'
+            var currTab;
 
-                // create an audio context
-                var audioContext = new AudioContext();
-                var gainNode = audioContext.createGain();
+            /*
+            chrome.tabs.query({active:true, currentWindow:true}, function(tabs){
+                currTab = tabs[0];
+                console.log("currTab: ",currTab);
+            });
+            */
 
-                // get a source, attach the gain node
-                var source = audioContext.createMediaStreamSource(stream);
-                source.connect(gainNode);
-                gainNode.connect(audioContext.destination);
+            if(!tabsList.includes(5)){
+                
+                // capture the active tab
+                chrome.tabCapture.capture({
+			        audio : true,
+			        video : false
+		        }, function(stream) {
+			        //console.log('stream', stream);
+                    //I can attach audio stuff here
+
+                    // create an audio context
+                    var audioContext = new AudioContext();
+                    var gainNode = audioContext.createGain();
+
+                    // get a source, attach the gain node
+                    var source = audioContext.createMediaStreamSource(stream);
+                    source.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
             
-                // now push the new nodes to the list store
-                audioContextsList.push(audioContext);
-                gainNodesList.push(gainNode);
-        });
+                    // now push the new nodes to the list store
+                    audioContextsList.push(audioContext);
+                    gainNodesList.push(gainNode);
+                    tabsList.push(currTab); // add tabs to tabs being monitored.
+                });
+            }
 
         } catch(err) {
             // in this case do nothing, since there is no audio context to capture
             if(err.name !== 'TypeError'){
-                console.error("Not the error type I was expecting")
+                console.error("Not the error type I was expecting, something else went wrong here:")
+                console.error(err);
             }
         }
+
+        // now call the callback function:
+        sendResponse(true);
 
     // the recieve an update gain message    
     } else if (request.action === 'update-gain'){
