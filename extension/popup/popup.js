@@ -1,4 +1,6 @@
 // get html element
+let testdiv = document.getElementById('testdiv');
+
 let mute_test = document.getElementById('mute_test');
 var gain_slider = document.getElementById('gainslider');
 let second_slider = document.getElementById('secondslider');
@@ -67,9 +69,25 @@ window.addEventListener("input", function(event){
     }
 });
 
+
+
 /*
     On load, setup the UI
 */
+
+function loadCapturedTabs(){
+    // get the tab array from the document script
+    let tablist = chrome.extension.getBackgroundPage().tabstrings;
+    tablist.forEach(element => {
+        console.log(element);
+        let button = document.createElement('button');
+        button.innerHTML = element;
+        testdiv.appendChild(button);
+    });
+
+}
+
+
 window.addEventListener("load", function(){
     console.log("the popup was loaded on");
     // set the slider value to the value in storage
@@ -86,6 +104,8 @@ window.addEventListener("load", function(){
     gainNode = chrome.extension.getBackgroundPage().gainNode;
     console.log("background page2 :", chrome.extension.getBackgroundPage().gainNode);
     
+    // loading elements testing
+    loadCapturedTabs();
 
 });
 

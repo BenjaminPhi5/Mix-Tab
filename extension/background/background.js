@@ -1,4 +1,7 @@
 // background script goes here, to inject content script eventually I imagine
+// testing for creating multiple objects
+tabstrings = ["label a", "lable b", "label c"];
+
 
 // testing setup for a single audio context
 var audioContext = new AudioContext();
