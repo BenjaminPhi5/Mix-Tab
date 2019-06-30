@@ -11,7 +11,7 @@ let third_slider = document.getElementById('thirdslider');
 let label1 = document.getElementById('label1');
 let date = new Date();
 var gainNode;
-var audios = [];
+var audios = new Map();
 
 // IF I CAN EVER WORK OUT HOW TO GET THIS BACKGROUND PORT THING TO WORK
 // THE IDEA IS THAT YOU ONLY SAVE THE STATE WHEN THE POPUP ACTUALLY CLOSES, AND I THINK THIS THING ACHIEVES THIS
@@ -74,12 +74,12 @@ window.addEventListener("input", function(event){
         // load from gain node list
         label1.innerHTML = "slider value: " + evvalue;
         
-        index = event.target.id;
+        index = parseInt(event.target.id);
 
         this.console.log("change gain in list: ", audios);
         this.console.log("current index:", index);
         this.console.log(testslider);
-        audios[index].node.gain.value = parseInt(evvalue)/100;
+        audios.get(index).node.gain.value = parseInt(evvalue)/100;
     }
 });
 
@@ -109,12 +109,25 @@ function loadCapturedTabs(){
     console.log("audios:", audios);
     console.log("html tags:", testslider);
 
-    var i = 0;
+    // iterate through each element, and add a slider
+    audios.forEach(function(value, key, map){
+        // sanity check - if its valid
+        // value is audios.get(key)
+        if(value.valid){
+            mkSlider(key, value.node.gain.value * 100);
+        } else {
+            // popup is the only section to modify params, therefore it is safe for the popup to do deletion
+            // of records it is not currently using.
+            audios.delete(key);
+        }
+    });
+
+
+
+
     for(var key in audios){
         // sanity check - if its valid
-        if(audios[key].valid){
-            mkSlider(key, audios[key].node.gain.value * 100);
-        }
+        
     }
 
 }
@@ -122,8 +135,12 @@ function loadCapturedTabs(){
 // load a new tab into the popup
 function addExtraTab(key){
     // sanity check - if its valid
-    if(audios[key].valid){
-        mkSlider(key, audios[key].node.gain.value * 100);
+    if(audios.get(key).valid){
+        mkSlider(key, audios.get(key).node.gain.value * 100);
+    } else {
+        // popup is the only section to modify params, therefore it is safe for the popup to do deletion
+        // of records it is not currently using.
+        audios.delete(key);
     }
 }
 

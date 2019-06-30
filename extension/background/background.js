@@ -1,7 +1,7 @@
 // background script goes here, to inject content script eventually I imagine
 // testing for creating multiple objects
 var tabstrings = ["label a", "lable b", "label c"];
-var audioControlList = {};
+var audioControlList = new Map();
 
 
 // testing setup for a single audio context
@@ -75,8 +75,9 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
                         //gainNode.gain.value = 0;
                         console.log("updated value", gainNode.gain.value);
 
-                        // add gain node to audios list
-                        audioControlList[tabid] = {node: gainNode, streamid: stream.id, valid:true};
+                        // add gain node to audios list/map
+                        //audioControlList[tabid] = {node: gainNode, streamid: stream.id, valid:true};
+                        audioControlList.set(tabid, {node: gainNode, streamid: stream.id, valid:true});
 
                         console.log("audioControl: ",audioControlList);
 
@@ -118,8 +119,8 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo){
 
     // now to send message to remove the slider with that particular id
     // check if id is being used
-    if(audioControlList[tabId]){
-        audioControlList[tabId].valid = false;
+    if(audioControlList.has(tabId)){
+        audioControlList.get(tabId).valid = false;
         
         // send message saying audio value is to be removed
         chrome.runtime.sendMessage({
