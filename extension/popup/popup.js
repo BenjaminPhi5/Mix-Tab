@@ -4,9 +4,12 @@ let gain_slider = document.getElementById('gainslider');
 let label1 = document.getElementById('label1');
 let date = new Date();
 <<<<<<< HEAD
+<<<<<<< HEAD
 var gainNodes = [];
 var audioContexts = [];
 var tabs = [];
+=======
+>>>>>>> parent of b98dc9f... properly linked my gain node to my slider
 =======
 >>>>>>> parent of b98dc9f... properly linked my gain node to my slider
 
@@ -86,9 +89,12 @@ window.addEventListener("input", function(event){
         label1.innerHTML = "slider value: " + evvalue;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         // now update the audio gain for the relevant tab
         gainNodes[parseInt(event.target.id)].gain.value = parseInt(evvalue)/100;
 =======
+=======
+>>>>>>> parent of b98dc9f... properly linked my gain node to my slider
 
         // now update the audio gain in the two different ways with the two different sliders.
         // version 1, by sending a message:
@@ -100,6 +106,9 @@ window.addEventListener("input", function(event){
 
 
         // version 2 - where we already have the audio thing
+<<<<<<< HEAD
+>>>>>>> parent of b98dc9f... properly linked my gain node to my slider
+=======
 >>>>>>> parent of b98dc9f... properly linked my gain node to my slider
     }
 });
@@ -139,6 +148,7 @@ window.addEventListener("load", function(){
     });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     // now fetch the gain node from the background...
     // so yes, everything is going to be handled from the popup script now oh yes I know, its terrible.
     // TODO need to replace with fetch the list, hopefully then can just access any nodes in it quite easily.
@@ -146,6 +156,8 @@ window.addEventListener("load", function(){
     //gainNode = chrome.extension.getBackgroundPage().gainNode;
     //console.log("background page2 :", chrome.extension.getBackgroundPage().gainNode);
 
+=======
+>>>>>>> parent of b98dc9f... properly linked my gain node to my slider
 =======
 >>>>>>> parent of b98dc9f... properly linked my gain node to my slider
 });

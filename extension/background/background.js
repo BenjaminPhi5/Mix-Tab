@@ -28,8 +28,13 @@ chrome.runtime.onConnect.addListener(function(port){
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 // setup message listener, check for different messages and act approporiately
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
+=======
+// setup message listener, when tab audio requested, just output a log of the stream
+chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+>>>>>>> parent of b98dc9f... properly linked my gain node to my slider
 =======
 // setup message listener, when tab audio requested, just output a log of the stream
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
@@ -103,6 +108,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
             console.log("updated value", gainNode.gain.value);
 >>>>>>> parent of b98dc9f... properly linked my gain node to my slider
             
+<<<<<<< HEAD
                     // now push the new nodes to the list store
                     audioContextsList.push(audioContext);
                     gainNodesList.push(gainNode);
@@ -132,6 +138,11 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
             sendResponse(gainNode);
     }
 =======
+		});
+    } 
+>>>>>>> parent of b98dc9f... properly linked my gain node to my slider
+=======
+
 		});
     } 
 >>>>>>> parent of b98dc9f... properly linked my gain node to my slider
