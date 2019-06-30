@@ -1,11 +1,12 @@
 // background script goes here, to inject content script eventually I imagine
 // testing for creating multiple objects
-tabstrings = ["label a", "lable b", "label c"];
+var tabstrings = ["label a", "lable b", "label c"];
+var audioControlList = [];
 
 
 // testing setup for a single audio context
-var audioContext = new AudioContext();
-var gainNode = audioContext.createGain();
+//var audioContext = new AudioContext();
+//var gainNode = audioContext.createGain();
 
 // on install, eventually should setup settings, for now just write to console
 chrome.runtime.onInstalled.addListener(function (){
@@ -40,33 +41,48 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
         chrome.tabCapture.capture({
 			audio : true,
-			video : false
-		}, function(stream) {
-            console.log('slider value:', request.slider_value)
-			console.log('stream', stream);
-            //I can attach all my filter here...
+		    video : false
+	    }, function(stream) {
+            try{
 
-            // create an audio context
-            //var audioContext = new AudioContext();
-            //var gainNode = audioContext.createGain();
+                console.log('slider value:', request.slider_value)
+			    console.log('stream', stream);
+                //I can attach all my filter here...
+                // create an audio context
+                var audioContext = new AudioContext();
+                var gainNode = audioContext.createGain();
 
-            // get a source
-            var source = audioContext.createMediaStreamSource(stream);
-            console.log('i managed to create an audio context.. yay')
+                // get a source
+                var source = audioContext.createMediaStreamSource(stream);
+                console.log('i managed to create an audio context.. yay')
             
             
             
-            source.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+                source.connect(gainNode);
+                gainNode.connect(audioContext.destination);
 
-            console.log("here is my audio context, source, and gain node: ", audioContext, source, gainNode);
-            console.log("min and max value", gainNode.gain.minValue, gainNode.gain.maxValue);
-            console.log("current value", gainNode.gain.value);
-            gainNode.gain.value = 0;
-            console.log("updated value", gainNode.gain.value);
-            
+                console.log("here is my audio context, source, and gain node: ", audioContext, source, gainNode);
+                console.log("min and max value", gainNode.gain.minValue, gainNode.gain.maxValue);
+                console.log("current value", gainNode.gain.value);
+                //gainNode.gain.value = 0;
+                console.log("updated value", gainNode.gain.value);
+
+                // add gain node to audios list
+                audioControlList.push(gainNode);
+                console.log("audioControl: ",audioControlList);
+
+                // send message to popup to add new slider
+                chrome.runtime.sendMessage({
+                    action: 'new-audio-control'
+                })
+
+            } catch(err) {
+                console.log("audio stream cannot be fetched, which may be a good thing, cause:", err);
+            }
 
         });
+
+        
     // the recieve an update gain message    
     } else if (request.action === 'update-gain'){
         console.log("value recived: " + request.slider_value);
