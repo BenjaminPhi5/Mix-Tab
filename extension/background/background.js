@@ -34,7 +34,8 @@ chrome.runtime.onConnect.addListener(function(port){
 // setup message listener, when tab audio requested, just output a log of the stream
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // the message listener will recieve a request message, who sent it and a callback? I think, not sure
-    
+    console.log("message:", request);
+
     // if its my message
     if(request.action === 'fetch_audio_stream') {
         console.log("my mesage for audio fetch recieved");
@@ -109,6 +110,13 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             console.log("tab", tabs[0]);
         });
+    
+    } else if (request.action === 'page-audio-setup'){
+        // send message to popup to add new slider to other list
+        chrome.runtime.sendMessage({
+            action: 'new-page-audio-control',
+            key: request.tabid
+        })
     }
 
 });

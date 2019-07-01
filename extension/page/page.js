@@ -8,6 +8,7 @@ var audioNodes = [];
 var tabid = 0;
 var sendReady = false;
 var url = '';
+var responsefunc;
 
 
 // collect audio targets - returns a list of targets
@@ -103,7 +104,7 @@ function attachAll(){
 // for now will just attach a gain filter. noice.
 function attachTarget(target, index){
   
-    if(target.getAttribute("mix-tab-attach") === "true"){
+    if(target.getAttribute('mix-tab-attach') === 'true'){
         return; // duplicate target, or where this method has got called multiple times from mutation observer on the target
     }
 
@@ -175,6 +176,9 @@ function resolveCrossorigin(target, source){
 
 // setup the audioContext variable
 function setupAudioContext(){
+    // reset audioNodes
+    audioNodes = [];
+
     // init the audio context
     audioContext = new AudioContext();
     audioContextCreated = true;
@@ -195,11 +199,14 @@ function setupAudioContext(){
 
 function attachTargetAudio(target){
     // get source from target
+    console.log("got called to attach: ", target);
     var source = audioContext.createMediaElementSource(target);
     
     // connect the source to the first node in the chain (index 0 is the audio context itself)
     source.connect(audioNodes[1]); 
 
+    // register the target is now attached
+    target.setAttribute('mix-tab-attach', 'true');
 }
 
 function sendToBackground(){
@@ -215,13 +222,14 @@ function sendToBackground(){
         return;
     }
     // else, continue, send info to background
-    console.log("YES got here");
+    console.log("YES got here: ", audioNodes, audioNodes[1]);
 
     // send the message to the background okay. noice.
+    
     chrome.runtime.sendMessage({
-        action: 'page-audio',
+        action: 'page-audio-setup',
         tabid: tabid,
-        audioobj: {node: audioNodes[1], streamid: 'html5', valid:true}
+        valid:true
     });
 }
 
@@ -234,6 +242,8 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         url = request.url;
         tabid = request.tabid;
         console.log("tab found: (+url): ", tabid, url);
+
+        // setup response func
 
         // just call init from in here, on each page load:
         init();
