@@ -7,19 +7,20 @@ var targets = [];
 var audioNodes = [];
 
 // collect audio targets - returns a list of targets
+
 function getAudioTargets(){
     // get all videos and audios from the html, and collect them into a targets array.
     var videos = document.getElementsByTagName('video');
     var audios = document.getElementsByTagName('audio');
 
-    var collect = function(collection) {
-        collection.forEach(element => {
-            targets.push(element);
-        });
+    for (i = 0; i < videos.length; i++) {
+        console.log('video:', videos[i]);
+        targets.push(videos[i]);
     }
-
-    collect(videos);
-    collect(audios);
+    for (i = 0; i < audios.length; i++) {
+        console.log('audio:', audios[i]);
+        targets.push(audios[i]);
+    }
 }
 
 // get a host name
@@ -44,29 +45,31 @@ function getHostName(url){
 function init(){
     // get targets
     getAudioTargets();
+    console.log("targets load success!: ", targets);
 
     if(targets.length > 0){
         // init the audio context and add control nodes
-        setupAudioContext();
-        
+        setupAudioContext();   
+        console.log("setup success!");
     }
-
-    // check it exists
+    // check audioContext exists
     if(!audioContextCreated){
         // for now just return, means targets to attach to, or creating the audiocontext failed.
         return;
     }
-
+    console.log("proceed to attach success!");
     // attach the controller audio params
     attachAll();
 
-
+    console.log("attach success!");
     // AAAAAHHHH BUT by running attach target, not the entire attach process, attachAll is only called once,
     // so instead, don't have to worry
     // then am giong to have to communicate these changes to the document page.
     // ONLY DO IT IF THE PAGEEEE IS NOT!! CURRENTLY IN THE LIST, SINCE THESE SOURCE REATTACH THINGIES
     // NEED TO BE CONSIDERED. note I don't think tab id nessesarily works here, as the new page in the tab may have
     // no audio at all... hmmmm this is something to be investigated with the other document stuff actually.
+
+    // NOTE THAT IF A TAB ALREADY!! EXISTS REPLACE ITS INFO OKAY 
 }
 
 // attach the tab html5 audio to our audio context
@@ -130,6 +133,7 @@ function attachTarget(target, index){
 
 // deal with any crossorigin issues
 function resolveCrossorigin(target, source){
+    try{
     // I am NOT going to rewrite headers of webpages, so im giong to try and force the cross origin attribute
     // and if it doesn't work, I will ignore it. I don't to modify headers, bad practice.
     var crossorigin = target.getAttribute('crossorigin');
@@ -149,6 +153,10 @@ function resolveCrossorigin(target, source){
                 }
             }
         }
+    }
+    } catch(err) {
+        // crossorigin resolve failed (probably due to header issues)
+        console.log("resolving crossorgin failed: ", err);
     }
 }
 
@@ -187,7 +195,12 @@ function attachTargetAudio(target){
 
 document.addEventListener("DOMContentLoaded", function onLoad(){
     // log each time a new tab is loaded
+    /*
     console.log("new tab has loaded - should be for every single tab");
+    var videos = document.getElementsByTagName('video');
+    var audios = document.getElementsByTagName('audio');
+    console.log("videos: ", videos, videos.length, videos.item(0), videos.namedItem.length);
+    */
 
     console.log("window", window);
 
@@ -196,7 +209,8 @@ document.addEventListener("DOMContentLoaded", function onLoad(){
         action: 'get-current-tab'}
     );
 
-    // may have to do this in background or something... hmmm we shall seeee.
+    // THE BIG MOMENT OF TRUUUUF WILL IT CRASH AND BURN OR NAHHH?
+    init();
     
     
 
