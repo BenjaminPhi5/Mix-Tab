@@ -229,6 +229,7 @@ function sendToBackground(){
     chrome.runtime.sendMessage({
         action: 'page-audio-setup',
         tabid: tabid,
+        gain: audioNodes[1].gain.value,
         valid:true
     });
 }
@@ -247,6 +248,11 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
         // just call init from in here, on each page load:
         init();
+    }
+
+    // update gain node with audio
+    if(request.action === 'page-param-modify'){
+        audioNodes[1].gain.value = request.gain;
     }
 });
 

@@ -2,6 +2,7 @@
 // testing for creating multiple objects
 var tabstrings = ["label a", "lable b", "label c"];
 var audioControlList = new Map();
+var pageAudioControlList = new Map();
 
 
 // testing setup for a single audio context
@@ -112,6 +113,9 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         });
     
     } else if (request.action === 'page-audio-setup'){
+        // add new audio element to page map:
+        pageAudioControlList.set(request.tabid, {gain: request.gain, valid: request.valid});
+
         // send message to popup to add new slider to other list
         chrome.runtime.sendMessage({
             action: 'new-page-audio-control',
@@ -138,6 +142,16 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo){
         // send message saying audio value is to be removed
         chrome.runtime.sendMessage({
             action: 'tab-close',
+            key: tabId
+        })
+    }
+
+    if(pageAudioControlList.has(tabId)){
+        pageAudioControlList.get(tabId).valid = false;
+        
+        // send message saying audio value is to be removed
+        chrome.runtime.sendMessage({
+            action: 'page-tab-close',
             key: tabId
         })
     }
