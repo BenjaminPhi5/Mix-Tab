@@ -41,6 +41,9 @@ function init(){
 
 
     // then am giong to have to communicate these changes to the document page.
+    // ONLY DO IT IF THE PAGEEEE IS NOT!! CURRENTLY IN THE LIST, SINCE THESE SOURCE REATTACH THINGIES
+    // NEED TO BE CONSIDERED. note I don't think tab id nessesarily works here, as the new page in the tab may have
+    // no audio at all... hmmmm this is something to be investigated with the other document stuff actually.
 }
 
 // attach the tab html5 audio to our audio context
@@ -60,11 +63,29 @@ function attachAll(){
 function attachTarget(target, index){
     // attach this specific target to the audioContext.
     // for now will just attach a gain filter. noice.
+    if(target.getAttribute("mix-tab-attach") === "true"){
+        // duplicate target, its already attached, or this is a rerun from where sources have now been
+        // initialised, see the case below
+        return;
+    }
+    // else continue attaching the target
 
-    // check if it is already attached, (may be duplicate targets)
-    // if so do nothing
+    // the source may be the target source or be the webpage source? not quite sure about this but I need it
+    var targetSource = (target.src ? target.src : target.currentSrc);
 
-    // then check if the source exists, if it doesn't, then do something else
+    // crossorigin stuff.... see below
+    var crossorigin = target.getAttribute("crossorigin");
+
+    // then check if the source exists.
+    /*
+        Some websites don't initialise the object upon creation, they add info later
+        so if source is defined its fine, if not need to observe when 
+    */
+   if(targetSource){
+
+   } else {
+       // do the other stuff, attach to the target
+   }
 
     // deal with cross origin.
 
