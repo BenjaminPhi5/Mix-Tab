@@ -102,8 +102,13 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         console.log("value recived: " + request.slider_value);
         gainNode.gain.value = parseInt(request.slider_value)/100;
     
-    } else if(request.action == 'fetch-gain-node'){
+    } else if(request.action === 'fetch-gain-node'){
             sendResponse(gainNode);
+    
+    } else if (request.action === 'get-current-tab'){
+        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+            console.log("tab", tabs[0]);
+        });
     }
 
 });
