@@ -40,6 +40,8 @@ function init(){
     attachAll();
 
 
+    // AAAAAHHHH BUT by running attach target, not the entire attach process, attachAll is only called once,
+    // so instead, don't have to worry
     // then am giong to have to communicate these changes to the document page.
     // ONLY DO IT IF THE PAGEEEE IS NOT!! CURRENTLY IN THE LIST, SINCE THESE SOURCE REATTACH THINGIES
     // NEED TO BE CONSIDERED. note I don't think tab id nessesarily works here, as the new page in the tab may have
@@ -60,15 +62,15 @@ function attachAll(){
 
 }
 
+// attach this specific target to the audioContext.
+// for now will just attach a gain filter. noice.
 function attachTarget(target, index){
-    // attach this specific target to the audioContext.
-    // for now will just attach a gain filter. noice.
+  
     if(target.getAttribute("mix-tab-attach") === "true"){
         // duplicate target, its already attached, or this is a rerun from where sources have now been
         // initialised, see the case below
         return;
     }
-    // else continue attaching the target
 
     // the source may be the target source or be the webpage source? not quite sure about this but I need it
     var targetSource = (target.src ? target.src : target.currentSrc);
@@ -76,20 +78,35 @@ function attachTarget(target, index){
     // crossorigin stuff.... see below
     var crossorigin = target.getAttribute("crossorigin");
 
-    // then check if the source exists.
-    /*
-        Some websites don't initialise the object upon creation, they add info later
-        so if source is defined its fine, if not need to observe when 
-    */
-   if(targetSource){
+    // if the source exists, good carry on
+    if(targetSource){
+        // here we attach all of our filters to the target, and attach the source
 
-   } else {
-       // do the other stuff, attach to the target
-   }
+    } else {
+        // Some websites don't initialise the object upon creation with things such as a source, they add info later
+        //so if source is defined its fine, if not need to observe when
+        // so instead, I will create an observer that will look to see if any attributes are unchanged
+        // and if so rerun attaching the target
+        var targetObserver = new MutationObserver(function(mutations, observer){
+            try{
+                // if an attribute has changed, retry attaching the target
+                attachTarget(target, index);
+            } catch(err) {
+                // dones't seem to occur.
+                console.log("attach error: ", err);
+            }
+        });
 
-    // deal with cross origin.
+        // now run the observer
+        targetObserver.observe(target, {
+            childList: false,
+            subtree: false,
+            attributes: true,
+            characterData: false
+        });
+    }
 
-    // then nicely all setup. good.
+   
 }
 
 
