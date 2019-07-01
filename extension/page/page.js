@@ -1,8 +1,10 @@
 // page script to be injected
 // at the moment it is injected into every single page upon the page being loaded.
 // it does nothing so far.
-var audioContext = false;
+var audioContextCreated = false;
+var audioContext;
 var targets = [];
+var audioNodes = [];
 
 // collect audio targets - returns a list of targets
 function getAudioTargets(){
@@ -27,11 +29,13 @@ function init(){
     getAudioTargets();
 
     if(targets.length > 0){
-        audioContext = new AudioContext();
+        // init the audio context and add control nodes
+        setupAudioContext();
+        
     }
 
     // check it exists
-    if(!audioContext){
+    if(!audioContextCreated){
         // for now just return, means targets to attach to, or creating the audiocontext failed.
         return;
     }
@@ -50,7 +54,7 @@ function init(){
 
 // attach the tab html5 audio to our audio context
 function attachAll(){
-    if(!audioContext){
+    if(!audioContextCreated){
         // something went wrong
         return;
     }
@@ -80,7 +84,11 @@ function attachTarget(target, index){
 
     // if the source exists, good carry on
     if(targetSource){
-        // here we attach all of our filters to the target, and attach the source
+        // do the cross origin stuff
+        
+
+        // attach the audio nodes and set the parameter
+        attachTargetAudio(target);
 
     } else {
         // Some websites don't initialise the object upon creation with things such as a source, they add info later
@@ -105,9 +113,40 @@ function attachTarget(target, index){
             characterData: false
         });
     }
-
    
 }
+
+// setup the audioContext variable
+function setupAudioContext(){
+    // init the audio context
+    audioContext = new AudioContext();
+    audioContextCreated = true;
+
+    // add a gain node
+    var gainNode = audioContext.createGain();
+
+    // will eventually do this for last parameter okay. noice.
+    //filters[0]._defaultChannelCount = (source.channelCount) ? source.channelCount : 2;
+
+    // i assue only have to connect up all the filters once only.... but not sure
+    gainNode.connect(audioContext.destination);
+
+    // add nodes to the audios array
+    audioNodes.push(audioContext);
+    audioNodes.push(gainNode);
+}
+
+function attachTargetAudio(target){
+    // get source from target
+    var source = audioContext.createMediaElementSource(target);
+    
+    // connect the source to the first node in the chain (index 0 is the audio context itself)
+    source.connect(audioNodes[1]); 
+
+}
+
+
+
 
 
 document.addEventListener("DOMContentLoaded", function onLoad(){
