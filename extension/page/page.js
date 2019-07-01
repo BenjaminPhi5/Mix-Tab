@@ -5,6 +5,10 @@ var audioContextCreated = false;
 var audioContext;
 var targets = [];
 var audioNodes = [];
+var tabid = 0;
+var sendReady = false;
+var url = '';
+
 
 // collect audio targets - returns a list of targets
 
@@ -12,6 +16,11 @@ function getAudioTargets(){
     // get all videos and audios from the html, and collect them into a targets array.
     var videos = document.getElementsByTagName('video');
     var audios = document.getElementsByTagName('audio');
+
+    // NOTE live values in console not same as what is fetched
+    // sometimes some elements don't get loaded at all until later, as in they are injected
+    // into the script at a later date... which could be a problem since this never re-checks
+    // for extra target elements. but we will see......
 
     for (i = 0; i < videos.length; i++) {
         console.log('video:', videos[i]);
@@ -69,7 +78,11 @@ function init(){
     // NEED TO BE CONSIDERED. note I don't think tab id nessesarily works here, as the new page in the tab may have
     // no audio at all... hmmmm this is something to be investigated with the other document stuff actually.
 
-    // NOTE THAT IF A TAB ALREADY!! EXISTS REPLACE ITS INFO OKAY 
+    // NOTE THAT IF A TAB ALREADY!! EXISTS REPLACE ITS INFO OKAY
+    
+    // now its time to communicate to the backgroundd... here goes:
+    sendReady = true;
+    sendToBackground();
 }
 
 // attach the tab html5 audio to our audio context
@@ -189,36 +202,53 @@ function attachTargetAudio(target){
 
 }
 
+function sendToBackground(){
+    // for now basic setup just using a gain node - does NOT look to see if the tab is there...
+    // but I don't think that matters since it will just override it anyway... oooh noice.
+    // REFERENCE FROM DOCUMENT SCRIPT: audioControlList.set(tabid, {node: gainNode, streamid: stream.id, valid:true});
+    //var audioControlList = chrome.extension.getBackgroundPage().audioControlList;
+
+    // first check, is the id not 0 or the init function is not finished:
+    console.log("got here: ", tabid, sendReady);
+    console.log("audionodes: ", audioNodes);
+    if(tabid === 0 || !sendReady){
+        return;
+    }
+    // else, continue, send info to background
+    console.log("YES got here");
+
+    // send the message to the background okay. noice.
+    chrome.runtime.sendMessage({
+        action: 'page-audio',
+        tabid: tabid,
+        audioobj: {node: audioNodes[1], streamid: 'html5', valid:true}
+    });
+}
 
 
+
+chrome.runtime.onMessage.addListener(function(request, sendResponse){
+    // recieve tabid
+    if(request.action === 'tab-id-send'){
+        // set ids
+        url = request.url;
+        tabid = request.tabid;
+        console.log("tab found: (+url): ", tabid, url);
+
+        // just call init from in here, on each page load:
+        init();
+    }
+});
 
 
 document.addEventListener("DOMContentLoaded", function onLoad(){
     // log each time a new tab is loaded
-    /*
     console.log("new tab has loaded - should be for every single tab");
-    var videos = document.getElementsByTagName('video');
-    var audios = document.getElementsByTagName('audio');
-    console.log("videos: ", videos, videos.length, videos.item(0), videos.namedItem.length);
-    */
 
-    console.log("window", window);
+    console.log("script: ", document.currentScript);
 
-    // outputs the current tab in the background console.
-    chrome.runtime.sendMessage({
-        action: 'get-current-tab'}
-    );
-
-    // THE BIG MOMENT OF TRUUUUF WILL IT CRASH AND BURN OR NAHHH?
-    init();
-    
-    
-
-    // Media streams seems can be created from three separate sources.
-    // checking the dom for the <audio> tags gets the html 5 stuff,
-    // need to use other things to get the rest though.
-
-    // orrr... even better find a way of getting one of my beloved media streams....
-    // maybe add each audio context as one of all three put together
+    // setup audio targets
+    //init();
+    // dont really think i need this method anymore..... aha oh well never mind.
     
 });
