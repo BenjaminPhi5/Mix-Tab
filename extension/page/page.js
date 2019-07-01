@@ -22,6 +22,23 @@ function getAudioTargets(){
     collect(audios);
 }
 
+// get a host name
+function getHostName(url){
+    if('blob:' === url.substring(0,5)){
+        url = url.replace('blob:', '');
+        // remove control characters from the url
+        url = unescape(url);
+    }
+
+    var match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i); // match a host in a url
+    if(match !== null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0){
+        // if a url match is found
+        return match[2];
+    } else {
+        return null;
+    }
+}
+
 // the init function - collect the targets, if there are some create an audio context. if not, then don't this seems simple
 // also look in the tab info to see if it could at any point play audio maybe
 function init(){
@@ -71,21 +88,16 @@ function attachAll(){
 function attachTarget(target, index){
   
     if(target.getAttribute("mix-tab-attach") === "true"){
-        // duplicate target, its already attached, or this is a rerun from where sources have now been
-        // initialised, see the case below
-        return;
+        return; // duplicate target, or where this method has got called multiple times from mutation observer on the target
     }
 
     // the source may be the target source or be the webpage source? not quite sure about this but I need it
     var targetSource = (target.src ? target.src : target.currentSrc);
 
-    // crossorigin stuff.... see below
-    var crossorigin = target.getAttribute("crossorigin");
-
     // if the source exists, good carry on
     if(targetSource){
-        // do the cross origin stuff
-        
+        // crossorigin stuff.... for resources loaded from another domain
+        resolveCrossorigin(target, targetSource);
 
         // attach the audio nodes and set the parameter
         attachTargetAudio(target);
@@ -105,7 +117,7 @@ function attachTarget(target, index){
             }
         });
 
-        // now run the observer
+        // now run the observer - I only care about attributes, and so don't want any spurious triggers from anything else
         targetObserver.observe(target, {
             childList: false,
             subtree: false,
@@ -114,6 +126,30 @@ function attachTarget(target, index){
         });
     }
    
+}
+
+// deal with any crossorigin issues
+function resolveCrossorigin(target, source){
+    // I am NOT going to rewrite headers of webpages, so im giong to try and force the cross origin attribute
+    // and if it doesn't work, I will ignore it. I don't to modify headers, bad practice.
+    var crossorigin = target.getAttribute('crossorigin');
+
+    // if cross origin is being used and the cross origin attribute has not been set, then I need to try and set it
+    if(document.location.hostname != getHostName(source) && source.substring(0,5) != 'blob:' && !crossorigin){
+        // ananymous means cross-origin requests for this element will have the credentials flag set to 'same-origin'.
+        target.setAttribute('crossorigin', 'anonymous'); 
+
+        //force "reload" so addedd crossorigin attribute can kick in
+        if (target.src){
+            // fine do nothing
+        } else {
+            if(target.currentSrc){
+                if(!target.paused){
+                    target.load();
+                }
+            }
+        }
+    }
 }
 
 // setup the audioContext variable
