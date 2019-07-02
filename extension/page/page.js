@@ -254,6 +254,12 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     if(request.action === 'page-param-modify'){
         audioNodes[1].gain.value = request.gain;
     }
+
+    if(request.action === 'page-param-request'){
+        // can actually make audioNodes a map and multiplex on request.param
+        console.log("recieved message: param: ", request);
+        chrome.runtime.sendMessage({action: 'page-param-send', key: tabid, param:'gain', value: audioNodes[1].gain.value});
+    }
 });
 
 

@@ -71,6 +71,12 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         removeExtraTab(request.key, testslider2);
     }
 
+    if(request.action === 'page-param-send'){
+        // update value in pageAudios
+        pageAudios.get(request.key).gain = request.value;
+        addExtraPageTab(request.key);
+
+    }
 });
 
 // input is the message used for sliders that gradually change their value
@@ -149,12 +155,10 @@ function loadCapturedTabs(){
         }
     });
 
-    // iterate through each element, and add a slider
+    // iterate through each element, and add a slider, going to need to actually request values via a message
     pageAudios.forEach(function(value, key, map){
-        // sanity check - if its valid
-        // value is audios.get(key)
         if(value.valid){
-            mkSlider(key, value.gain * 100, testslider2);
+        chrome.tabs.sendMessage(key, {action: 'page-param-request', param: 'gain'});
         } else {
             // popup is the only section to modify params, therefore it is safe for the popup to do deletion
             // of records it is not currently using.
