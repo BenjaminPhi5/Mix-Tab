@@ -4,7 +4,7 @@ let testslider = document.getElementById('testslider');
 let testslider2 = document.getElementById('testslider2');
 var tablist;
 
-let mute_test = document.getElementById('mute_test');
+let mute_test = document.getElementById('load-current-tab');
 let logbutton = document.getElementById('log');
 var gain_slider = document.getElementById('gainslider');
 let second_slider = document.getElementById('secondslider');
