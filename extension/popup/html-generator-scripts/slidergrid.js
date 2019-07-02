@@ -70,7 +70,7 @@ function generateSliderGrid(id, value, host, content, parentGroup){
     strId = String(id);
 
     sliderGridContainer.class = "slider-grid-container";
-    sliderGridContainer.id = strId;
+    sliderGridContainer.id = strId + "sGroup";
     
     muteButton.class = "slider-grid-item acontrol";
     muteButton.id = strId + " mute";
