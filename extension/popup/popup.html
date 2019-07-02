@@ -20,6 +20,12 @@
     <body>
         <button id="mute_test">load audio</button>
 
+        <div class = "topmenu">
+                <button class="tmcontrol" id="gain-button">gain</button>
+                <button class="tmcontrol" id="pan-button">pan</button>
+                <button class="tmcontrol" id="eq-button">eq</button>
+        </div>
+
         <div class="slider">
             <input class = "inputslider" id="gainslider" type="range" min="1" max="100" value="50">
             <input class = "inputslider" id="secondlider" type="range" min="1" max="100" value="50">
@@ -57,19 +63,11 @@
                 <div class="selection"></div>
                 <div class="holder" style="color: hsl(120, 100%, 50%);"><label class="slidertext">100%</label></div>
         </div>
+
+            <button class="bmcontrol" id="load-current-tab">load current tab</button>
+            <button class="bmcontrol" id="mute-all">mute all</button>
+            <button class="bmcontrol" id="options">options</button>
         
-        <div class="container">
-  
-                <div class="range-slider">
-                  <input id="rs-range-line" class="rs-range" type="range" value="0" min="0" max="200">
-                  
-                </div>
-                
-                <div class="box-minmax">
-                  <span>0</span><span>200</span>
-                </div>
-                
-        </div>
 
         <script src = "popup.js"></script>
         <script type="text/javascript" src="dials/dials.js"></script>

@@ -23,3 +23,55 @@
       position:relative;
       top:1px;
   }
+
+  .tmcontrol {
+    height: 20px;
+    width: 15vh;
+    outline: none;
+    background-color:#f36d00;
+      -moz-border-radius:28px;
+      -webkit-border-radius:28px;
+      border-radius:28px;
+      border:1px solid #a04800;
+      display:inline-block;
+      cursor:pointer;
+      color:#ffffff;
+      font-family:Arial;
+      font-size:10px;
+      padding:2px 5px;
+      text-decoration:none;
+      text-shadow:0px 1px 0px #a04800;
+  }
+  .tmcontrol:hover {
+      background-color:#f36d00;
+  }
+  .tmcontrol:active {
+      position:relative;
+      top:1px;
+  }
+
+  .bmcontrol {
+    height: 20px;
+    width: 48vh;
+    outline: none;
+    background-color:rgb(67, 227, 255);
+      -moz-border-radius:28px;
+      -webkit-border-radius:28px;
+      border-radius:28px;
+      border:1px solid #06b5fa;
+      display:inline-block;
+      cursor:pointer;
+      color:#383737;
+      font-family:Arial;
+      font-size:11px;
+      padding:2px 5px;
+      text-decoration:none;
+      text-shadow:0px 1px 0px #191b18;
+  }
+  .bmcontrol:hover {
+      background-color:#06b5fa;
+  }
+  .bmcontrol:active {
+      position:relative;
+      top:1px;
+  }
