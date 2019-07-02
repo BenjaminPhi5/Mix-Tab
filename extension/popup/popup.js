@@ -19,7 +19,7 @@ mute_test.onclick = function(element) {
     // request the tab capture - maybe I need to do it in here...?
     chrome.runtime.sendMessage({
         action: 'fetch_audio_stream',
-        slider_value: gain_slider.style.value
+        slider_value: "100"
     });
 }
 /*

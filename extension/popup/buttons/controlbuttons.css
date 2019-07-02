@@ -1,6 +1,9 @@
+/* Three types: */
+/* 1) slider button group slyling */
+
 .acontrol {
     height: 20px;
-    width: 40px;
+    width: 100%;
     outline: none;
     background-color:#44c767;
       -moz-border-radius:28px;
@@ -24,6 +27,7 @@
       top:1px;
   }
 
+/* 2) top menu buttons */
   .tmcontrol {
     height: 20px;
     width: 31%;
@@ -51,19 +55,19 @@
       top:1px;
   }
 
-  .button-grid-container {
-	display: grid;
-	width: 100%;
-	grid-template-rows: auto auto auto;
+/* 3) bottom menu buttons */
+.bottom-grid-container {
+    display: grid;
+    width: 100%;
+    grid-template-rows: auto auto auto auto auto;
     padding: 0px;
+    padding-top: 5px
   }
-  .button-grid-item {
+  .bottom-grid-item {
     padding: 5px;
-    border: 5px solid rgba(0, 0, 0, 0.8);
-
   }
 
-  .bmcontrol {
+.bmcontrol {
     height: 20px;
     width: 100%;
     outline: none;

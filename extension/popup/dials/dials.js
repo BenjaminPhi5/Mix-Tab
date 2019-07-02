@@ -1,3 +1,9 @@
+/**
+ * This script mostly for controlling the visual effect of the dials...
+ * and some message passing for connecting to the rest of the extension,
+ * for communicating values to content scripts etc etc.
+ */
+
 var sliders = document.getElementsByClassName("round-slider");
 console.log("Sliders:", sliders);
 for (let i = 0; i < sliders.length; i++) {

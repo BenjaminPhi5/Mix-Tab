@@ -25,17 +25,16 @@
                 <button class="tmcontrol" id="eq-button">eq</button>
         </div>
 
-        <div class="slider">
-                <label> 
-
-
-                </label>
-            <div class="container">
-                    <label class="infolabel">host: content</label>
+        <div class="slider-grid-container">
+                <button class="slider-grid-item acontrol" id="mute">mute</button>
+                <label class="slider-grid-item infolabel">host: content</label>
+                <button class="slider-grid-item acontrol" id="goto">goto</button>
+                <button class="slider-grid-item acontrol" id="solo">solo</button>
+            <div class="slider-grid-item container">
+                   
   
                     <div class="range-slider">
-                        <button class="acontrol" id="mute">mute</button>
-                        <button class="acontrol" id="solo">solo</button>
+                        
                       <input id="rs-range-line" class="rs-range" type="range" value="0" min="0" max="200">
                       
                     </div>
@@ -45,7 +44,9 @@
                     </div>
                     
             </div>
+            <label class = "slider-grid-item"></label>
         </div>
+
 
         <div id = "testdiv"></div>
 
@@ -80,12 +81,17 @@
         </div>
 
         
-
-        <div class="button-grid-container">
-            <button class="button-grid-item bmcontrol" id="load-current-tab">load current tab</button>
-            <button class="button-grid-item bmcontrol" id="mute-all">mute all</button>
-            <button class="button-grid-item bmcontrol" id="options">options</button>
-        </div>
+        <div class="bottom-grid-container">
+                <button class="bottom-grid-item bmcontrol" id="load-current-tab">load current tab</button>
+                <label class="bottom-grid-item">
+                  
+                </label>
+                <button class="bottom-grid-item bmcontrol" id="mute-all">mute all</button>
+                <label class="bottom-grid-item">
+                  
+                </label>
+                <button class="bottom-grid-item bmcontrol" id="options">options</button>
+            </div>
 
         <script src = "popup.js"></script>
         <script type="text/javascript" src="dials/dials.js"></script>
