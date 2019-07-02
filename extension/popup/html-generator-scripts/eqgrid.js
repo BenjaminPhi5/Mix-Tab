@@ -1,3 +1,5 @@
+let parentGroup = document.getElementById("audioControlHolder");
+
 /**
  * Generates the eq container with the dials and labels
  * 
@@ -20,7 +22,7 @@
 }
  */
 // see sliderGrid for similar function description.
- function generateEqGrid(id, low, mid, high, host, content, parentGroup){
+ function generateEqGrid(id, low, mid, high, host, content){
     // create elements
     let eqPane = document.createElement('div');
     let infoLabel = document.createElement('label');

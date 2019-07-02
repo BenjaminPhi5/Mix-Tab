@@ -1,3 +1,5 @@
+let parentGroup = document.getElementById("audioControlHolder");
+
 /**
  * Generates the grid containing the slider and its buttons.
  * 
@@ -50,7 +52,7 @@ function mkSlider(id, value, slidergroup){
  * @param {*String} content site media content
  * @param {*HTML element} parentGroup parent html element of slider
  */
-function generateSliderGrid(id, value, host, content, parentGroup){
+function generateSliderGrid(id, value, host, content){
     // create elements
     let sliderGridContainer = document.createElement('div');
     let muteButton = document.createElement('button');
