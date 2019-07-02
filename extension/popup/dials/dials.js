@@ -22,7 +22,7 @@ function round_slider_tune(event) {
 		  (doc && doc.scrollTop  || body && body.scrollTop  || 0) -
 		  (doc && doc.clientTop  || body && body.clientTop  || 0 );
 	let output = event.target.getElementsByClassName("selection")[0],
-		text = event.target.getElementsByClassName("holder")[0],
+		text = event.target.getElementsByClassName("slidertext")[0],
 		styleafter = document.head.appendChild(document.createElement("style")),
 		elpos = event.target.getBoundingClientRect(),
 		cX = elpos.width / 2,
