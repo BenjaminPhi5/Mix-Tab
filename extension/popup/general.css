@@ -5,3 +5,7 @@ body {
 	display: grid;
 	font-family: 'Roboto',sans-serif;
 }
+
+.infolabel{
+    color: #FFFFFF;
+}
