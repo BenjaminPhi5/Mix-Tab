@@ -168,8 +168,13 @@ window.addEventListener("load", function(){
     console.log("the popup was loaded on");
     // loading elements testing
     loadCapturedTabs();
+    generateSliderGrid(1234567, 50, "host it", "content it");
+    generateEqGrid(12345987, 50, 50, 50, "host it", "content it");
+    generateSliderHandles();
 
 });
+
+
 
 window.addEventListener("close", function(){
     chrome.storage.sync.set({'sliderValue': event.target.value});

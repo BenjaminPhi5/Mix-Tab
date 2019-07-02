@@ -5,6 +5,9 @@
 
     "permissions": ["storage", "<all_urls>", "tabs", "activeTab", "tabCapture", "webNavigation"],
 
+    "web_accessible_resources": ["popup/general.css", "popup/buttons/controlbuttons.css",
+        "popup/dials/dials.css", "popup/sliders/sliders.css", "popup/dials/dials.js"],
+
     "options_page": "options/options.html",
 
     "background": {

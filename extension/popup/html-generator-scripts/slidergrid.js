@@ -1,5 +1,3 @@
-let parentGroup = document.getElementById("audioControlHolder");
-
 /**
  * Generates the grid containing the slider and its buttons.
  * 
@@ -71,45 +69,45 @@ function generateSliderGrid(id, value, host, content){
     // add the elements' properties
     strId = String(id);
 
-    sliderGridContainer.class = "slider-grid-container";
+    sliderGridContainer.className = "slider-grid-container";
     sliderGridContainer.id = strId + "sGroup";
     
-    muteButton.class = "slider-grid-item acontrol";
+    muteButton.className = "slider-grid-item acontrol";
     muteButton.id = strId + " mute";
     muteButton.innerHTML = "mute";
     
-    infoLabel.class = "slider-grid-item infolabel";
+    infoLabel.className = "slider-grid-item infolabel";
     infoLabel.id = strId + " info";
     infoLabel.innerHTML = host + ": " + content;
 
-    gotoButton.class = "slider-grid-item acontrol";
+    gotoButton.className = "slider-grid-item acontrol";
     gotoButton.id = strId + " goto";
     gotoButton.innerHTML = "goto";
 
-    soloButton.class = "slider-grid-item acontrol";
+    soloButton.className = "slider-grid-item acontrol";
     soloButton.id = strId + " solo";
     soloButton.innerHTML = "solo";
 
-    sliderGridItem.class = "slider-grid-item container";
+    sliderGridItem.className = "slider-grid-item container";
     sliderGridItem.id = strId + " sgi";
     
-    rangeSlider.class = "range-slider";
+    rangeSlider.className = "range-slider";
     rangeSlider.id = strId + " rs";
 
-    rangeLine.class = "rs-range";
+    rangeLine.className = "rs-range";
     rangeLine.id = strId + " input";
     rangeLine.type = "range";
     rangeLine.value = String(value);
     rangeLine.min = "0";
     rangeLine.max = "200";
 
-    boxMinMax.class = "box-minmax";
+    boxMinMax.className = "box-minmax";
     
     zeroSpan.innerHTML = "0";
 
     maxSpan.innerHTML = "200";
 
-    spareGridItem.class = "slider-grid-item";
+    spareGridItem.className = "slider-grid-item";
 
     
     // Generate parent child structure

@@ -2,23 +2,9 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <style>
-            button{
-                height: 60px;
-                width: 60px;
-                outline: none;
-            }
-        </style>
-
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
-    <link href="general.css" rel="stylesheet" type="text/css">
-    <link href="buttons/controlbuttons.css" rel="stylesheet" type="text/css">
-    <link href="dials/dials.css" rel="stylesheet" type="text/css">
-    <link href="sliders/sliders.css" rel="stylesheet" type="text/css">
-    
     </head>
 
-    <body>
+    <body id="body">
         <div class = "topmenu">
                 <button class="tmcontrol" id="gain-button">gain</button>
                 <button class="tmcontrol" id="pan-button">pan</button>
@@ -99,7 +85,16 @@
                 <button class="bottom-grid-item bmcontrol" id="options">options</button>
             </div>
 
+
+        <link href="https://fonts.googleapis.com/css?family=Ubuntu&display=swap" rel="stylesheet">
+        <link href="general.css" rel="stylesheet" type="text/css">
+        <link href="buttons/controlbuttons.css" rel="stylesheet" type="text/css">
+        <link href="dials/dials.css" rel="stylesheet" type="text/css">
+        <link href="sliders/sliders.css" rel="stylesheet" type="text/css">
         <script src = "popup.js"></script>
         <script type="text/javascript" src="dials/dials.js"></script>
+        <script src = "html-generator-scripts/eqgrid.js"></script>
+        <script src = "html-generator-scripts/slidergrid.js"></script>
+        
     </body>
 </html>

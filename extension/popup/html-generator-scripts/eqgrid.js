@@ -1,5 +1,4 @@
 let parentGroup = document.getElementById("audioControlHolder");
-
 /**
  * Generates the eq container with the dials and labels
  * 
@@ -7,6 +6,31 @@ let parentGroup = document.getElementById("audioControlHolder");
  * 
  * reference htmlcode to be generated looks like this:
  * 
+ * <div class="eq-pane">
+                <label class="infolabel eqlabel">host: content</label>
+                <div class="grid-container">
+       
+                               <div class="grid-item round-slider">
+                                       <div class="selection"></div>
+                                       <div class="holder" style="color: hsl(120, 100%, 50%);"><label class="slidertext">100%</label></div>
+                               </div>
+                               
+                               <div class="grid-item round-slider">
+                                       <div class="selection"></div>
+                                       <div class="holder" style="color: hsl(120, 100%, 50%);"><label class="slidertext">100%</label></div>      
+                               </div>
+                               
+                               <div class="grid-item round-slider">
+                                       <div class="selection"></div>
+                                       <div class="holder" style="color: hsl(120, 100%, 50%);"><label class="slidertext">100%</label></div>      
+                               </div>
+
+                               <label class="infolabel eqlabel">low</label>
+                               <label class="infolabel eqlabel">mid</label>
+                               <label class="infolabel eqlabel">high</label>
+                      </div>
+                
+    </div>
  * 
  * reference slider generator from old tesingcode:
  
@@ -46,57 +70,57 @@ let parentGroup = document.getElementById("audioControlHolder");
     // add the elements' properties
     strId = String(id);
 
-    eqPane.class = "eq-pane";
+    eqPane.className = "eq-pane";
     eqPane.id = strId + " eqGroup";
 
-    infoLabel.class = "infolabel eqlabel";
+    infoLabel.className = "infolabel eqlabel";
     infoLabel.id = strId + " eqInfo";
     infoLabel.innerHTML = host + ": " + content;
 
-    gridContainer.class = "grid-container";
+    gridContainer.className = "grid-container";
 
     // low
-    sliderLow.class = "grid-item round-slider";
+    sliderLow.className = "grid-item round-slider";
     sliderLow.id = strId + " dialLow";
 
-    selectionLow.class = "selection";
+    selectionLow.className = "selection";
     selectionLow.id = strId + "selLow";
 
-    holderLow.class = "holder";
+    holderLow.className = "holder";
     holderLow.id = strId + "hLow";
     holderLow.style = "color: hsl(120, 100%, 50%);";
 
-    labelLow.class = "slidertext";
+    labelLow.className = "slidertext";
     labelLow.id = strId + "lltext";
     labelLow.innerHTML = String(mid) + "%";
 
     // mid
-    sliderMid.class = "grid-item round-slider";
+    sliderMid.className = "grid-item round-slider";
     sliderMid.id = strId + " dialMid";
 
-    selectionMid.class = "selection";
+    selectionMid.className = "selection";
     selectionMid.id = strId + "selMid";
 
-    holderMid.class = "holder";
+    holderMid.className = "holder";
     holderMid.id = strId + "hMid";
     holderMid.style = "color: hsl(120, 100%, 50%);";
 
-    labelMid.class = "slidertext";
+    labelMid.className = "slidertext";
     labelMid.id = strId + "lmtext";
     labelMid.innerHTML = String(low) + "%"; 
     
     // high
-    sliderHigh.class = "grid-item round-slider";
+    sliderHigh.className = "grid-item round-slider";
     sliderHigh.id = strId + " dialHigh";
 
-    selectionHigh.class = "selection";
+    selectionHigh.className = "selection";
     selectionHigh.id = strId + "selHigh";
 
-    holderHigh.class = "holder";
+    holderHigh.className = "holder";
     holderHigh.id = strId + "hHigh";
     holderHigh.style = "color: hsl(120, 100%, 50%);";
 
-    labelHigh.class = "slidertext";
+    labelHigh.className = "slidertext";
     labelHigh.id = strId + "lhtext";
     labelHigh.innerHTML = String(high) + "%";
 
@@ -137,4 +161,7 @@ let parentGroup = document.getElementById("audioControlHolder");
     eqPane.appendChild(gridContainer);
 
     parentGroup.appendChild(eqPane);
+
+    // get new controllers for each dial - method from the dials.js script
+    generateSliderHandles();
  }

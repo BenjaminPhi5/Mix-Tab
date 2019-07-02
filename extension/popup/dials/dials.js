@@ -3,19 +3,24 @@
  * and some message passing for connecting to the rest of the extension,
  * for communicating values to content scripts etc etc.
  */
-
 var sliders = document.getElementsByClassName("round-slider");
-console.log("Sliders:", sliders);
-for (let i = 0; i < sliders.length; i++) {
-	sliders[i].addEventListener("click", round_slider_tune, false);
-	sliders[i].addEventListener("mousedown", function(event) {
-		sliders[i].onmousemove = function(event) {
-			if (event.buttons == 1 || event.buttons == 3) {
-				round_slider_tune(event);
+
+function generateSliderHandles(){
+	sliders = document.getElementsByClassName("round-slider");
+	console.log("Sliders:", sliders);
+	for (let i = 0; i < sliders.length; i++) {
+		sliders[i].addEventListener("click", round_slider_tune, false);
+		sliders[i].addEventListener("mousedown", function(event) {
+			sliders[i].onmousemove = function(event) {
+				if (event.buttons == 1 || event.buttons == 3) {
+					round_slider_tune(event);
+				}
 			}
-		}
-	});
+		});
+	}
 }
+
+generateSliderHandles();
 
 function round_slider_tune(event) {
 	let eventDoc = (event.target && event.target.ownerDocument) || document,
