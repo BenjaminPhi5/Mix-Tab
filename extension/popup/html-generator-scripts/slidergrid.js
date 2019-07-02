@@ -29,7 +29,7 @@
  */
 
  /*
-Reference slider generator from old testing code
+Reference slider generator from old testing code:
 
 function mkSlider(id, value, slidergroup){
     //template: <input id="gainslider" type="range" min="1" max="100" value="50"></input>
@@ -42,7 +42,6 @@ function mkSlider(id, value, slidergroup){
     slidergroup.appendChild(slider);
 }
 */
-
 /**
  * 
  * @param {*number} id tab id
