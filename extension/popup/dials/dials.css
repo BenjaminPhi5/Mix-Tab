@@ -2,6 +2,7 @@ body {
 	min-height: 100vh;
 	background: linear-gradient(180deg,#DB302A 0%,#62186B 100%) no-repeat;
 	display: grid;
+	font-family: 'Roboto',sans-serif;
 }
 .round-slider {
 	display: grid;
