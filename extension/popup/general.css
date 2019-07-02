@@ -11,6 +11,10 @@ body {
 .infolabel{
     color: #FFFFFF;
 }
+.eqlabel{
+    display: flex;
+    justify-content: center;
+}
 
 /* ----------------------------------------------------*/
 /* slider button group grid */
