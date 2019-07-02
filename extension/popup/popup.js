@@ -170,7 +170,6 @@ window.addEventListener("load", function(){
     loadCapturedTabs();
     generateSliderGrid(1234567, 50, "host it", "content it");
     generateEqGrid(12345987, 50, 50, 50, "host it", "content it");
-    generateSliderHandles();
 
 });
 
