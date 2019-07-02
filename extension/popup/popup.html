@@ -59,15 +59,35 @@
         
         <button id="log">write console</button>
 
-        <div class="round-slider">
-                <div class="selection"></div>
-                <div class="holder" style="color: hsl(120, 100%, 50%);"><label class="slidertext">100%</label></div>
+        <div class="eq-pane">
+                <label class="infolabel">host: content</label>
+                <div class="grid-container">
+       
+                        <div class="grid-item round-slider">
+                                       <div class="selection"></div>
+                                       <div class="holder" style="color: hsl(120, 100%, 50%);"><label class="slidertext">100%</label></div>
+                               </div>
+                               
+                               <div class="grid-item round-slider">
+                                       <div class="selection"></div>
+                                       <div class="holder" style="color: hsl(120, 100%, 50%);"><label class="slidertext">100%</label></div>      
+                               </div>
+                               
+                               <div class="grid-item round-slider">
+                                       <div class="selection"></div>
+                                       <div class="holder" style="color: hsl(120, 100%, 50%);"><label class="slidertext">100%</label></div>      
+                               </div>
+                      </div>
+                
         </div>
 
-            <button class="bmcontrol" id="load-current-tab">load current tab</button>
-            <button class="bmcontrol" id="mute-all">mute all</button>
-            <button class="bmcontrol" id="options">options</button>
         
+
+        <div class="button-grid-container">
+            <button class="button-grid-item bmcontrol" id="load-current-tab">load current tab</button>
+            <button class="button-grid-item bmcontrol" id="mute-all">mute all</button>
+            <button class="button-grid-item bmcontrol" id="options">options</button>
+        </div>
 
         <script src = "popup.js"></script>
         <script type="text/javascript" src="dials/dials.js"></script>
