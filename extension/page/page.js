@@ -252,6 +252,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
     // update gain node with audio
     if(request.action === 'page-param-modify'){
+        console.log("recieved param update: ", request);
         audioNodes[1].gain.value = request.gain;
     }
 
