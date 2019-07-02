@@ -1,0 +1,7 @@
+body {
+	min-height: 100vh;
+	min-width: 50vh;
+	background: linear-gradient(180deg,#DB302A 0%,#62186B 100%) no-repeat;
+	display: grid;
+	font-family: 'Roboto',sans-serif;
+}

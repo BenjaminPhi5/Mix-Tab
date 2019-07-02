@@ -1,7 +1,4 @@
-*{
-    margin : 0;
-    padding : 0;
-  }
+
   
   .container {
       display: flex;
@@ -11,6 +8,7 @@
   }
   .box-minmax{
     margin-top: 7px;
+    margin-left: 75px;
     width: 108px;
     display: flex;
     justify-content: space-between;
@@ -19,7 +17,7 @@
     
   }
   .range-slider {
-      margin-top: 30vh;
+      margin-top: 0vh;
       
   }
   .rs-range {
