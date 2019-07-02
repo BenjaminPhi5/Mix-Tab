@@ -6,20 +6,10 @@ var tablist;
 
 let mute_test = document.getElementById('load-current-tab');
 let logbutton = document.getElementById('log');
-var gain_slider = document.getElementById('gainslider');
-let second_slider = document.getElementById('secondslider');
-let third_slider = document.getElementById('thirdslider');
 let label1 = document.getElementById('label1');
-let date = new Date();
 var gainNode;
 var audios = new Map();
 var pageAudios = new Map();
-
-// IF I CAN EVER WORK OUT HOW TO GET THIS BACKGROUND PORT THING TO WORK
-// THE IDEA IS THAT YOU ONLY SAVE THE STATE WHEN THE POPUP ACTUALLY CLOSES, AND I THINK THIS THING ACHIEVES THIS
-var backgroundPort = chrome.runtime.connect({name:"port-from-popup"});
-// message via port from background....
-backgroundPort.onMessage.addListener(function(message){});
 
 
 // add onclick for it
@@ -32,24 +22,11 @@ mute_test.onclick = function(element) {
         slider_value: gain_slider.style.value
     });
 }
-
-// LOG ON CLICK
-logbutton.onclick = function(element) {
-    console.log("LOG: ", audios);
-}
-
 /*
     Getting updates from UI
 */
 window.addEventListener("change", function(event){
-    console.log("audio object: ", audios);
-    // if its a slider, set its value to the slider value
-    
-    if(event.target.parentElement.className === "slider"){
-        chrome.storage.sync.set({'sliderValue': event.target.value});
-        label1.innerHTML = "slider value: " + event.target.value;
-    }
-    
+    // on change now does nothing
 });
 
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
@@ -83,16 +60,11 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 window.addEventListener("input", function(event){
     // if its a slider continually update a value
     let evvalue = event.target.value;
-    if(event.target.parentElement.className === "slider"){
-        label1.innerHTML = "slider value: " + evvalue;
-    }
     if(event.target.parentElement.className === 'testslider'){
-
-        // load from gain node list
         label1.innerHTML = "slider value: " + evvalue;
-        
         index = parseInt(event.target.id);
 
+        // load from gain node list
         this.console.log("change gain in list: ", audios);
         this.console.log("current index:", index);
         this.console.log(testslider);
@@ -100,7 +72,6 @@ window.addEventListener("input", function(event){
     }
 
     if(event.target.parentElement.className === 'testslider2'){
-        // load from gain node list
         label1.innerHTML = "slider value: " + evvalue;
         pagetabid = parseInt(event.target.id);
         gainvalue = parseInt(evvalue)/100;
@@ -195,19 +166,6 @@ function removeExtraTab(key, slidergroup){
 
 window.addEventListener("load", function(){
     console.log("the popup was loaded on");
-    // set the slider value to the value in storage
-
-    // get the slider value
-    chrome.storage.sync.get('sliderValue', function(data){
-        console.log("setting value to: ", data.sliderValue);
-        gain_slider.value = data.sliderValue;
-    });
-
-    // now fetch the gain node from the background...
-    // so yes, everything is going to be handled from the popup script now oh yes I know, its terrible.
-    gainNode = chrome.extension.getBackgroundPage().gainNode;
-    console.log("background page :", chrome.extension.getBackgroundPage().gainNode);
-    
     // loading elements testing
     loadCapturedTabs();
 
