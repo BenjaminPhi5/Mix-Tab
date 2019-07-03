@@ -1,34 +1,11 @@
 // background script goes here, to inject content script eventually I imagine
 // testing for creating multiple objects
-var tabstrings = ["label a", "lable b", "label c"];
 var audioControlList = new Map();
 var pageAudioControlList = new Map();
-
-
-// testing setup for a single audio context
-//var audioContext = new AudioContext();
-//var gainNode = audioContext.createGain();
 
 // on install, eventually should setup settings, for now just write to console
 chrome.runtime.onInstalled.addListener(function (){
     console.log("extension installed");
-    // store the value for my slider:
-    chrome.storage.sync.set({sliderValue: 100});
-});
-
-var popupPort;
-// port connection from popup for when popup closes
-chrome.runtime.onConnect.addListener(function(port){
-    popupPort = port;
-    popupPort.onMessage.addListener(function(message){
-        console.log("message that I got:", message)
-        // store all the state in the message
-    });
-
-    port.onDisconnect.addListener(function(message) {
-        // popup should have closed now
-        console.log("disconnect recieved: ", message);
-    });
 });
 
 
@@ -54,8 +31,6 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 		            video : false
 	            }, function(stream) {
                     try{
-
-                        console.log('slider value:', request.slider_value);
                         console.log('stream', stream);
                         
                         // call the setup function to attach all the audio nodes and add to the audioControlList.
@@ -75,16 +50,11 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         });
 
         
-
-        
     // the recieve an update gain message    
     } else if (request.action === 'update-gain'){
         console.log("value recived: " + request.slider_value);
-        gainNode.gain.value = parseInt(request.slider_value)/100;
-    
-    } else if(request.action === 'fetch-gain-node'){
-            sendResponse(gainNode);
-    
+        gainNode.gain.value = parseInt(request.slider_value)/100; 
+
     } else if (request.action === 'get-current-tab'){
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             console.log("tab", tabs[0]);
@@ -144,21 +114,3 @@ chrome.webNavigation.onCompleted.addListener(function(details){
         url: details.url
     });
 });
-
-
-/*
-// log the change of status of tabs may need this is a tab now has some audio to stream
-chrome.tabCapture.onStatusChanged.addListener(function (captureInfo){
-    console.log("captureInfo: ", captureInfo);
-});
-*/
-
-/*
-trigger the extension on certain websites where the audio is known to not work - e.g. to get netflix silverlight
-or something like that and make it all work via a browser action.
-chrome.runtime.onMessageExternal.addListener(
-    function(request, sender, response){
-        // verify `sender.url`, read `request` object, reply with `sednResponse(...)`
-    }
-)
-*/
