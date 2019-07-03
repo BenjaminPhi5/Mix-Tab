@@ -28,7 +28,7 @@
                 "<all_urls>"
             ],
             "css":[],
-            "js":["page/page.js"],
+            "js":["page/page.js", "page/audioSetup.js"],
             "run_at": "document_start",
             "all_frames": true
         }

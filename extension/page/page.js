@@ -1,10 +1,7 @@
-// page script to be injected
-// at the moment it is injected into every single page upon the page being loaded.
-// it does nothing so far.
+// page script to be injected into every loaded page
+
 var audioContextCreated = false;
-var audioContext;
 var targets = [];
-var audioNodes = [];
 var tabid = 0;
 var sendReady = false;
 var url = '';
@@ -12,7 +9,6 @@ var responsefunc;
 
 
 // collect audio targets - returns a list of targets
-
 function getAudioTargets(){
     // get all videos and audios from the html, and collect them into a targets array.
     var videos = document.getElementsByTagName('video');
@@ -72,14 +68,6 @@ function init(){
     attachAll();
 
     console.log("attach success!");
-    // AAAAAHHHH BUT by running attach target, not the entire attach process, attachAll is only called once,
-    // so instead, don't have to worry
-    // then am giong to have to communicate these changes to the document page.
-    // ONLY DO IT IF THE PAGEEEE IS NOT!! CURRENTLY IN THE LIST, SINCE THESE SOURCE REATTACH THINGIES
-    // NEED TO BE CONSIDERED. note I don't think tab id nessesarily works here, as the new page in the tab may have
-    // no audio at all... hmmmm this is something to be investigated with the other document stuff actually.
-
-    // NOTE THAT IF A TAB ALREADY!! EXISTS REPLACE ITS INFO OKAY
     
     // now its time to communicate to the backgroundd... here goes:
     sendReady = true;
@@ -174,50 +162,11 @@ function resolveCrossorigin(target, source){
     }
 }
 
-// setup the audioContext variable
-function setupAudioContext(){
-    // reset audioNodes
-    audioNodes = [];
 
-    // init the audio context
-    audioContext = new AudioContext();
-    audioContextCreated = true;
 
-    // add a gain node
-    var gainNode = audioContext.createGain();
-
-    // will eventually do this for last parameter okay. noice.
-    //filters[0]._defaultChannelCount = (source.channelCount) ? source.channelCount : 2;
-
-    // i assue only have to connect up all the filters once only.... but not sure
-    gainNode.connect(audioContext.destination);
-
-    // add nodes to the audios array
-    audioNodes.push(audioContext);
-    audioNodes.push(gainNode);
-}
-
-function attachTargetAudio(target){
-    // get source from target
-    console.log("got called to attach: ", target);
-    var source = audioContext.createMediaElementSource(target);
-    
-    // connect the source to the first node in the chain (index 0 is the audio context itself)
-    source.connect(audioNodes[1]); 
-
-    // register the target is now attached
-    target.setAttribute('mix-tab-attach', 'true');
-}
-
+// Communicate setup to background script ----------------------------------------------------------------------------------------------
 function sendToBackground(){
-    // for now basic setup just using a gain node - does NOT look to see if the tab is there...
-    // but I don't think that matters since it will just override it anyway... oooh noice.
-    // REFERENCE FROM DOCUMENT SCRIPT: audioControlList.set(tabid, {node: gainNode, streamid: stream.id, valid:true});
-    //var audioControlList = chrome.extension.getBackgroundPage().audioControlList;
-
     // first check, is the id not 0 or the init function is not finished:
-    console.log("got here: ", tabid, sendReady);
-    console.log("audionodes: ", audioNodes);
     if(tabid === 0 || !sendReady){
         return;
     }
@@ -235,6 +184,8 @@ function sendToBackground(){
 }
 
 
+
+// Listeners For Setup -----------------------------------------------------------------------------------------------------------------
 
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // recieve tabid
@@ -267,11 +218,4 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 document.addEventListener("DOMContentLoaded", function onLoad(){
     // log each time a new tab is loaded
     console.log("new tab has loaded - should be for every single tab");
-
-    console.log("script: ", document.currentScript);
-
-    // setup audio targets
-    //init();
-    // dont really think i need this method anymore..... aha oh well never mind.
-    
 });
