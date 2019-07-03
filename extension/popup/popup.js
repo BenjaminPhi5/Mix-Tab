@@ -5,6 +5,8 @@ let load_audio_button = document.getElementById('load-current-tab');
 let mute_all_button = document.getElementById('mute-all');
 let options_button = document.getElementById('options');
 
+let slider_holder = document.getElementById('audioControlHolder');
+
 let logbutton = document.getElementById('log');
 let label1 = document.getElementById('testing-label');
 var gainNode;
@@ -64,19 +66,16 @@ window.addEventListener("input", function(event){
 
     if(event.target.getAttribute('audiosource') === 'load'){
         label1.innerHTML = "slider value: " + evvalue + " :" + event.target.getAttribute("audiosource");
-        /*
+        
         index = parseInt(event.target.id);
 
         // load from gain node list
-        this.console.log("change gain in list: ", audios);
-        this.console.log("current index:", index);
-        this.console.log(testslider);
         audios.get(index).gainNode.gain.value = parseInt(evvalue)/100;
-        */
+        
     }
 
-    if(event.target.parentElement.className === 'testslider2'){
-        /*
+    if(event.target.getAttribute('audiosource') === 'page'){
+        
         pagetabid = parseInt(event.target.id);
         gainvalue = parseInt(evvalue)/100;
 
@@ -86,7 +85,7 @@ window.addEventListener("input", function(event){
             param: 'gainNode',
             value: gainvalue
         });
-        */
+        
     }
 });
 
@@ -124,7 +123,9 @@ function loadCapturedTabs(){
         // sanity check - if its valid
         // value is audios.get(key)
         if(value.valid){
-            mkSlider(key, value.gainNode.gain.value * 100, testslider);
+            //mkSlider(key, value.gainNode.gain.value * 100, slider_holder);
+            //generateSliderGrid(id, value, host, content, audioSource)
+            generateSliderGrid(key, value.gainNode.gain.value * 100, "load host", "ld cn", "load");
         } else {
             // popup is the only section to modify params, therefore it is safe for the popup to do deletion
             // of records it is not currently using.
@@ -150,7 +151,9 @@ function loadCapturedTabs(){
 function addExtraTab(key){
     // sanity check - if its valid
     if(audios.get(key).valid){
-        mkSlider(key, audios.get(key).gainNode.gain.value * 100, testslider);
+        //mkSlider(key, audios.get(key).gainNode.gain.value * 100, slider_holder);
+        //generateSliderGrid(id, value, host, content, audioSource)
+        generateSliderGrid(key, audios.get(key).gainNode.gain.value * 100, "load host", "ld cn", "load");
     } else {
         // popup is the only section to modify params, therefore it is safe for the popup to do deletion
         // of records it is not currently using.
@@ -161,7 +164,8 @@ function addExtraTab(key){
 function addExtraPageTab(key){
     console.log("add tab: , key, audios: ", key, pageAudios);
     if(pageAudios.get(key).valid){
-        mkSlider(key, pageAudios.get(key).gain * 100, testslider2);
+        //mkSlider(key, pageAudios.get(key).gain * 100, slider_holder);
+        generateSliderGrid(key, pageAudios.get(key).gain * 100, "page host", "pg cn", "page");
     } else {
         pageAudios.delete(key);
     }
@@ -181,7 +185,7 @@ window.addEventListener("load", function(){
 
     // loading elements testing
     loadCapturedTabs();
-    generateSliderGrid(1234567, 50, "host it", "content it", "load");
+    //generateSliderGrid(1234567, 50, "host it", "content it", "load");
     //generateEqGrid(12345987, 50, 50, 50, "host it", "content it");
 
 });

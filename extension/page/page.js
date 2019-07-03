@@ -213,7 +213,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
     if(request.action === 'popup-param-request'){
         // can actually make audioNodes a map and multiplex on request.param
-        console.log("recieved message: param: ", request);
+        console.log("recieved message: param: ", request, audioNodes);
         // pan uses .pan, everything else is .gain
         let param_value = (request.param === "panNode") ? audioNodes.get(request.param).pan.value : audioNodes.get(request.param).gain.value;
         
