@@ -19,9 +19,6 @@ function setupStatus(){
 gain_button.onclick = function(element) {
     // if not already on gain, do switching
     if(currentStatus !== "gain"){
-        // set status
-        currentStatus = "gain";
-
         // set button color to blue and other buttons to orange
         gain_button.style = "background-color:#004df3;";
         pan_button.style = "background-color:#f36d00;";
@@ -37,15 +34,13 @@ gain_button.onclick = function(element) {
 
         // now the values have to be changed... not same as loading...
         // load the slider values
+        switchToGain();
     }
 }
 
 pan_button.onclick = function(element){
     // if not already on pan, do switching
     if(currentStatus !== "pan"){
-        // set status
-        currentStatus = "pan";
-
         // set button color to blue and other buttons to orange
         pan_button.style = "background-color:#004df3;";
         gain_button.style = "background-color:#f36d00;";
@@ -61,20 +56,88 @@ pan_button.onclick = function(element){
 
         // now the values have to be changed... not same as loading...
         // load the slider values
+        switchToPan();
     }
 }
 
 eq_button.onclick = function(element){
     // if not already on pan, do switching
     if(currentStatus !== "eq"){
-        // set status
-        currentStatus = "eq";
-
         // set button color to blue and other buttons to orange
         eq_button.style = "background-color:#004df3;";
         gain_button.style = "background-color:#f36d00;";
         pan_button.style = "background-color:#f36d00;";
         
         // switch out the sliders for the eq dials and load all that eq data......
+        switchToEq();
     }
+}
+
+
+// switch the sliders from whatever state they are in to gain
+function switchToGain(){
+    if(currentStatus === "pan"){
+        // set status
+        currentStatus = "gain";
+
+        // get all the sliders
+        sliders = document.getElementsByClassName("rs-range");
+
+        for(i = 0; i < sliders.length; i++){
+            let slider = sliders[i];
+            if(slider.getAttribute("audiosource") === "load"){
+                // for all document loaded audio, just switch the slider value to the pan
+                slider.value = audios.get(parseInt(slider.getAttribute("tabid"))).gainNode.gain.value * 100;
+            }
+
+            // for all page loaded audio - gonna have to do a ton of message passing eugh oh well
+            else if(slider.getAttribute("audiosource") === "page"){
+
+            }
+        }
+
+        
+    } else {
+        // switch from eq to gain
+        // set status
+        currentStatus = "gain";
+    }
+
+}
+
+function switchToPan(){
+    if(currentStatus === "gain"){
+        // set status
+        currentStatus = "pan";
+
+        // get all the sliders
+        sliders = document.getElementsByClassName("rs-range");
+
+        for(i = 0; i < sliders.length; i++){
+            let slider = sliders[i];
+            if(slider.getAttribute("audiosource") === "load"){
+                console.log("load pan: ", slider.getAttribute("tabid"), audios, slider);
+                console.log("load pan value: ", parseInt(slider.getAttribute("tabid")), audios.get(parseInt(slider.getAttribute("tabid"))).panNode.pan.value);
+                // for all document loaded audio, just switch the slider value to the pan, by converting the given value
+                slider.value = (audios.get(parseInt(slider.getAttribute("tabid"))).panNode.pan.value + 1) * 100;
+            }
+
+            // for all page loaded audio - gonna have to do a ton of message passing eugh oh well
+            else if(slider.getAttribute("audiosource") === "page"){
+
+            }
+
+        }
+
+        
+    } else {
+        // switch from eq to gain
+        // set status
+        currentStatus = "pan";
+    }
+}
+
+function switchToEq(){
+    // set status
+    currentStatus = "eq";
 }

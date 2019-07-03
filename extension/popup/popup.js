@@ -69,22 +69,40 @@ window.addEventListener("input", function(event){
         
         index = parseInt(event.target.id);
 
-        // load from gain node list
-        audios.get(index).gainNode.gain.value = parseInt(evvalue)/100;
+        // check if it is gain or pan
+        if(currentStatus === "gain"){
+            // divide by 100, to get a maximum gain of 2, min of 0
+            audios.get(index).gainNode.gain.value = parseInt(evvalue)/100;
+        }
+        else if(currentStatus === "pan"){
+            // divide by 100 and -1, to get a min of -1 (all left) and max +1 (all right)
+            audios.get(index).panNode.pan.value = (parseInt(evvalue)/100) -1;
+        }
         
     }
 
     if(event.target.getAttribute('audiosource') === 'page'){
-        
         pagetabid = parseInt(event.target.id);
-        gainvalue = parseInt(evvalue)/100;
 
-        // send message to page context script
-        chrome.tabs.sendMessage(pagetabid, {
-            action: 'popup-param-modify',
-            param: 'gainNode',
-            value: gainvalue
-        });
+        if(currentStatus === "gain"){
+            gainvalue = parseInt(evvalue)/100;
+            // send message to page context script
+            chrome.tabs.sendMessage(pagetabid, {
+                action: 'popup-param-modify',
+                param: 'gainNode',
+                value: gainvalue
+            });
+        }
+        
+        else if(currentStatus === "pan"){
+            panvalue = parseInt(evvalue)/100 - 1;
+            // send message to page context script
+            chrome.tabs.sendMessage(pagetabid, {
+                action: 'popup-param-modify',
+                param: 'panNode',
+                value: panvalue
+            });
+        }
         
     }
 });

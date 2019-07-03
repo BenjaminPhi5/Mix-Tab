@@ -101,6 +101,7 @@ function generateSliderGrid(id, value, host, content, audioSource){
     rangeLine.min = "0";
     rangeLine.max = "200";
     rangeLine.setAttribute('audiosource', audioSource); 
+    rangeLine.setAttribute("tabid", id);
     //audio source is page for contents script extracted audio, and load for popup loaded audio
 
     boxMinMax.className = "box-minmax";
