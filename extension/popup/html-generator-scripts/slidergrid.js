@@ -50,7 +50,7 @@ function mkSlider(id, value, slidergroup){
  * @param {*String} content site media content
  * @param {*HTML element} parentGroup parent html element of slider
  */
-function generateSliderGrid(id, value, host, content){
+function generateSliderGrid(id, value, host, content, audioSource){
     // create elements
     let sliderGridContainer = document.createElement('div');
     let muteButton = document.createElement('button');
@@ -100,6 +100,8 @@ function generateSliderGrid(id, value, host, content){
     rangeLine.value = String(value);
     rangeLine.min = "0";
     rangeLine.max = "200";
+    rangeLine.setAttribute('audiosource', audioSource); 
+    //audio source is page for contents script extracted audio, and load for popup loaded audio
 
     boxMinMax.className = "box-minmax";
     

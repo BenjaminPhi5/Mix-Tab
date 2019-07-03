@@ -1,7 +1,4 @@
 // get html element
-let testdiv = document.getElementById('testdiv');
-let testslider = document.getElementById('testslider');
-let testslider2 = document.getElementById('testslider2');
 var tablist;
 
 let load_audio_button = document.getElementById('load-current-tab');
@@ -9,7 +6,7 @@ let mute_all_button = document.getElementById('mute-all');
 let options_button = document.getElementById('options');
 
 let logbutton = document.getElementById('log');
-let label1 = document.getElementById('label1');
+let label1 = document.getElementById('testing-label');
 var gainNode;
 var audios = new Map();
 var pageAudios = new Map();
@@ -27,9 +24,6 @@ load_audio_button.onclick = function(element) {
 /*
     Getting updates from UI
 */
-window.addEventListener("change", function(event){
-    // on change now does nothing
-});
 
 // listen for requests to add or remove audio control groups from the popup,
 // or to switch between gain, pan, and eq.
@@ -63,11 +57,14 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
 // input is the message used for sliders that gradually change their value
 window.addEventListener("input", function(event){
-    // if its a slider continually update a value
+    // testing label if its a slider continually update a value
     let evvalue = event.target.value;
     label1.innerHTML = "slider value: " + evvalue;
-    if(event.target.parentElement.className === 'testslider'){
-        
+    this.console.log("event.target: ", event.target);
+
+    if(event.target.getAttribute('audiosource') === 'load'){
+        label1.innerHTML = "slider value: " + evvalue + " :" + event.target.getAttribute("audiosource");
+        /*
         index = parseInt(event.target.id);
 
         // load from gain node list
@@ -75,9 +72,11 @@ window.addEventListener("input", function(event){
         this.console.log("current index:", index);
         this.console.log(testslider);
         audios.get(index).gainNode.gain.value = parseInt(evvalue)/100;
+        */
     }
 
     if(event.target.parentElement.className === 'testslider2'){
+        /*
         pagetabid = parseInt(event.target.id);
         gainvalue = parseInt(evvalue)/100;
 
@@ -87,10 +86,13 @@ window.addEventListener("input", function(event){
             param: 'gainNode',
             value: gainvalue
         });
+        */
     }
 });
 
-
+window.addEventListener("change", function(event){
+    // on change now does nothing
+});
 
 /*
     On load, setup the UI
@@ -116,7 +118,6 @@ function loadCapturedTabs(){
     pageAudios = chrome.extension.getBackgroundPage().pageAudioControlList;
     console.log("audios:", audios);
     console.log("page audios", pageAudios);
-    console.log("html tags:", testslider);
 
     // iterate through each element, and add a slider
     audios.forEach(function(value, key, map){
@@ -180,7 +181,7 @@ window.addEventListener("load", function(){
 
     // loading elements testing
     loadCapturedTabs();
-    //generateSliderGrid(1234567, 50, "host it", "content it");
+    generateSliderGrid(1234567, 50, "host it", "content it", "load");
     //generateEqGrid(12345987, 50, 50, 50, "host it", "content it");
 
 });
