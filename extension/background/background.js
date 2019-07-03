@@ -30,6 +30,11 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
                 // get id
                 var tabid = currTab.id;
 
+                 // now check if the tab isn't already being monitored, if it is, do nothing.
+                if(audioControlList.has(tabid) || pageAudioControlList.has(tabid)){
+                    return;
+                }
+
                 // fetch audio
                 chrome.tabCapture.capture({
 			        audio : true,

@@ -97,18 +97,6 @@ window.addEventListener("change", function(event){
     On load, setup the UI
 */
 
-// create a slider and add it in to the popup
-function mkSlider(id, value, slidergroup){
-    //template: <input id="gainslider" type="range" min="1" max="100" value="50"></input>
-    let slider = document.createElement('input');
-    slider.id = String(id);
-    slider.type = "range";
-    slider.min = "0";
-    slider.max = "100";
-    slider.value = String(value);
-    slidergroup.appendChild(slider);
-}
-
 
 // load already being tracked tabs into popup page
 function loadCapturedTabs(){
@@ -123,8 +111,6 @@ function loadCapturedTabs(){
         // sanity check - if its valid
         // value is audios.get(key)
         if(value.valid){
-            //mkSlider(key, value.gainNode.gain.value * 100, slider_holder);
-            //generateSliderGrid(id, value, host, content, audioSource)
             generateSliderGrid(key, value.gainNode.gain.value * 100, "load host", "ld cn", "load");
         } else {
             // popup is the only section to modify params, therefore it is safe for the popup to do deletion
@@ -151,8 +137,6 @@ function loadCapturedTabs(){
 function addExtraTab(key){
     // sanity check - if its valid
     if(audios.get(key).valid){
-        //mkSlider(key, audios.get(key).gainNode.gain.value * 100, slider_holder);
-        //generateSliderGrid(id, value, host, content, audioSource)
         generateSliderGrid(key, audios.get(key).gainNode.gain.value * 100, "load host", "ld cn", "load");
     } else {
         // popup is the only section to modify params, therefore it is safe for the popup to do deletion
@@ -164,7 +148,6 @@ function addExtraTab(key){
 function addExtraPageTab(key){
     console.log("add tab: , key, audios: ", key, pageAudios);
     if(pageAudios.get(key).valid){
-        //mkSlider(key, pageAudios.get(key).gain * 100, slider_holder);
         generateSliderGrid(key, pageAudios.get(key).gain * 100, "page host", "pg cn", "page");
     } else {
         pageAudios.delete(key);
