@@ -55,33 +55,11 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 	            }, function(stream) {
                     try{
 
-                        console.log('slider value:', request.slider_value)
-			            console.log('stream', stream);
-                        //I can attach all my filter here...
-                        // create an audio context
-                        var audioContext = new AudioContext();
-                        var gainNode = audioContext.createGain();
-
-                        // get a source
-                        var source = audioContext.createMediaStreamSource(stream);
-                        console.log('i managed to create an audio context.. yay')
-            
-            
-            
-                        source.connect(gainNode);
-                        gainNode.connect(audioContext.destination);
-
-                        console.log("here is my audio context, source, and gain node: ", audioContext, source, gainNode);
-                        console.log("min and max value", gainNode.gain.minValue, gainNode.gain.maxValue);
-                        console.log("current value", gainNode.gain.value);
-                        //gainNode.gain.value = 0;
-                        console.log("updated value", gainNode.gain.value);
-
-                        // add gain node to audios list/map
-                        //audioControlList[tabid] = {node: gainNode, streamid: stream.id, valid:true};
-                        audioControlList.set(tabid, {node: gainNode, streamid: stream.id, valid:true});
-
-                        console.log("audioControl: ",audioControlList);
+                        console.log('slider value:', request.slider_value);
+                        console.log('stream', stream);
+                        
+                        // call the setup function to attach all the audio nodes and add to the audioControlList.
+                        setupBackgroundAudioContext(stream, tabid);
 
                         // send message to popup to add new slider
                         chrome.runtime.sendMessage({

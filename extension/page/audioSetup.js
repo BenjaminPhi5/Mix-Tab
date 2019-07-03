@@ -63,6 +63,8 @@ function attachTargetAudio(target){
     console.log("got called to attach: ", target);
     var source = audioContext.createMediaElementSource(target);
     
+    // set channel count for firts node in chain
+
     // connect the source to the first node in the chain (index 0 is the audio context itself)
     source.connect(audioNodes[1]);
 

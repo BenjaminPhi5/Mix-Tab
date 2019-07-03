@@ -68,7 +68,7 @@ window.addEventListener("input", function(event){
         this.console.log("change gain in list: ", audios);
         this.console.log("current index:", index);
         this.console.log(testslider);
-        audios.get(index).node.gain.value = parseInt(evvalue)/100;
+        audios.get(index).gainNode.gain.value = parseInt(evvalue)/100;
     }
 
     if(event.target.parentElement.className === 'testslider2'){
@@ -118,7 +118,7 @@ function loadCapturedTabs(){
         // sanity check - if its valid
         // value is audios.get(key)
         if(value.valid){
-            mkSlider(key, value.node.gain.value * 100, testslider);
+            mkSlider(key, value.gainNode.gain.value * 100, testslider);
         } else {
             // popup is the only section to modify params, therefore it is safe for the popup to do deletion
             // of records it is not currently using.
@@ -142,7 +142,7 @@ function loadCapturedTabs(){
 function addExtraTab(key){
     // sanity check - if its valid
     if(audios.get(key).valid){
-        mkSlider(key, audios.get(key).node.gain.value * 100, testslider);
+        mkSlider(key, audios.get(key).gainNode.gain.value * 100, testslider);
     } else {
         // popup is the only section to modify params, therefore it is safe for the popup to do deletion
         // of records it is not currently using.

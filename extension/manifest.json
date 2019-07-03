@@ -11,7 +11,7 @@
     "options_page": "options/options.html",
 
     "background": {
-        "scripts": ["background/background.js"],
+        "scripts": ["background/background.js", "background/backgroundAudioSetup.js"],
 
         "": "I think I need to remove the persistent tag"
     },
