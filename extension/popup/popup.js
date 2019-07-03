@@ -65,8 +65,9 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 window.addEventListener("input", function(event){
     // if its a slider continually update a value
     let evvalue = event.target.value;
+    label1.innerHTML = "slider value: " + evvalue;
     if(event.target.parentElement.className === 'testslider'){
-        label1.innerHTML = "slider value: " + evvalue;
+        
         index = parseInt(event.target.id);
 
         // load from gain node list
@@ -77,7 +78,6 @@ window.addEventListener("input", function(event){
     }
 
     if(event.target.parentElement.className === 'testslider2'){
-        label1.innerHTML = "slider value: " + evvalue;
         pagetabid = parseInt(event.target.id);
         gainvalue = parseInt(evvalue)/100;
 
