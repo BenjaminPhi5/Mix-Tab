@@ -20,7 +20,7 @@
                     </div>
                     
                     <div class="box-minmax">
-                      <span>0</span><span>200</span>
+                      <span class="slider-lower-bound">0</span><span class="slider-upper-bound">200</span>
                     </div>
                     
             </div>
@@ -103,9 +103,11 @@ function generateSliderGrid(id, value, host, content){
 
     boxMinMax.className = "box-minmax";
     
+    zeroSpan.className = "slider-lower-bound";
     zeroSpan.innerHTML = "0";
 
     maxSpan.innerHTML = "200";
+    maxSpan.className = "slider-upper-bound";
 
     spareGridItem.className = "slider-grid-item";
 
