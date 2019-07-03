@@ -142,9 +142,15 @@ function generateSliderGrid(id, value, host, content, audioSource){
         // send mute message to slider - depends on audio type
 
         // set badge text and colour
-        chrome.browserAction.setBadgeText({title: "mute", tabId: id});
+        chrome.browserAction.setBadgeText({text: "mute", tabId: id});
         chrome.browserAction.setBadgeBackgroundColor({color: "#FF0000", tabId: id});
     }
 
-    
+    soloButton.onclick = function(elment){
+      // send mute message to slider - depends on audio type
+
+      // set badge text and colour
+      chrome.browserAction.setBadgeText({text: "mute", tabId: id});
+      chrome.browserAction.setBadgeBackgroundColor({color: "#FFFF00", tabId: id});
+  }
 }

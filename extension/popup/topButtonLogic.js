@@ -158,4 +158,8 @@ function switchToPan(){
 function switchToEq(){
     // set status
     currentStatus = "eq";
+
+    if(currentStatus !== "eq"){
+        // shouldn't even need to store values, just need to hide and show different values.
+    }
 }
