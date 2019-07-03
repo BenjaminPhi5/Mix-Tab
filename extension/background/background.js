@@ -57,8 +57,12 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     
     } else if (request.action === 'page-audio-setup-delivery'){
         // add new audio element to page map:
+        console.log("tabid: ", request.tabid);
+        console.log("page audios before: ", pageAudioControlList);
         pageAudioControlList.set(request.tabid, {gain: request.gain, valid: request.valid});
 
+        console.log("SEND TAB TO FRONT");
+        console.log("page audios after: ", pageAudioControlList);
         // send message to popup to add new slider to other list
         chrome.runtime.sendMessage({
             action: 'background-new-page-audio-control-delivery',

@@ -171,21 +171,21 @@ function sendToBackground(){
         return;
     }
     // else, continue, send info to background
-    console.log("YES got here: ", audioNodes, audioNodes[1]);
+    console.log("YES got here: ", audioNodes, audioNodes.get("gainNode"));
 
     // send the message to the background okay. noice.
     
     chrome.runtime.sendMessage({
         action: 'page-audio-setup-delivery',
         tabid: tabid,
-        gain: audioNodes[1].gain.value,
+        gain: audioNodes.get("gainNode").gain.value,
         valid:true
     });
 }
 
 
 
-// Listeners For Setup -----------------------------------------------------------------------------------------------------------------
+// Listeners for Setup and Param Updates --------------------------------------------------------------------------------------------------
 
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // recieve tabid
@@ -204,13 +204,24 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // update gain node with audio
     if(request.action === 'popup-param-modify'){
         console.log("recieved param update: ", request);
-        audioNodes[1].gain.value = request.gain;
+        if(request.param === "panNode"){
+            audioNodes.get("panNode").pan.value = request.value;
+        } else {
+            audioNodes.get(request.param).gain.value = request.value;
+        }
     }
 
     if(request.action === 'popup-param-request'){
         // can actually make audioNodes a map and multiplex on request.param
         console.log("recieved message: param: ", request);
-        chrome.runtime.sendMessage({action: 'page-param-delivery', key: tabid, param:'gain', value: audioNodes[1].gain.value});
+        // pan uses .pan, everything else is .gain
+        let param_value = (request.param === "panNode") ? audioNodes.get(request.param).pan.value : audioNodes.get(request.param).gain.value;
+        
+        console.log("param value: ", param_value);
+        chrome.runtime.sendMessage(
+            {action: 'page-param-delivery', key: tabid, param:request.param, value: param_value}
+        );
+        console.log("sent message");
     }
 });
 

@@ -51,6 +51,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
     if(request.action === 'page-param-delivery'){
         // update value in pageAudios
+        console.log("request param deliv: ", request);
         pageAudios.get(request.key).gain = request.value;
         addExtraPageTab(request.key);
 
@@ -80,9 +81,8 @@ window.addEventListener("input", function(event){
         // send message to page context script
         chrome.tabs.sendMessage(pagetabid, {
             action: 'popup-param-modify',
-            tabid: pagetabid,
-            param: 'gain',
-            gain: gainvalue
+            param: 'gainNode',
+            value: gainvalue
         });
     }
 });
@@ -112,6 +112,7 @@ function loadCapturedTabs(){
     audios = chrome.extension.getBackgroundPage().audioControlList;
     pageAudios = chrome.extension.getBackgroundPage().pageAudioControlList;
     console.log("audios:", audios);
+    console.log("page audios", pageAudios);
     console.log("html tags:", testslider);
 
     // iterate through each element, and add a slider
@@ -129,8 +130,10 @@ function loadCapturedTabs(){
 
     // iterate through each element, and add a slider, going to need to actually request values via a message
     pageAudios.forEach(function(value, key, map){
+        console.log("audio iterate: ", value, key);
         if(value.valid){
-        chrome.tabs.sendMessage(key, {action: 'popup-param-request', param: 'gain'});
+            console.log("selected");
+        chrome.tabs.sendMessage(key, {action: 'popup-param-request', param: 'gainNode'});
         } else {
             // popup is the only section to modify params, therefore it is safe for the popup to do deletion
             // of records it is not currently using.
@@ -152,6 +155,7 @@ function addExtraTab(key){
 }
 
 function addExtraPageTab(key){
+    console.log("add tab: , key, audios: ", key, pageAudios);
     if(pageAudios.get(key).valid){
         mkSlider(key, pageAudios.get(key).gain * 100, testslider2);
     } else {
