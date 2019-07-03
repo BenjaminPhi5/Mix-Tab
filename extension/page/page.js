@@ -176,7 +176,7 @@ function sendToBackground(){
     // send the message to the background okay. noice.
     
     chrome.runtime.sendMessage({
-        action: 'page-audio-setup',
+        action: 'page-audio-setup-delivery',
         tabid: tabid,
         gain: audioNodes[1].gain.value,
         valid:true
@@ -189,7 +189,7 @@ function sendToBackground(){
 
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // recieve tabid
-    if(request.action === 'tab-id-send'){
+    if(request.action === 'background-tab-id-load-delivery'){
         // set ids
         url = request.url;
         tabid = request.tabid;
@@ -202,15 +202,15 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     }
 
     // update gain node with audio
-    if(request.action === 'page-param-modify'){
+    if(request.action === 'popup-param-modify'){
         console.log("recieved param update: ", request);
         audioNodes[1].gain.value = request.gain;
     }
 
-    if(request.action === 'page-param-request'){
+    if(request.action === 'popup-param-request'){
         // can actually make audioNodes a map and multiplex on request.param
         console.log("recieved message: param: ", request);
-        chrome.runtime.sendMessage({action: 'page-param-send', key: tabid, param:'gain', value: audioNodes[1].gain.value});
+        chrome.runtime.sendMessage({action: 'page-param-delivery', key: tabid, param:'gain', value: audioNodes[1].gain.value});
     }
 });
 

@@ -18,8 +18,7 @@ mute_test.onclick = function(element) {
 
     // request the tab capture - maybe I need to do it in here...?
     chrome.runtime.sendMessage({
-        action: 'fetch_audio_stream',
-        slider_value: "100"
+        action: 'popup-fetch-audio-stream-request',
     });
 }
 /*
@@ -29,26 +28,28 @@ window.addEventListener("change", function(event){
     // on change now does nothing
 });
 
+// listen for requests to add or remove audio control groups from the popup,
+// or to switch between gain, pan, and eq.
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // if a new audio control has been clicked on and added
-    if(request.action === 'new-audio-control'){
+    if(request.action === 'background-new-loaded-audio-control-delivery'){
         addExtraTab(request.key);
     }
 
-    if(request.action === 'new-page-audio-control'){
+    if(request.action === 'background-new-page-audio-control-delivery'){
         addExtraPageTab(request.key);
     }
 
     // if an audio control has been removed, its slider needs to dissapear
-    if(request.action === 'tab-close'){
+    if(request.action === 'background-loaded-tab-close-delivery'){
         removeExtraTab(request.key, testslider);
     }
 
-    if(request.action === 'page-tab-close'){
+    if(request.action === 'background-page-tab-close-delivery'){
         removeExtraTab(request.key, testslider2);
     }
 
-    if(request.action === 'page-param-send'){
+    if(request.action === 'page-param-delivery'){
         // update value in pageAudios
         pageAudios.get(request.key).gain = request.value;
         addExtraPageTab(request.key);
@@ -78,7 +79,7 @@ window.addEventListener("input", function(event){
 
         // send message to page context script
         chrome.tabs.sendMessage(pagetabid, {
-            action: 'page-param-modify',
+            action: 'popup-param-modify',
             tabid: pagetabid,
             param: 'gain',
             gain: gainvalue
@@ -129,7 +130,7 @@ function loadCapturedTabs(){
     // iterate through each element, and add a slider, going to need to actually request values via a message
     pageAudios.forEach(function(value, key, map){
         if(value.valid){
-        chrome.tabs.sendMessage(key, {action: 'page-param-request', param: 'gain'});
+        chrome.tabs.sendMessage(key, {action: 'popup-param-request', param: 'gain'});
         } else {
             // popup is the only section to modify params, therefore it is safe for the popup to do deletion
             // of records it is not currently using.

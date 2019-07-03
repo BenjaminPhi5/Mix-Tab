@@ -3,6 +3,11 @@
 var audioControlList = new Map();
 var pageAudioControlList = new Map();
 
+/**
+ * TEMPLATE FOR SENDING MESSAGES IS:
+ * action: sender-param/info-request/modify/delivery   (where info is the specific info)
+ */
+
 // on install, eventually should setup settings, for now just write to console
 chrome.runtime.onInstalled.addListener(function (){
     console.log("extension installed");
@@ -15,7 +20,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     console.log("message:", request);
 
     // if its my message
-    if(request.action === 'fetch_audio_stream') {
+    if(request.action === 'popup-fetch-audio-stream-request') {
         console.log("my mesage for audio fetch recieved");
 
         // fetch tab id
@@ -38,7 +43,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
                         // send message to popup to add new slider
                         chrome.runtime.sendMessage({
-                            action: 'new-audio-control',
+                            action: 'background-new-loaded-audio-control-delivery',
                             key: tabid
                         })
                     } catch(err) {
@@ -49,24 +54,14 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
             }
         });
 
-        
-    // the recieve an update gain message    
-    } else if (request.action === 'update-gain'){
-        console.log("value recived: " + request.slider_value);
-        gainNode.gain.value = parseInt(request.slider_value)/100; 
-
-    } else if (request.action === 'get-current-tab'){
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-            console.log("tab", tabs[0]);
-        });
     
-    } else if (request.action === 'page-audio-setup'){
+    } else if (request.action === 'page-audio-setup-delivery'){
         // add new audio element to page map:
         pageAudioControlList.set(request.tabid, {gain: request.gain, valid: request.valid});
 
         // send message to popup to add new slider to other list
         chrome.runtime.sendMessage({
-            action: 'new-page-audio-control',
+            action: 'background-new-page-audio-control-delivery',
             key: request.tabid
         })
     }
@@ -89,7 +84,7 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo){
         
         // send message saying audio value is to be removed
         chrome.runtime.sendMessage({
-            action: 'tab-close',
+            action: 'background-loaded-tab-close-delivery',
             key: tabId
         })
     }
@@ -99,7 +94,7 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo){
         
         // send message saying audio value is to be removed
         chrome.runtime.sendMessage({
-            action: 'page-tab-close',
+            action: 'background-page-tab-close-delivery',
             key: tabId
         })
     }
@@ -109,7 +104,7 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo){
 chrome.webNavigation.onCompleted.addListener(function(details){
     console.log("details found: ", details);
     chrome.tabs.sendMessage(details.tabId, {
-        action: 'tab-id-send',
+        action: 'background-tab-id-load-delivery',
         tabid: details.tabId,
         url: details.url
     });
