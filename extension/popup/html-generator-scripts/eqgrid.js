@@ -125,10 +125,13 @@ let parentGroup = document.getElementById("audioControlHolder");
     labelHigh.innerHTML = String(high) + "%";
 
     textLow.innerHTML = "low";
+    textLow.className = "infolabel eqlabel";
 
     textMid.innerHTML = "mid";
+    textMid.className = "infolabel eqlabel";
 
     textHigh.innerHTML = "high";
+    textHigh.className = "infolabel eqlabel";
 
     // Generate parent child structure
     // everything is finally added to the popup at the end

@@ -9,6 +9,12 @@ function generateSliderHandles(){
 	sliders = document.getElementsByClassName("round-slider");
 	console.log("Sliders:", sliders);
 	for (let i = 0; i < sliders.length; i++) {
+
+		// the angle should be fetched here from the popup, and message passing should
+		// also be set up here, so that the param is passed through,
+		// however, wait until actually have frequency stuff properly setup.
+		computeStartAngle(sliders[i], 60);
+
 		sliders[i].addEventListener("click", round_slider_tune, false);
 		sliders[i].addEventListener("mousedown", function(event) {
 			sliders[i].onmousemove = function(event) {
@@ -20,7 +26,58 @@ function generateSliderHandles(){
 	}
 }
 
-generateSliderHandles();
+function getAngle(percentage){
+	// -1 so that it does not wrap around to 0 when its on 100 and on max
+	// + 90 since it starts at the top, not the side
+	return (percentage*3.6) + 90 - 1;
+}
+
+function toRadians(angle){
+	// divide through  by ratio
+	return angle;
+}
+
+function getdy(angle){
+	return Math.sin(angle);
+}
+
+function getdx(angle){
+	return Math.cos(angle);
+}
+
+function computeStartAngle(slider, percentage){
+	let rads = toRadians(getAngle(percentage));
+	let dY = getdy(rads) * 100;
+	let dX = getdx(rads) * 100;
+	
+	let styleafter = document.head.appendChild(document.createElement("style"));
+	let text = slider.getElementsByClassName("slidertext")[0];
+	let output = slider.getElementsByClassName("selection")[0];
+	let value = 100;
+
+	if (0 <= dX && dX < 50 && dY == 0) {
+		output.style = "clip-path: polygon(" + dX + "% " + dY + "%, 50% 0%, 50% 50%);";
+		value = Math.round((50 - dX) / 50 * 12.5);
+	} else if (dX == 0 && 0 <= dY && dY <= 100) {
+		output.style = "clip-path: polygon(" + dX + "% " + dY + "%, 0% 0%, 50% 0%, 50% 50%);";
+		value = Math.round(12.5 + dY / 100 * 25);
+	} else if (0 <= dX && dX <= 100 && dY == 100) {
+		output.style = "clip-path: polygon(" + dX + "% " + dY + "%, 0% 100%, 0% 0%, 50% 0%, 50% 50%);";
+		value = Math.round(37.5 + dX / 100 * 25);
+	} else if (dX == 100 && 0 <= dY && dY <= 100) {
+		output.style = "clip-path: polygon(" + dX + "% " + dY + "%, 100% 100%, 0% 100%, 0% 0%, 50% 0%, 50% 50%);";
+		value = Math.round(62.5 + (100 - dY) / 100 * 25);
+	} else if (50 <= dX && dX <= 100 && dY == 0) {
+		output.style = "clip-path: polygon(" + dX + "% " + dY + "%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 0%, 50% 50%);";
+		value = Math.round(87.5 + (100 - dX) / 50 * 12.5);
+	}	
+	
+	styleafter.innerHTML = ".round-slider .selection:after {transform: rotate(" + -rads + "deg);}";
+	let hue = Math.floor(value / 100 * 120),
+		saturation = Math.abs(value - 50);
+	text.innerHTML = percentage + "%";
+	text.style = "color: hsl(" + hue + ", 100%, " + saturation + "%);";
+}
 
 function round_slider_tune(event) {
 	let eventDoc = (event.target && event.target.ownerDocument) || document,
