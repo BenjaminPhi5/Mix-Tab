@@ -4,7 +4,10 @@ let testslider = document.getElementById('testslider');
 let testslider2 = document.getElementById('testslider2');
 var tablist;
 
-let mute_test = document.getElementById('load-current-tab');
+let load_audio_button = document.getElementById('load-current-tab');
+let mute_all_button = document.getElementById('mute-all');
+let options_button = document.getElementById('options');
+
 let logbutton = document.getElementById('log');
 let label1 = document.getElementById('label1');
 var gainNode;
@@ -13,7 +16,7 @@ var pageAudios = new Map();
 
 
 // add onclick for it
-mute_test.onclick = function(element) {
+load_audio_button.onclick = function(element) {
     console.log("button pressed");
 
     // request the tab capture - maybe I need to do it in here...?
@@ -171,6 +174,10 @@ function removeExtraTab(key, slidergroup){
 
 window.addEventListener("load", function(){
     console.log("the popup was loaded on");
+
+    // set current button status
+    setupStatus();
+
     // loading elements testing
     loadCapturedTabs();
     generateSliderGrid(1234567, 50, "host it", "content it");
