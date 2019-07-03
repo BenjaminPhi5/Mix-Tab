@@ -3,7 +3,7 @@
     "version": "0.1",
     "description": "control all tabs' audio via one simple extension!",
 
-    "permissions": ["storage", "<all_urls>", "tabs", "activeTab", "tabCapture", "browser_action"],
+    "permissions": ["storage", "<all_urls>", "tabs", "activeTab", "tabCapture", "webNavigation"],
 
     "web_accessible_resources": ["popup/general.css", "popup/buttons/controlbuttons.css",
         "popup/dials/dials.css", "popup/sliders/sliders.css", "popup/dials/dials.js"],

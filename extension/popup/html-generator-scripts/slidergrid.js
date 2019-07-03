@@ -135,4 +135,16 @@ function generateSliderGrid(id, value, host, content, audioSource){
     sliderGridContainer.appendChild(spareGridItem);
 
     parentGroup.appendChild(sliderGridContainer);
+
+
+    // add on clicks for the buttons:
+    muteButton.onclick = function(elment){
+        // send mute message to slider - depends on audio type
+
+        // set badge text and colour
+        chrome.browserAction.setBadgeText({title: "mute", tabId: id});
+        chrome.browserAction.setBadgeBackgroundColor({color: "#FF0000", tabId: id});
+    }
+
+    
 }
