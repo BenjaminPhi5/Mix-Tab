@@ -85,14 +85,23 @@ function switchToGain(){
 
         for(i = 0; i < sliders.length; i++){
             let slider = sliders[i];
+            let id = parseInt(slider.getAttribute("tabid"));
             if(slider.getAttribute("audiosource") === "load"){
                 // for all document loaded audio, just switch the slider value to the pan
-                slider.value = audios.get(parseInt(slider.getAttribute("tabid"))).gainNode.gain.value * 100;
+                slider.value = audios.get(id).gainNode.gain.value * 100;
             }
 
-            // for all page loaded audio - gonna have to do a ton of message passing eugh oh well
+            
             else if(slider.getAttribute("audiosource") === "page"){
+                // store old (current) slider value
+                let vals = pageAudios.get(id);
+                vals.pan = parseInt(slider.value)/100 - 1;
+                pageAudios.set(id, vals);
+                
 
+                // now, local values are stored in the pageAudios map upon a switch, so no message passing needed!. yay nice.
+                // see the top of the if statement for the store bit
+                slider.value = pageAudios.get(id).gain * 100;
             }
         }
 
@@ -107,6 +116,8 @@ function switchToGain(){
 
 function switchToPan(){
     if(currentStatus === "gain"){
+        // store current gain value
+
         // set status
         currentStatus = "pan";
 
@@ -115,16 +126,23 @@ function switchToPan(){
 
         for(i = 0; i < sliders.length; i++){
             let slider = sliders[i];
+            let id = parseInt(slider.getAttribute("tabid"));
             if(slider.getAttribute("audiosource") === "load"){
                 console.log("load pan: ", slider.getAttribute("tabid"), audios, slider);
                 console.log("load pan value: ", parseInt(slider.getAttribute("tabid")), audios.get(parseInt(slider.getAttribute("tabid"))).panNode.pan.value);
                 // for all document loaded audio, just switch the slider value to the pan, by converting the given value
-                slider.value = (audios.get(parseInt(slider.getAttribute("tabid"))).panNode.pan.value + 1) * 100;
+                slider.value = (audios.get(id).panNode.pan.value + 1) * 100;
             }
 
             // for all page loaded audio - gonna have to do a ton of message passing eugh oh well
             else if(slider.getAttribute("audiosource") === "page"){
+                // store old (current) slider value
+                let vals = pageAudios.get(id);
+                vals.gain = parseInt(slider.value)/100;
+                pageAudios.set(id, vals);
 
+                // now, local values are stored in the pageAudios map upon a switch, so no message passing needed!. yay nice.
+                slider.value = (pageAudios.get(id).pan + 1) * 100;
             }
 
         }

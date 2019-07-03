@@ -179,6 +179,7 @@ function sendToBackground(){
         action: 'page-audio-setup-delivery',
         tabid: tabid,
         gain: audioNodes.get("gainNode").gain.value,
+        pan: audioNodes.get("panNode").pan.value,
         valid:true
     });
 }

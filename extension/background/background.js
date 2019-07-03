@@ -64,7 +64,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         // add new audio element to page map:
         console.log("tabid: ", request.tabid);
         console.log("page audios before: ", pageAudioControlList);
-        pageAudioControlList.set(request.tabid, {gain: request.gain, valid: request.valid});
+        pageAudioControlList.set(request.tabid, {gain: request.gain, pan: request.pan, valid: request.valid});
 
         console.log("SEND TAB TO FRONT");
         console.log("page audios after: ", pageAudioControlList);
