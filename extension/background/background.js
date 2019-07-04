@@ -44,7 +44,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
                         console.log('stream', stream);
                         
                         // call the setup function to attach all the audio nodes and add to the audioControlList.
-                        setupBackgroundAudioContext(stream, tabid, currTab.mutedInfo);
+                        setupBackgroundAudioContext(stream, tabid, currTab.title);
 
                         // send message to popup to add new slider
                         chrome.runtime.sendMessage({

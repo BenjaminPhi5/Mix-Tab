@@ -1,5 +1,5 @@
 // setup the audioContext variable
-function setupBackgroundAudioContext(stream, tabid, mutedInfo){
+function setupBackgroundAudioContext(stream, tabid, title){
     // init the audio context
     var audioContext = new AudioContext();
 
@@ -38,8 +38,9 @@ function setupBackgroundAudioContext(stream, tabid, mutedInfo){
         highEq: highEq,
         muteNode: muteNode,
         streamid: stream.id,
+        title: title,
         valid:true,
-        muted: mutedInfo.muted,
+        muted: false,
         soloed: false}
     );
 
