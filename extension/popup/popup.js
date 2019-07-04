@@ -56,7 +56,17 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
     }
 
-    else if(request.action === "background-visual-mute-request"){}
+    else if(request.action === "background-visual-mute-request"){
+        visualMuteSlider(request.id);
+    }
+
+    else if(request.action === "background-visual-solo-request"){
+        visualSoloSlider(request.id);
+    }
+
+    else if(request.action === "background-visual-undo-request"){
+        visualUndoSlider(request.id, request.type);
+    }
 
 });
 

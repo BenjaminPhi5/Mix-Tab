@@ -89,7 +89,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
     else if(request.action === "slidergrid-mute-request"){
         // mute this particular tab
-        chrome.runtime.sendMessage({action: "background-visual-mute-request", id:request.tabid});
+        chrome.runtime.sendMessage({action: "background-visual-mute-request", id:request.tabid, type: " mute"});
         
     }
 
