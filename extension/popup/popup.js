@@ -41,11 +41,11 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
     // if an audio control has been removed, its slider needs to dissapear
     if(request.action === 'background-loaded-tab-close-delivery'){
-        removeExtraTab(request.key, testslider);
+        removeExtraTab(request.key, slider_holder);
     }
 
     if(request.action === 'background-page-tab-close-delivery'){
-        removeExtraTab(request.key, testslider2);
+        removeExtraTab(request.key, slider_holder);
     }
 
     if(request.action === 'page-param-delivery'){
