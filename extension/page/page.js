@@ -186,8 +186,6 @@ function sendToBackground(){
     });
 }
 
-
-
 // Listeners for Setup and Param Updates --------------------------------------------------------------------------------------------------
 
 chrome.runtime.onMessage.addListener(function(request, sendResponse){

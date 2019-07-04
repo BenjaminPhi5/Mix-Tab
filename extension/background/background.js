@@ -64,15 +64,25 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         // add new audio element to page map:
         console.log("tabid: ", request.tabid);
         console.log("page audios before: ", pageAudioControlList);
-        pageAudioControlList.set(request.tabid, {gain: request.gain, pan: request.pan, valid: request.valid, muted: request.muted, soloed:false});
 
-        console.log("SEND TAB TO FRONT");
-        console.log("page audios after: ", pageAudioControlList);
-        // send message to popup to add new slider to other list
-        chrome.runtime.sendMessage({
-            action: 'background-new-page-audio-control-delivery',
-            key: request.tabid
-        })
+        if(!pageAudioControlList.has(request.tabid)){
+
+            pageAudioControlList.set(request.tabid, {
+                gain: request.gain,
+                pan: request.pan,
+                valid: request.valid,
+                muted: request.muted,
+                soloed:false
+            });
+
+            console.log("SEND TAB TO FRONT");
+            console.log("page audios after: ", pageAudioControlList);
+            // send message to popup to add new slider to other list
+            chrome.runtime.sendMessage({
+                action: 'background-new-page-audio-control-delivery',
+                key: request.tabid
+            });
+        }
     }
 
     else if(request.action === "slidergrid-mute-request"){
