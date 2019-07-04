@@ -199,7 +199,7 @@ function visualMuteSlider(id){
 function visualUndoSlider(id, type){
   strId = String(id);
   // remove badge text
-  chrome.browserAction.setBadgeText({text:""});
+  chrome.browserAction.setBadgeText({text: '', tabId: id});
 
   // set its colour back to white
   slider = document.getElementById(strId + " input");
