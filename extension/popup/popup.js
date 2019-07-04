@@ -56,7 +56,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
     }
 
-    else if(request.action === '')
+    else if(request.action === "background-visual-mute-request"){}
 
 });
 
