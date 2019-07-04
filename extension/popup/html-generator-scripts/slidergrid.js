@@ -138,19 +138,33 @@ function generateSliderGrid(id, value, host, content, audioSource){
 
 
     // add on clicks for the buttons:
-    muteButton.onclick = function(elment){
-        // send mute message to slider - depends on audio type
 
-        // set badge text and colour
-        chrome.browserAction.setBadgeText({text: "mute", tabId: id});
-        chrome.browserAction.setBadgeBackgroundColor({color: "#FF0000", tabId: id});
-    }
+  muteButton.onclick = function(elment){
+    // send mute message to slider - depends on audio type
 
-    soloButton.onclick = function(elment){
-      // send mute message to slider - depends on audio type
-
-      // set badge text and colour
-      chrome.browserAction.setBadgeText({text: "mute", tabId: id});
-      chrome.browserAction.setBadgeBackgroundColor({color: "#FFFF00", tabId: id});
+    // set badge text and colour
+    chrome.browserAction.setBadgeText({text: "mute", tabId: id});
+    chrome.browserAction.setBadgeBackgroundColor({color: "#FF0000", tabId: id});
   }
+
+  soloButton.onclick = function(elment){
+    // send mute message to slider - depends on audio type
+
+    // set badge text and colour
+    chrome.browserAction.setBadgeText({text: "solo", tabId: id});
+    chrome.browserAction.setBadgeBackgroundColor({color: "#F1C40F", tabId: id});
+  }
+  
+  gotoButton.onclick = function(element){
+    // this button just opens the tab which you have selected
+    // gets selected tab to get its window id, then switches to it.
+    chrome.tabs.get(id, function(tab){
+      chrome.tabs.update(id, {active: true}, function () {
+        chrome.windows.update(tab.windowId, {focused: true});
+    });
+    })
+
+    
+  }
+
 }
