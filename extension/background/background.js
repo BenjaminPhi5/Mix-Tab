@@ -2,7 +2,6 @@
 // testing for creating multiple objects
 var audioControlList = new Map();
 var pageAudioControlList = new Map();
-var soloEnabled = false;
 
 /**
  * TEMPLATE FOR SENDING MESSAGES IS:
@@ -78,6 +77,10 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
                 solo:request.solo
             });
 
+            if(soloEnabled){
+                chrome.tabs.sendMessage(tabid, {action: "backgroundAudioSetup-mute-request", mute:true});
+            }
+
             console.log("SEND TAB TO FRONT");
             console.log("page audios after: ", pageAudioControlList);
             // send message to popup to add new slider to other list
@@ -102,7 +105,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     }
 
     else if(request.action === "slidergrid-unsolo-request"){
-        unsolotab(request.tabid);
+        unsoloTab(request.tabid);
     }
 });
 

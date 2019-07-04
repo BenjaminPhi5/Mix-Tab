@@ -216,7 +216,7 @@ function visualUndoSlider(id, type){
   }
 }
 
-function visualSoloSLider(id){
+function visualSoloSlider(id){
   strId = String(id);
   // set badge text and colour
   chrome.browserAction.setBadgeText({text: "solo", tabId: id});
@@ -225,6 +225,9 @@ function visualSoloSLider(id){
   // set background colour to yellow
   slider = document.getElementById(strId + " input");
   slider.style = "border: 1px solid #ff9900;\nbackground: #ff9900;";
+
+  // set button colour
+  document.getElementById(strId + " solo").style = "background-color:#F1C40F;"
 
   // set state
   setSoloState(id, "true");
