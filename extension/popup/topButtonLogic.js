@@ -76,7 +76,9 @@ eq_button.onclick = function(element){
 
 // switch the sliders from whatever state they are in to gain
 function switchToGain(){
-    if(currentStatus === "pan"){
+        // show the slider group and hide the eq group
+        sliderParentGroup.style.display='block';
+        eqParentGroup.style.display = 'none';
         // set status
         currentStatus = "gain";
 
@@ -104,19 +106,12 @@ function switchToGain(){
                 slider.value = pageAudios.get(id).gain * 100;
             }
         }
-
-        
-    } else {
-        // switch from eq to gain
-        // set status
-        currentStatus = "gain";
-    }
-
 }
 
 function switchToPan(){
-    if(currentStatus === "gain"){
-        // store current gain value
+    // show the sliders, hide the eq  (it may not have been visible anyway)
+    sliderParentGroup.style.display='block';
+    eqParentGroup.style.display='none';
 
         // set status
         currentStatus = "pan";
@@ -147,19 +142,11 @@ function switchToPan(){
 
         }
 
-        
-    } else {
-        // switch from eq to gain
-        // set status
-        currentStatus = "pan";
-    }
 }
 
 function switchToEq(){
     // set status
     currentStatus = "eq";
-
-    if(currentStatus !== "eq"){
-        // shouldn't even need to store values, just need to hide and show different values.
-    }
+    sliderParentGroup.style.display='none';
+    eqParentGroup.style.display='block';
 }
