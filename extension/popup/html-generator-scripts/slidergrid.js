@@ -189,6 +189,9 @@ function visualMuteSlider(id){
 
   // set button colour
   document.getElementById(strId + " mute").style = "background-color:#FF0000;"
+
+  // set state
+  setMuteState(id, "true");
 }
 
 function visualUndoSlider(id, type){
@@ -202,6 +205,13 @@ function visualUndoSlider(id, type){
 
   // set button colour
   document.getElementById(strId + type).style = "background-color:#44c767;"
+
+  // set state
+  if(type === " mute"){
+    setMuteState(id, "false");
+  } else {
+    setSoloState(id, "false");
+  }
 }
 
 function visualSoloSLider(id){
@@ -213,6 +223,9 @@ function visualSoloSLider(id){
   // set background colour to yellow
   slider = document.getElementById(strId + " input");
   slider.style = "border: 1px solid #ff9900;\nbackground: #ff9900;";
+
+  // set state
+  setSoloState(id, "true");
 }
 
 function muteSlider(id){
@@ -255,3 +268,10 @@ function unsoloSlider(id){
   });
 }
 
+function setMuteState(id, mute){
+  document.getElementById(String(id) + " mute").setAttribute("muted", mute);
+}
+
+function setSoloState(id, solo){
+  document.getElementById(String(id) + " solo").setAttribute("soloed", solo);
+}

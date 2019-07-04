@@ -19,6 +19,7 @@ chrome.runtime.onInstalled.addListener(function (){
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // the message listener will recieve a request message, who sent it and a callback? I think, not sure
     console.log("message:", request);
+    console.log("audios page audios:", audioControlList, pageAudioControlList);
 
     // if its my message
     if(request.action === 'popup-fetch-audio-stream-request') {
@@ -88,24 +89,20 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     }
 
     else if(request.action === "slidergrid-mute-request"){
-        // mute the tab
         muteTab(request.tabid);
-        
     }
 
     else if(request.action === "slidergrid-unmute-request"){
-        // unmute this particular tab
-
-        // can undo its mute field, but DONT undo its mute param unless no solo in place
+        unmuteTab(request.tabid);
         
     }
 
     else if(request.action === "slidergrid-solo-request"){
-        // solo this particular tab
+        soloTab(request.tabid);
     }
 
     else if(request.action === "slidergrid-unsolo-request"){
-        // unsolo this particular tab
+        unsolotab(request.tabid);
     }
 });
 
