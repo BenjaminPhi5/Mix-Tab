@@ -148,12 +148,31 @@ function round_slider_tune(event) {
 
 function communicateChange(value, target){
 	// now communicate change in eq param, convert value to a value between -20 and 20:
-	value = ((value/10) * 4) - 20;
+	let converted = ((value/10) * 4) - 20;
 
-	// send message with the change in param to the background
-	chrome.runtime.sendMessage({
-		action: "dials-param-delivery",
-		tabid: parseInt(target.getAttribute("tabid")),
-		eqtype: target.getAttribute("eq-type")
-	});
+	let tabid = parseInt(target.getAttribute("tabid"));
+	let eqType = target.getAttribute("eq-type");
+
+	// check if it in load audios
+	if(audios.has(tabid)){
+		let audioControl = audios.get(tabid);
+		switch(eqType){
+			case "low": audioControl.lowEq.gain.value = converted;
+			case "mid": audioControl.midEq.gain.value = converted;
+			case "high": audioControl.highEq.gain.value = converted;
+		}
+	} else {
+		// must be a page audio, send to contents script
+		chrome.runtime.sendMessage(tabid, {
+			action: "dials-param-delivery",
+			eqType: target.getAttribute("eq-type"),
+			value: converted
+		});
+	}
+	
+}
+
+// convert a eq value to percent
+function ctp(value){
+	return ((value + 20) / 4) * 10;
 }

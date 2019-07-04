@@ -36,8 +36,15 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
     else if(request.action === 'page-param-delivery'){
         // update value in pageAudios
+        let audioControl = pageAudios.get(request.key);
         console.log("request param deliv: ", request);
-        pageAudios.get(request.key).gain = request.value;
+        audioControl.gain = request.gain;
+        audioControl.pan = request.pan;
+        audioControl.low = request.low;
+        audioControl.mid = request.mid;
+        audioControl.high = request.high;
+        audioControl.mute = request.mute;
+        audioControl.solo = request.solo;
         console.log("updates value: ", pageAudios.get(request.key), pageAudios);
         addExtraPageTab(request.key);
 
@@ -135,6 +142,7 @@ function loadCapturedTabs(){
         if(value.valid){
             generateSliderGrid(key, value.gainNode.gain.value * 100, value.title, "load", 
             value.mute, value.solo);
+            generateEqGrid(key, ctp(value.lowEq.gain.value), ctp(value.midEq.gain.value), ctp(value.highEq.gain.value), value.title);
         } else {
             // popup is the only section to modify params, therefore it is safe for the popup to do deletion
             // of records it is not currently using.
@@ -147,7 +155,7 @@ function loadCapturedTabs(){
         console.log("audio iterate: ", value, key);
         if(value.valid){
             console.log("selected");
-        chrome.tabs.sendMessage(key, {action: 'popup-param-request', param: 'gainNode'});
+        chrome.tabs.sendMessage(key, {action: 'popup-param-request'});
         } else {
             // popup is the only section to modify params, therefore it is safe for the popup to do deletion
             // of records it is not currently using.
@@ -163,6 +171,7 @@ function addExtraTab(key){
     if(audioCont.valid){
         generateSliderGrid(key, audioCont.gainNode.gain.value * 100, audioCont.title, "load", 
         audioCont.mute, audioCont.solo);
+        generateEqGrid(key, ctp(audioCont.lowEq.gain.value), ctp(audioCont.midEq.gain.value), ctp(audioCont.highEq.gain.value), audioCont.title);
     } else {
         // popup is the only section to modify params, therefore it is safe for the popup to do deletion
         // of records it is not currently using.
@@ -178,6 +187,7 @@ function addExtraPageTab(key){
             console.log("sucess to here!: ", String(pAudCont.gain * 100));
             generateSliderGrid(key, pAudCont.gain * 100, tab.title, "page",
         pAudCont.mute, pAudCont.solo);});
+            generateEqGrid(key, ctp(pAudCont.lowEq.gain.value), ctp(pAudCont.midEq.gain.value), ctp(pAudCont.highEq.gain.value), pAudCont.title)
     } else {
         pageAudios.delete(key);
     }

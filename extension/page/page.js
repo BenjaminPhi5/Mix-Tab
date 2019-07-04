@@ -221,14 +221,27 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     else if(request.action === 'popup-param-request'){
         // can actually make audioNodes a map and multiplex on request.param
         console.log("recieved message: param: ", request, audioNodes);
-        // pan uses .pan, everything else is .gain
-        let param_value = (request.param === "panNode") ? audioNodes.get(request.param).pan.value : audioNodes.get(request.param).gain.value;
-        
-        console.log("param value: ", param_value);
-        chrome.runtime.sendMessage(
-            {action: 'page-param-delivery', key: tabid, param:request.param, value: param_value}
+        // just send all the params
+        chrome.runtime.sendMessage({
+            action: 'page-param-delivery', 
+            key: tabid, 
+            gain: audioNodes.get("gainNode").gain.value,
+            pan: audioNodes.get("panNode").gain.value,
+            low: audioNodes.get("lowEq").gain.value,
+            mid: audioNodes.get("midEq").gain.value,
+            high: audioNodes.get("highEq").gain.value,
+            mute: mute,
+            solo: solo}
         );
         console.log("sent message");
+    }
+
+    else if(request.action === 'dials-param-delivery'){
+        switch(request.eqType){
+			case "low": audioNodes.get("lowEq").gain.value = request.value;
+			case "mid": audioNodes.get("midEq").gain.value = request.value;
+			case "high": audioNodes.get("highEq").gain.value = request.value;
+		}
     }
 
     // mute and unmute
@@ -244,6 +257,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         console.log("unmute request after: ", audioNodes);
         mute = request.mute;
     }
+
 });
 
 

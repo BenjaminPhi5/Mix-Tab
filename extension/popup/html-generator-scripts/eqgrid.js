@@ -1,4 +1,6 @@
 let eqParentGroup = document.getElementById("eqControlHolder");
+
+eqParentGroup.style.display = 'none';
 /**
  * Generates the eq container with the dials and labels
  * 
@@ -169,7 +171,7 @@ let eqParentGroup = document.getElementById("eqControlHolder");
     eqPane.appendChild(infoLabel);
     eqPane.appendChild(gridContainer);
 
-    parentGroup.appendChild(eqPane);
+    eqParentGroup.appendChild(eqPane);
 
     // get new controllers for each dial - method from the dials.js script
     generateSliderHandles();
