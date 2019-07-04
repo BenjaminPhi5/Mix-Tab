@@ -181,6 +181,7 @@ function sendToBackground(){
         tabid: tabid,
         gain: audioNodes.get("gainNode").gain.value,
         pan: audioNodes.get("panNode").pan.value,
+        title: title,
         valid:true,
         muted: muted,
     });
@@ -191,15 +192,15 @@ function sendToBackground(){
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // recieve tabid
     if(request.action === 'background-tab-id-load-delivery'){
+
         // set ids
         url = request.url;
         tabid = request.tabid;
         console.log("tab found: (+url): ", tabid, url, muted);
 
-        // setup response func
-
         // just call init from in here, on each page load:
         init();
+         
     }
 
     // update gain node with audio
@@ -232,7 +233,9 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     }
 
     else if(request.action === "backgroundAudioSetup-unmute-request"){
+        console.log("unmute request before: ", audioNodes);
         audioNodes.get("muteNode").gain.value = 1;
+        console.log("unmute request after: ", audioNodes);
     }
 });
 

@@ -35,26 +35,29 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         addExtraTab(request.key);
     }
 
-    if(request.action === 'background-new-page-audio-control-delivery'){
+    else if(request.action === 'background-new-page-audio-control-delivery'){
         addExtraPageTab(request.key);
     }
 
     // if an audio control has been removed, its slider needs to dissapear
-    if(request.action === 'background-loaded-tab-close-delivery'){
+    else if(request.action === 'background-loaded-tab-close-delivery'){
         removeExtraTab(request.key, slider_holder);
     }
 
-    if(request.action === 'background-page-tab-close-delivery'){
+    else if(request.action === 'background-page-tab-close-delivery'){
         removeExtraTab(request.key, slider_holder);
     }
 
-    if(request.action === 'page-param-delivery'){
+    else if(request.action === 'page-param-delivery'){
         // update value in pageAudios
         console.log("request param deliv: ", request);
         pageAudios.get(request.key).gain = request.value;
         addExtraPageTab(request.key);
 
     }
+
+    else if(request.action === '')
+
 });
 
 // input is the message used for sliders that gradually change their value
@@ -168,7 +171,7 @@ function addExtraPageTab(key){
     console.log("add tab: , key, audios: ", key, pageAudios);
     pAudCont = pageAudios.get(key);
     if(pAudCont.valid){
-        generateSliderGrid(key, pAudCont.gain * 100, "page title", "page", pAudCont.muted, pAudCont.soloed);
+        chrome.tabs.get(key, function(tab){generateSliderGrid(key, pAudCont.gain * 100, tab.title, "page", pAudCont.muted, pAudCont.soloed);})
     } else {
         pageAudios.delete(key);
     }

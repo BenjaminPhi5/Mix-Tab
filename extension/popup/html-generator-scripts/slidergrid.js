@@ -75,6 +75,7 @@ function generateSliderGrid(id, value, title, audioSource, mute, solo){
     muteButton.className = "slider-grid-item acontrol";
     muteButton.id = strId + " mute";
     muteButton.innerHTML = "mute";
+    muteButton.setAttribute("muted",(mute) ? "true":"false");
     
     infoLabel.className = "slider-grid-item infolabel";
     infoLabel.id = strId + " info";
@@ -87,6 +88,7 @@ function generateSliderGrid(id, value, title, audioSource, mute, solo){
     soloButton.className = "slider-grid-item acontrol";
     soloButton.id = strId + " solo";
     soloButton.innerHTML = "solo";
+    soloButton.setAttribute("soloed",(solo) ? "true":"false");
 
     sliderGridItem.className = "slider-grid-item container";
     sliderGridItem.id = strId + " sgi";
@@ -138,21 +140,29 @@ function generateSliderGrid(id, value, title, audioSource, mute, solo){
 
     // call the mute or solo functions if nessesary
     if(mute){
-      muteSlider(rangeLine, id);
+      visualMuteSlider(id);
     } else if(solo){
-      soloSlider(rangeLine, id);
+      visualSoloSlider(id);
     }
 
     // add on clicks for the buttons:
 
   muteButton.onclick = function(elment){
-      // call the mute slider function
-      muteSlider(rangeLine, id);
+      // is it mute or not?:
+      if(muteButton.getAttribute("muted") === "true"){
+        unmuteSlider(id);
+      } else {
+        muteSlider(id);
+      }
   }
 
   soloButton.onclick = function(element){
-      // call the solo slider function
-      soloSlider(rangeLine, id);
+     // is it solo or not?:
+     if(soloButton.getAttribute("soloed") === "true"){
+      unsoloSlider(id);
+    } else {
+      soloSlider(id);
+    }
   }
   
   gotoButton.onclick = function(element){
@@ -166,34 +176,82 @@ function generateSliderGrid(id, value, title, audioSource, mute, solo){
   }
 }
 
-function muteSlider(slider, id){
-    // set badge text and colour
-    chrome.browserAction.setBadgeText({text: "mute", tabId: id});
-    chrome.browserAction.setBadgeBackgroundColor({color: "#FF0000", tabId: id});
-    
-    //set its colour to dark grey
-    slider.style = "border: 1px solid #252420;\nbackground: #252420;";
+function visualMuteSlider(id){
+  strId = String(id);
 
-    // now send message to background calling for mute of tab id
-    chrome.runtime.sendMessage({
-      action: "slidergrid-mute-request",
-      // ensure to check its not solod, if it is, undo solo
-      tabid: id
-    });
+  // set badge text and colour
+  chrome.browserAction.setBadgeText({text: "mute", tabId: id});
+  chrome.browserAction.setBadgeBackgroundColor({color: "#FF0000", tabId: id});
+  
+  //set its colour to dark grey
+  slider = document.getElementById(strId + " input");
+  slider.style = "border: 1px solid #252420;\nbackground: #252420;";
+
+  // set button colour
+  document.getElementById(strId + " mute").style = "background-color:#FF0000;"
 }
 
-function soloSlider(slider, id){
+function visualUndoSlider(id, type){
+  strId = String(id);
+  // remove badge text
+  chrome.browserAction.setBadgeText({text:""});
+
+  // set its colour back to white
+  slider = document.getElementById(strId + " input");
+  slider.style = "border: 0px solid #010101;\nbackground: #ffffff;";
+
+  // set button colour
+  document.getElementById(strId + type).style = "background-color:#44c767;"
+}
+
+function visualSoloSLider(id){
+  strId = String(id);
   // set badge text and colour
   chrome.browserAction.setBadgeText({text: "solo", tabId: id});
   chrome.browserAction.setBadgeBackgroundColor({color: "#F1C40F", tabId: id});
 
   // set background colour to yellow
+  slider = document.getElementById(strId + " input");
   slider.style = "border: 1px solid #ff9900;\nbackground: #ff9900;";
+}
 
-  // mute every other tab and solo this one - done in background script
+function muteSlider(id){
+    strId = String(id);
+    slider = document.getElementById(strId + " input");
+
+    chrome.runtime.sendMessage({
+      action: "slidergrid-mute-request",
+      tabid: id
+    });
+}
+
+function unmuteSlider(id){
+  strId = String(id);
+  slider = document.getElementById(strId + " input");
+
   chrome.runtime.sendMessage({
-    action: "slidergrid-solo-request",
-    // ensure to check its not muted, if it is, undo the mute
+    action: "slidergrid-unmute-request",
     tabid: id
   });
 }
+
+function soloSlider(id){
+  strId = String(id);
+  slider = document.getElementById(strId + " input");
+
+  chrome.runtime.sendMessage({
+    action: "slidergrid-solo-request",
+    tabid: id
+  });
+}
+
+function unsoloSlider(id){
+  strId = String(id);
+  slider = document.getElementById(strId + " input");
+
+  chrome.runtime.sendMessage({
+    action: "slidergrid-unsolo-request",
+    tabid: id
+  });
+}
+

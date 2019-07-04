@@ -66,69 +66,10 @@ function createBackgroundFilter(context, freq, Q){
    return filter;
 }
 
-function __muteTab(tabid){
-    // set state
-    console.log("muted called on: ", tabid);
-    if(audioControlList.has(tabid)){
-        console.log("muted called on background loaded: ", tabid);
-        audioControlList.get(tabid).soloed = false;
-        audioControlList.get(tabid).muted = true;
-
-        // mute the tab
-        audioControlList.get(tabid).muteNode.gain.value = 0;
+function muteTab(tabid){
     
-    } else if(pageAudioControlList.has(tabid)){
-        console.log("muted called on page loaded: ", tabid);
-        pageAudioControlList.get(tabid).soloed = false;
-        pageAudioControlList.get(tabid).muted = true;
-
-        chrome.tabs.sendMessage(tabid, {
-            action: "backgroundAudioSetup-mute-request"
-        });
-    }
-
 }
 
 function soloTab(tabid){
-    // set state
-    if(audioControlList.has(tabid)){
-        if(audioControlList.get(tabid).muted){
-            // if its muted, unmute it
-            audioControlList.get(tabid).muted = false;
-            audioControlList.get(tabid).muteNode.gain.value = 1;
-        }
-        
-        audioControlList.get(tabid).soloed = true;
-    
-    } else if(pageAudioControlList.has(tabid)){
-        if(pageAudioControlList.get(tabid).muted){
-            // if its muted, unmute it
-            pageAudioControlList.get(tabid).muted = false;
-            chrome.tabs.sendMessage(tabid, {
-                action: "backgroundAudioSetup-unmute-request"
-            });
-        }
-
-
-        pageAudioControlList.get(tabid).soloed = true;
-    }
-
-    // mute all other tabids
-    // iterate through each element, and add a slider
-    console.log("audio control: ", audioControlList);
-    audioControlList.forEach(function(value, key, map){
-        console.log("elem: ", key, value);
-        if(key !== tabid){
-            __muteTab(tabid);
-        }
-    });
-    console.log("page audio control: ", tabid, pageAudioControlList);
-    pageAudioControlList.forEach(function(value, key, map){
-        console.log("elem: ", key, value);
-       if(key !== tabid){
-        console.log("selected elem: ", key, value);
-           __muteTab(tabid);
-       }
-    });
     
 }

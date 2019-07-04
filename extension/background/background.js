@@ -2,6 +2,7 @@
 // testing for creating multiple objects
 var audioControlList = new Map();
 var pageAudioControlList = new Map();
+var soloEnabled = false;
 
 /**
  * TEMPLATE FOR SENDING MESSAGES IS:
@@ -71,7 +72,8 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
                 gain: request.gain,
                 pan: request.pan,
                 valid: request.valid,
-                muted: request.muted,
+                muted: false,
+                title: request.title,
                 soloed:false
             });
 
@@ -87,13 +89,24 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
     else if(request.action === "slidergrid-mute-request"){
         // mute this particular tab
-        __muteTab(request.tabid);
+        chrome.runtime.sendMessage({action: "background-visual-mute-request", id:request.tabid});
+        
+    }
+
+    else if(request.action === "slidergrid-unmute-request"){
+        // unmute this particular tab
+
+        // can undo its mute field, but DONT undo its mute param unless no solo in place
+        
     }
 
     else if(request.action === "slidergrid-solo-request"){
-        soloTab(request.tabid);
+        // solo this particular tab
     }
 
+    else if(request.action === "slidergrid-unsolo-request"){
+        // unsolo this particular tab
+    }
 });
 
 /*
