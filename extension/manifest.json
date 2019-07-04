@@ -17,7 +17,7 @@
     },
 
     "browser_action": {
-        "default_title":"Mix Tab",
+        "default_title":"Mix Tab: Alt Z to mute, Alt S to solo",
         "default_popup": "popup/popup.html"
         
     },
