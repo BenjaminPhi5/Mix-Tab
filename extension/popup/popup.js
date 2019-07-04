@@ -12,6 +12,7 @@ let label1 = document.getElementById('testing-label');
 var gainNode;
 var audios = new Map();
 var pageAudios = new Map();
+var soloEnabled = false;
 
 
 // add onclick for it
@@ -56,6 +57,9 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
     }
 
+    /**
+     * Below the visual controls for muting and unmuting
+     */
     else if(request.action === "background-visual-mute-request"){
         visualMuteSlider(request.id);
     }
@@ -134,6 +138,7 @@ function loadCapturedTabs(){
     // get the tab array from the document script
     audios = chrome.extension.getBackgroundPage().audioControlList;
     pageAudios = chrome.extension.getBackgroundPage().pageAudioControlList;
+    soloEnabled = chrome.extension.getBackgroundPage().soloEnabled;
     console.log("audios:", audios);
     console.log("page audios", pageAudios);
 
@@ -142,7 +147,8 @@ function loadCapturedTabs(){
         // sanity check - if its valid
         // value is audios.get(key)
         if(value.valid){
-            generateSliderGrid(key, value.gainNode.gain.value * 100, value.title, "load", value.muted, value.soloed);
+            generateSliderGrid(key, value.gainNode.gain.value * 100, value.title, "load", 
+            (soloEnabled && !value.solo) ? true : value.mute, value.solo);
         } else {
             // popup is the only section to modify params, therefore it is safe for the popup to do deletion
             // of records it is not currently using.
@@ -169,7 +175,8 @@ function addExtraTab(key){
     // sanity check - if its valid
     audioCont = audios.get(key);
     if(audioCont.valid){
-        generateSliderGrid(key, audioCont.gainNode.gain.value * 100, audioCont.title, "load", audioCont.muted, audioCont.soloed);
+        generateSliderGrid(key, audioCont.gainNode.gain.value * 100, audioCont.title, "load", 
+        (soloEnabled && !audioCont.solo) ? true : audioCont.mute, audioCont.solo);
     } else {
         // popup is the only section to modify params, therefore it is safe for the popup to do deletion
         // of records it is not currently using.
@@ -181,7 +188,8 @@ function addExtraPageTab(key){
     console.log("add tab: , key, audios: ", key, pageAudios);
     pAudCont = pageAudios.get(key);
     if(pAudCont.valid){
-        chrome.tabs.get(key, function(tab){generateSliderGrid(key, pAudCont.gain * 100, tab.title, "page", pAudCont.muted, pAudCont.soloed);})
+        chrome.tabs.get(key, function(tab){generateSliderGrid(key, pAudCont.gain * 100, tab.title, "page",
+        (soloEnabled && !pAudCont.solo) ? true : pAudCont.mute, pAudCont.solo);})
     } else {
         pageAudios.delete(key);
     }

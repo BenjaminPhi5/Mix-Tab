@@ -2,7 +2,7 @@
 // testing for creating multiple objects
 var audioControlList = new Map();
 var pageAudioControlList = new Map();
-var soloEnabled = false;
+var soloEnabled = true;
 
 /**
  * TEMPLATE FOR SENDING MESSAGES IS:
@@ -72,9 +72,9 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
                 gain: request.gain,
                 pan: request.pan,
                 valid: request.valid,
-                muted: false,
+                mute: false,
                 title: request.title,
-                soloed:false
+                solo:false
             });
 
             console.log("SEND TAB TO FRONT");
@@ -90,6 +90,9 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     else if(request.action === "slidergrid-mute-request"){
         // mute this particular tab
         chrome.runtime.sendMessage({action: "background-visual-mute-request", id:request.tabid, type: " mute"});
+
+        // mute the tab
+        muteTab(request.tabid);
         
     }
 

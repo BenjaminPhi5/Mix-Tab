@@ -40,8 +40,8 @@ function setupBackgroundAudioContext(stream, tabid, title){
         streamid: stream.id,
         title: title,
         valid:true,
-        muted: false,
-        soloed: false}
+        mute: false,
+        solo: false}
     );
 
     console.log("audioControl: ",audioControlList);
@@ -67,7 +67,19 @@ function createBackgroundFilter(context, freq, Q){
 }
 
 function muteTab(tabid){
+    // first is it load or page source of audio
+    if(audioControlList.has(tabid)){
+        audioControlList.get(tabid).muteNode.gain.value = 0;
+        audioControlList.get(tabid).mute = true;
     
+    } else if(pageAudioControlList.has(tabid)){
+        pageAudioControlList.get(tabid).mute = true;
+        chrome.tabs.sendMessage({action: "backgroundAudioSetup-mute-request"});
+    }
+}
+
+function unmuteTab(tabid){
+
 }
 
 function soloTab(tabid){
