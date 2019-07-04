@@ -46,7 +46,7 @@ let parentGroup = document.getElementById("audioControlHolder");
 }
  */
 // see sliderGrid for similar function description.
- function generateEqGrid(id, low, mid, high, host, content){
+ function generateEqGrid(id, low, mid, high, title){
     // create elements
     let eqPane = document.createElement('div');
     let infoLabel = document.createElement('label');
@@ -75,7 +75,7 @@ let parentGroup = document.getElementById("audioControlHolder");
 
     infoLabel.className = "infolabel eqlabel";
     infoLabel.id = strId + " eqInfo";
-    infoLabel.innerHTML = host + ": " + content;
+    infoLabel.innerHTML = title;
 
     gridContainer.className = "grid-container";
 

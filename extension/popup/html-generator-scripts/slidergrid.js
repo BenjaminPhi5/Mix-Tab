@@ -50,7 +50,7 @@ function mkSlider(id, value, slidergroup){
  * @param {*String} content site media content
  * @param {*HTML element} parentGroup parent html element of slider
  */
-function generateSliderGrid(id, value, host, content, audioSource, mute, solo){
+function generateSliderGrid(id, value, title, audioSource, mute, solo){
     // create elements
     let sliderGridContainer = document.createElement('div');
     let muteButton = document.createElement('button');
@@ -78,7 +78,7 @@ function generateSliderGrid(id, value, host, content, audioSource, mute, solo){
     
     infoLabel.className = "slider-grid-item infolabel";
     infoLabel.id = strId + " info";
-    infoLabel.innerHTML = host + ": " + content;
+    infoLabel.innerHTML = title;
 
     gotoButton.className = "slider-grid-item acontrol";
     gotoButton.id = strId + " goto";

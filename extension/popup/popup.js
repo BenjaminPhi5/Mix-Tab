@@ -129,7 +129,7 @@ function loadCapturedTabs(){
         // sanity check - if its valid
         // value is audios.get(key)
         if(value.valid){
-            generateSliderGrid(key, value.gainNode.gain.value * 100, "load host", "ld cn", "load", value.muted, value.soloed);
+            generateSliderGrid(key, value.gainNode.gain.value * 100, "load title", "load", value.muted, value.soloed);
         } else {
             // popup is the only section to modify params, therefore it is safe for the popup to do deletion
             // of records it is not currently using.
@@ -156,7 +156,7 @@ function addExtraTab(key){
     // sanity check - if its valid
     audioCont = audios.get(key);
     if(audioCont.valid){
-        generateSliderGrid(key, audioCont.gainNode.gain.value * 100, "load host", "ld cn", "load", audioCont.muted, audioCont.soloed);
+        generateSliderGrid(key, audioCont.gainNode.gain.value * 100, "load title", "load", audioCont.muted, audioCont.soloed);
     } else {
         // popup is the only section to modify params, therefore it is safe for the popup to do deletion
         // of records it is not currently using.
@@ -168,7 +168,7 @@ function addExtraPageTab(key){
     console.log("add tab: , key, audios: ", key, pageAudios);
     pAudCont = pageAudios.get(key);
     if(pAudCont.valid){
-        generateSliderGrid(key, pAudCont.gain * 100, "page host", "pg cn", "page", pAudCont.muted, pAudCont.soloed);
+        generateSliderGrid(key, pAudCont.gain * 100, "page title", "page", pAudCont.muted, pAudCont.soloed);
     } else {
         pageAudios.delete(key);
     }
@@ -188,8 +188,8 @@ window.addEventListener("load", function(){
 
     // loading elements testing
     loadCapturedTabs();
-    //generateSliderGrid(1234567, 50, "host it", "content it", "load");
-    //generateEqGrid(12345987, 50, 50, 50, "host it", "content it");
+    //generateSliderGrid(1234567, 50, "load it", "load");
+    //generateEqGrid(12345987, 50, 50, 50, "load it");
 
 });
 
