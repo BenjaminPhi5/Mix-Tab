@@ -53,6 +53,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         // update value in pageAudios
         console.log("request param deliv: ", request);
         pageAudios.get(request.key).gain = request.value;
+        console.log("updates value: ", pageAudios.get(request.key), pageAudios);
         addExtraPageTab(request.key);
 
     }
@@ -98,7 +99,7 @@ window.addEventListener("input", function(event){
         
     }
 
-    if(event.target.getAttribute('audiosource') === 'page'){
+    else if(event.target.getAttribute('audiosource') === 'page'){
         pagetabid = parseInt(event.target.id);
 
         if(currentStatus === "gain"){
@@ -148,7 +149,7 @@ function loadCapturedTabs(){
         // value is audios.get(key)
         if(value.valid){
             generateSliderGrid(key, value.gainNode.gain.value * 100, value.title, "load", 
-            (soloEnabled && !value.solo) ? true : value.mute, value.solo);
+            value.mute, value.solo);
         } else {
             // popup is the only section to modify params, therefore it is safe for the popup to do deletion
             // of records it is not currently using.
@@ -176,7 +177,7 @@ function addExtraTab(key){
     audioCont = audios.get(key);
     if(audioCont.valid){
         generateSliderGrid(key, audioCont.gainNode.gain.value * 100, audioCont.title, "load", 
-        (soloEnabled && !audioCont.solo) ? true : audioCont.mute, audioCont.solo);
+        audioCont.mute, audioCont.solo);
     } else {
         // popup is the only section to modify params, therefore it is safe for the popup to do deletion
         // of records it is not currently using.
@@ -188,8 +189,10 @@ function addExtraPageTab(key){
     console.log("add tab: , key, audios: ", key, pageAudios);
     pAudCont = pageAudios.get(key);
     if(pAudCont.valid){
-        chrome.tabs.get(key, function(tab){generateSliderGrid(key, pAudCont.gain * 100, tab.title, "page",
-        (soloEnabled && !pAudCont.solo) ? true : pAudCont.mute, pAudCont.solo);})
+        chrome.tabs.get(key, function(tab){
+            console.log("sucess to here!: ", String(pAudCont.gain * 100));
+            generateSliderGrid(key, pAudCont.gain * 100, tab.title, "page",
+        pAudCont.mute, pAudCont.solo);});
     } else {
         pageAudios.delete(key);
     }

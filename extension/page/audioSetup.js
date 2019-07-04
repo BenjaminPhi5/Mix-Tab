@@ -7,6 +7,12 @@ var audioNodes = new Map();
 
 // setup the audioContext variable
 function setupAudioContext(){
+    // only do the setup if it hasn't been done alreacdy
+    
+    if(audioNodes.size > 1){
+        return;
+    }
+
     // reset audioNodes
     audioNodes = new Map();
 

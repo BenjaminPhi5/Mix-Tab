@@ -52,6 +52,8 @@ function mkSlider(id, value, slidergroup){
  */
 function generateSliderGrid(id, value, title, audioSource, mute, solo){
     // create elements
+    console.log("at generate now: ", id, String(id), value, String(value), Math.round(value), title, audioSource);
+
     let sliderGridContainer = document.createElement('div');
     let muteButton = document.createElement('button');
     let infoLabel = document.createElement('label');
@@ -99,9 +101,9 @@ function generateSliderGrid(id, value, title, audioSource, mute, solo){
     rangeLine.className = "rs-range";
     rangeLine.id = strId + " input";
     rangeLine.type = "range";
-    rangeLine.value = String(value);
     rangeLine.min = "0";
     rangeLine.max = "200";
+    rangeLine.value = String(value);
     rangeLine.setAttribute('audiosource', audioSource); 
     rangeLine.setAttribute("tabid", id);
     //audio source is page for contents script extracted audio, and load for popup loaded audio

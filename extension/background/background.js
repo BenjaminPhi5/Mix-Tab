@@ -73,9 +73,9 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
                 gain: request.gain,
                 pan: request.pan,
                 valid: request.valid,
-                mute: false,
+                mute: request.mute,
                 title: request.title,
-                solo:false
+                solo:request.solo
             });
 
             console.log("SEND TAB TO FRONT");

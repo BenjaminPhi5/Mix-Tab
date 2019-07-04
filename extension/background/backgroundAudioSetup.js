@@ -77,7 +77,7 @@ function muteTab(tabid){
     
     } else if(pageAudioControlList.has(tabid)){
         pageAudioControlList.get(tabid).mute = true;
-        chrome.tabs.sendMessage(tabid, {action: "backgroundAudioSetup-mute-request"});
+        chrome.tabs.sendMessage(tabid, {action: "backgroundAudioSetup-mute-request", mute:true});
     }
 }
 
@@ -92,7 +92,7 @@ function unmuteTab(tabid){
     
     } else if(pageAudioControlList.has(tabid)){
         pageAudioControlList.get(tabid).mute = false;
-        chrome.tabs.sendMessage(tabid, {action: "backgroundAudioSetup-unmute-request"});
+        chrome.tabs.sendMessage(tabid, {action: "backgroundAudioSetup-unmute-request", mute:false});
     }
 }
 

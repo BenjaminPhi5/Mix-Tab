@@ -6,7 +6,8 @@ var tabid = 0;
 var sendReady = false;
 var url = '';
 var responsefunc;
-var muted = false;
+var mute = false;
+var solo = false;
 
 
 // collect audio targets - returns a list of targets
@@ -183,7 +184,8 @@ function sendToBackground(){
         pan: audioNodes.get("panNode").pan.value,
         title: title,
         valid:true,
-        muted: muted,
+        mute: mute,
+        solo: solo
     });
 }
 
@@ -196,7 +198,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         // set ids
         url = request.url;
         tabid = request.tabid;
-        console.log("tab found: (+url): ", tabid, url, muted);
+        console.log("tab found: (+url): ", tabid, url, mute);
 
         // just call init from in here, on each page load:
         init();
@@ -230,12 +232,14 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     else if(request.action === "backgroundAudioSetup-mute-request"){
         console.log("mute request");
         audioNodes.get("muteNode").gain.value = 0;
+        mute = request.mute;
     }
 
     else if(request.action === "backgroundAudioSetup-unmute-request"){
         console.log("unmute request before: ", audioNodes);
         audioNodes.get("muteNode").gain.value = 1;
         console.log("unmute request after: ", audioNodes);
+        mute = request.mute;
     }
 });
 
