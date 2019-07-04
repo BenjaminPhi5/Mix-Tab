@@ -71,6 +71,9 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
             pageAudioControlList.set(request.tabid, {
                 gain: request.gain,
                 pan: request.pan,
+                low: request.low,
+                mid: request.mid,
+                high: request.high,
                 valid: request.valid,
                 mute: request.mute,
                 title: request.title,

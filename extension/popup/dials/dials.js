@@ -47,7 +47,7 @@ function getdx(angle){
 }
 
 function computeStartAngle(slider, percentage){
-	/*
+	
 	let rads = toRadians(getAngle(percentage));
 	let dY = getdy(rads) * 100;
 	let dX = getdx(rads) * 100;
@@ -79,7 +79,7 @@ function computeStartAngle(slider, percentage){
 		saturation = Math.abs(value - 50);
 	text.innerHTML = percentage + "%";
 	text.style = "color: hsl(" + hue + ", 100%, " + saturation + "%);";
-	*/
+	
 }
 
 function round_slider_tune(event) {

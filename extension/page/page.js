@@ -176,12 +176,15 @@ function sendToBackground(){
     console.log("YES got here: ", audioNodes, audioNodes.get("gainNode"));
 
     // send the message to the background okay. noice.
-    
+
     chrome.runtime.sendMessage({
         action: 'page-audio-setup-delivery',
         tabid: tabid,
         gain: audioNodes.get("gainNode").gain.value,
         pan: audioNodes.get("panNode").pan.value,
+        low: audioNodes.get("lowEq").gain.value,
+        mid: audioNodes.get("midEq").gain.value,
+        high: audioNodes.get("highEq").gain.value,
         title: title,
         valid:true,
         mute: mute,
