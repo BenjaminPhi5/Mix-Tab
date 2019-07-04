@@ -29,12 +29,17 @@ function setupAudioContext(){
     var midEq = createFilter("midEq", 2950, 0.517);
     var highEq = createFilter("highEq", 7500, 0.567);
 
+    // add mute node
+    var muteNode = audioContext.createGain();
+    audioNodes.set("muteNode", muteNode);
+
     // connect up all the filters in order (remember ive put the context itself in slot 0, so don't try to connect that)
     gainNode.connect(panNode);
     panNode.connect(lowEq);
     lowEq.connect(midEq);
     midEq.connect(highEq);
-    highEq.connect(audioContext.destination);
+    highEq.connect(muteNode);
+    muteNode.connect(audioContext.destination);
 }
 
 // create an eq filter

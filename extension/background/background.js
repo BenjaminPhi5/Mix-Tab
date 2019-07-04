@@ -44,7 +44,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
                         console.log('stream', stream);
                         
                         // call the setup function to attach all the audio nodes and add to the audioControlList.
-                        setupBackgroundAudioContext(stream, tabid);
+                        setupBackgroundAudioContext(stream, tabid, currTab.mutedInfo);
 
                         // send message to popup to add new slider
                         chrome.runtime.sendMessage({
@@ -64,7 +64,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         // add new audio element to page map:
         console.log("tabid: ", request.tabid);
         console.log("page audios before: ", pageAudioControlList);
-        pageAudioControlList.set(request.tabid, {gain: request.gain, pan: request.pan, valid: request.valid});
+        pageAudioControlList.set(request.tabid, {gain: request.gain, pan: request.pan, valid: request.valid, muted: request.muted, soloed:false});
 
         console.log("SEND TAB TO FRONT");
         console.log("page audios after: ", pageAudioControlList);
@@ -73,6 +73,15 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
             action: 'background-new-page-audio-control-delivery',
             key: request.tabid
         })
+    }
+
+    else if(request.action === "slidergrid-mute-request"){
+        // mute this particular tab
+        __muteTab(request.tabid);
+    }
+
+    else if(request.action === "slidergrid-solo-request"){
+        soloTab(request.tabid);
     }
 
 });
@@ -115,6 +124,6 @@ chrome.webNavigation.onCompleted.addListener(function(details){
     chrome.tabs.sendMessage(details.tabId, {
         action: 'background-tab-id-load-delivery',
         tabid: details.tabId,
-        url: details.url
+        url: details.url,
     });
 });

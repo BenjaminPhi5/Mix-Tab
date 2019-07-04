@@ -50,7 +50,7 @@ function mkSlider(id, value, slidergroup){
  * @param {*String} content site media content
  * @param {*HTML element} parentGroup parent html element of slider
  */
-function generateSliderGrid(id, value, host, content, audioSource){
+function generateSliderGrid(id, value, host, content, audioSource, mute, solo){
     // create elements
     let sliderGridContainer = document.createElement('div');
     let muteButton = document.createElement('button');
@@ -136,23 +136,23 @@ function generateSliderGrid(id, value, host, content, audioSource){
 
     parentGroup.appendChild(sliderGridContainer);
 
+    // call the mute or solo functions if nessesary
+    if(mute){
+      muteSlider(rangeLine, id);
+    } else if(solo){
+      soloSlider(rangeLine, id);
+    }
 
     // add on clicks for the buttons:
 
   muteButton.onclick = function(elment){
-    // send mute message to slider - depends on audio type
-
-    // set badge text and colour
-    chrome.browserAction.setBadgeText({text: "mute", tabId: id});
-    chrome.browserAction.setBadgeBackgroundColor({color: "#FF0000", tabId: id});
+      // call the mute slider function
+      muteSlider(rangeLine, id);
   }
 
-  soloButton.onclick = function(elment){
-    // send mute message to slider - depends on audio type
-
-    // set badge text and colour
-    chrome.browserAction.setBadgeText({text: "solo", tabId: id});
-    chrome.browserAction.setBadgeBackgroundColor({color: "#F1C40F", tabId: id});
+  soloButton.onclick = function(element){
+      // call the solo slider function
+      soloSlider(rangeLine, id);
   }
   
   gotoButton.onclick = function(element){
@@ -161,10 +161,39 @@ function generateSliderGrid(id, value, host, content, audioSource){
     chrome.tabs.get(id, function(tab){
       chrome.tabs.update(id, {active: true}, function () {
         chrome.windows.update(tab.windowId, {focused: true});
+      });
     });
-    })
-
-    
   }
+}
 
+function muteSlider(slider, id){
+    // set badge text and colour
+    chrome.browserAction.setBadgeText({text: "mute", tabId: id});
+    chrome.browserAction.setBadgeBackgroundColor({color: "#FF0000", tabId: id});
+    
+    //set its colour to dark grey
+    slider.style = "border: 1px solid #252420;\nbackground: #252420;";
+
+    // now send message to background calling for mute of tab id
+    chrome.runtime.sendMessage({
+      action: "slidergrid-mute-request",
+      // ensure to check its not solod, if it is, undo solo
+      tabid: id
+    });
+}
+
+function soloSlider(slider, id){
+  // set badge text and colour
+  chrome.browserAction.setBadgeText({text: "solo", tabId: id});
+  chrome.browserAction.setBadgeBackgroundColor({color: "#F1C40F", tabId: id});
+
+  // set background colour to yellow
+  slider.style = "border: 1px solid #ff9900;\nbackground: #ff9900;";
+
+  // mute every other tab and solo this one - done in background script
+  chrome.runtime.sendMessage({
+    action: "slidergrid-solo-request",
+    // ensure to check its not muted, if it is, undo the mute
+    tabid: id
+  });
 }

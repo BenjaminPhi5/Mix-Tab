@@ -24,6 +24,7 @@
     margin-top: 2px;
     width: 100%;
     -webkit-appearance: none;
+    background: #ffffff;
 }
 .rs-range:focus {
         outline: none;
@@ -33,7 +34,7 @@
         height: 1px;
         cursor: pointer;
         box-shadow: none;
-        background: #ffffff;
+        /*background: #ffffff;*/
         border-radius: 0px;
         border: 0px solid #010101;
     }
@@ -42,7 +43,7 @@
         height: 1px;
         cursor: pointer;
         box-shadow: none;
-        background: #ffffff;
+        /*background: #ffffff;*/
         border-radius: 0px;
         border: 0px solid #010101;
     }

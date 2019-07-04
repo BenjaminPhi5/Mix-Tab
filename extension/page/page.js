@@ -6,6 +6,7 @@ var tabid = 0;
 var sendReady = false;
 var url = '';
 var responsefunc;
+var muted = false;
 
 
 // collect audio targets - returns a list of targets
@@ -180,7 +181,8 @@ function sendToBackground(){
         tabid: tabid,
         gain: audioNodes.get("gainNode").gain.value,
         pan: audioNodes.get("panNode").pan.value,
-        valid:true
+        valid:true,
+        muted: muted,
     });
 }
 
@@ -194,7 +196,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         // set ids
         url = request.url;
         tabid = request.tabid;
-        console.log("tab found: (+url): ", tabid, url);
+        console.log("tab found: (+url): ", tabid, url, muted);
 
         // setup response func
 
@@ -203,7 +205,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     }
 
     // update gain node with audio
-    if(request.action === 'popup-param-modify'){
+    else if(request.action === 'popup-param-modify'){
         console.log("recieved param update: ", request);
         if(request.param === "panNode"){
             audioNodes.get("panNode").pan.value = request.value;
@@ -212,7 +214,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         }
     }
 
-    if(request.action === 'popup-param-request'){
+    else if(request.action === 'popup-param-request'){
         // can actually make audioNodes a map and multiplex on request.param
         console.log("recieved message: param: ", request, audioNodes);
         // pan uses .pan, everything else is .gain
@@ -223,6 +225,16 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
             {action: 'page-param-delivery', key: tabid, param:request.param, value: param_value}
         );
         console.log("sent message");
+    }
+
+    // mute and unmute
+    else if(request.action === "backgroundAudioSetup-mute-request"){
+        console.log("mute request");
+        audioNodes.get("muteNode").gain.value = 0;
+    }
+
+    else if(request.action === "backgroundAudioSetup-unmute-request"){
+        audioNodes.get("muteNode").gain.value = 1;
     }
 });
 

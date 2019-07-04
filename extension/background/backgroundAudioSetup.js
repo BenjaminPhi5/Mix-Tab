@@ -1,5 +1,5 @@
 // setup the audioContext variable
-function setupBackgroundAudioContext(stream, tabid){
+function setupBackgroundAudioContext(stream, tabid, mutedInfo){
     // init the audio context
     var audioContext = new AudioContext();
 
@@ -9,6 +9,7 @@ function setupBackgroundAudioContext(stream, tabid){
     // add a gain node and a pan node
     var gainNode = audioContext.createGain();
     var panNode = audioContext.createStereoPanner();
+    var muteNode = audioContext.createGain();
 
     // create the filters
     // the gain on all of these eq ranges from -20db to +20db thats the range okay. good.
@@ -24,7 +25,8 @@ function setupBackgroundAudioContext(stream, tabid){
     panNode.connect(lowEq);
     lowEq.connect(midEq);
     midEq.connect(highEq);
-    highEq.connect(audioContext.destination);
+    highEq.connect(muteNode);
+    muteNode.connect(audioContext.destination);
 
     // add gain node to audios list/map
     // audioControlList[tabid] = {node: gainNode, streamid: stream.id, valid:true};
@@ -34,8 +36,11 @@ function setupBackgroundAudioContext(stream, tabid){
         lowEq: lowEq,
         midEq: midEq,
         highEq: highEq,
+        muteNode: muteNode,
         streamid: stream.id,
-        valid:true}
+        valid:true,
+        muted: mutedInfo.muted,
+        soloed: false}
     );
 
     console.log("audioControl: ",audioControlList);
@@ -58,4 +63,71 @@ function createBackgroundFilter(context, freq, Q){
    filter.gain.value = 0;
 
    return filter;
+}
+
+function __muteTab(tabid){
+    // set state
+    console.log("muted called on: ", tabid);
+    if(audioControlList.has(tabid)){
+        console.log("muted called on background loaded: ", tabid);
+        audioControlList.get(tabid).soloed = false;
+        audioControlList.get(tabid).muted = true;
+
+        // mute the tab
+        audioControlList.get(tabid).muteNode.gain.value = 0;
+    
+    } else if(pageAudioControlList.has(tabid)){
+        console.log("muted called on page loaded: ", tabid);
+        pageAudioControlList.get(tabid).soloed = false;
+        pageAudioControlList.get(tabid).muted = true;
+
+        chrome.tabs.sendMessage(tabid, {
+            action: "backgroundAudioSetup-mute-request"
+        });
+    }
+
+}
+
+function soloTab(tabid){
+    // set state
+    if(audioControlList.has(tabid)){
+        if(audioControlList.get(tabid).muted){
+            // if its muted, unmute it
+            audioControlList.get(tabid).muted = false;
+            audioControlList.get(tabid).muteNode.gain.value = 1;
+        }
+        
+        audioControlList.get(tabid).soloed = true;
+    
+    } else if(pageAudioControlList.has(tabid)){
+        if(pageAudioControlList.get(tabid).muted){
+            // if its muted, unmute it
+            pageAudioControlList.get(tabid).muted = false;
+            chrome.tabs.sendMessage(tabid, {
+                action: "backgroundAudioSetup-unmute-request"
+            });
+        }
+
+
+        pageAudioControlList.get(tabid).soloed = true;
+    }
+
+    // mute all other tabids
+    // iterate through each element, and add a slider
+    console.log("audio control: ", audioControlList);
+    audioControlList.forEach(function(value, key, map){
+        console.log("elem: ", key, value);
+        if(key !== tabid){
+            __muteTab(tabid);
+        }
+    });
+    console.log("page audio control: ", tabid, pageAudioControlList);
+    pageAudioControlList.forEach(function(value, key, map){
+        console.log("elem: ", key, value);
+       if(key !== tabid){
+        console.log("selected elem: ", key, value);
+           __muteTab(tabid);
+       }
+    });
+    
 }
