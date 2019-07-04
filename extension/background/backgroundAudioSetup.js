@@ -67,6 +67,9 @@ function createBackgroundFilter(context, freq, Q){
 }
 
 function muteTab(tabid){
+    // visually mute it
+    chrome.runtime.sendMessage({action: "background-visual-mute-request", id:tabid, type: " mute"});
+
     // first is it load or page source of audio
     if(audioControlList.has(tabid)){
         audioControlList.get(tabid).muteNode.gain.value = 0;
