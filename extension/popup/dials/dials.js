@@ -142,4 +142,18 @@ function round_slider_tune(event) {
 		saturation = Math.abs(value - 50);
 	text.innerHTML = value + "%";
 	text.style = "color: hsl(" + hue + ", 100%, " + saturation + "%);";
+
+	communicateChange(value, event.target);
+}
+
+function communicateChange(value, target){
+	// now communicate change in eq param, convert value to a value between -20 and 20:
+	value = ((value/10) * 4) - 20;
+
+	// send message with the change in param to the background
+	chrome.runtime.sendMessage({
+		action: "dials-param-delivery",
+		tabid: parseInt(target.getAttribute("tabid")),
+		eqtype: target.getAttribute("eq-type")
+	});
 }

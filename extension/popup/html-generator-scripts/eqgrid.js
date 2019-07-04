@@ -82,6 +82,8 @@ let eqParentGroup = document.getElementById("eqControlHolder");
     // low
     sliderLow.className = "grid-item round-slider";
     sliderLow.id = strId + " dialLow";
+    sliderLow.setAttribute("eq-type", "low");
+    sliderLow.setAttribute("tabid", strId);
 
     selectionLow.className = "selection";
     selectionLow.id = strId + "selLow";
@@ -97,6 +99,8 @@ let eqParentGroup = document.getElementById("eqControlHolder");
     // mid
     sliderMid.className = "grid-item round-slider";
     sliderMid.id = strId + " dialMid";
+    sliderMid.setAttribute("eq-type", "mid");
+    sliderMid.setAttribute("tabid", strId);
 
     selectionMid.className = "selection";
     selectionMid.id = strId + "selMid";
@@ -112,6 +116,8 @@ let eqParentGroup = document.getElementById("eqControlHolder");
     // high
     sliderHigh.className = "grid-item round-slider";
     sliderHigh.id = strId + " dialHigh";
+    sliderHigh.setAttribute("eq-type", "high");
+    sliderHigh.setAttribute("tabid", strId);
 
     selectionHigh.className = "selection";
     selectionHigh.id = strId + "selHigh";
