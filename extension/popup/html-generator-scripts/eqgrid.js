@@ -1,4 +1,4 @@
-let parentGroup = document.getElementById("audioControlHolder");
+let eqParentGroup = document.getElementById("eqControlHolder");
 /**
  * Generates the eq container with the dials and labels
  * 

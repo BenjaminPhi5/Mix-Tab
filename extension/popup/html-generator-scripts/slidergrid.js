@@ -1,3 +1,4 @@
+let sliderParentGroup = document.getElementById("sliderControlHolder");
 /**
  * Generates the grid containing the slider and its buttons.
  * 
@@ -138,7 +139,7 @@ function generateSliderGrid(id, value, title, audioSource, mute, solo){
     sliderGridContainer.appendChild(sliderGridItem);
     sliderGridContainer.appendChild(spareGridItem);
 
-    parentGroup.appendChild(sliderGridContainer);
+    sliderParentGroup.appendChild(sliderGridContainer);
 
     // call the mute or solo functions if nessesary
     if(mute){
