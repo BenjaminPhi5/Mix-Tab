@@ -1,10 +1,6 @@
 // get html element
 var tablist;
 
-let load_audio_button = document.getElementById('load-current-tab');
-let mute_all_button = document.getElementById('mute-all');
-let options_button = document.getElementById('options');
-
 let slider_holder = document.getElementById('audioControlHolder');
 
 let logbutton = document.getElementById('log');
@@ -13,17 +9,6 @@ var gainNode;
 var audios = new Map();
 var pageAudios = new Map();
 var soloEnabled = false;
-
-
-// add onclick for it
-load_audio_button.onclick = function(element) {
-    console.log("button pressed");
-
-    // request the tab capture - maybe I need to do it in here...?
-    chrome.runtime.sendMessage({
-        action: 'popup-fetch-audio-stream-request',
-    });
-}
 /*
     Getting updates from UI
 */
