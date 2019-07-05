@@ -4,7 +4,6 @@ var tablist;
 let slider_holder = document.getElementById('audioControlHolder');
 
 let logbutton = document.getElementById('log');
-let label1 = document.getElementById('testing-label');
 var gainNode;
 var audios = new Map();
 var pageAudios = new Map();
@@ -71,11 +70,8 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 window.addEventListener("input", function(event){
     // testing label if its a slider continually update a value
     let evvalue = event.target.value;
-    label1.innerHTML = "slider value: " + evvalue;
-    this.console.log("event.target: ", event.target);
 
     if(event.target.getAttribute('audiosource') === 'load'){
-        label1.innerHTML = "slider value: " + evvalue + " :" + event.target.getAttribute("audiosource");
         
         index = parseInt(event.target.id);
 
