@@ -5,7 +5,7 @@
  */
 //var sliders = document.getElementsByClassName("round-slider");
 
-function generateSliderHandle(slider){
+function generateSliderHandle(slider, value){
 	//sliders = document.getElementsByClassName("round-slider");
 	console.log("Slider:", slider);
 	
@@ -13,7 +13,7 @@ function generateSliderHandle(slider){
 		// the angle should be fetched here from the popup, and message passing should
 		// also be set up here, so that the param is passed through,
 		// however, wait until actually have frequency stuff properly setup.
-		computeStartAngle(slider, 60);
+		computeStartAngle(slider, value);
 
 		slider.addEventListener("click", round_slider_tune, false);
 		slider.addEventListener("mousedown", function(event) {
@@ -26,36 +26,68 @@ function generateSliderHandle(slider){
 	
 }
 
-
-function getAngle(percentage){
-	// -1 so that it does not wrap around to 0 when its on 100 and on max
-	// + 90 since it starts at the top, not the side
-	return (percentage*3.6) + 90 - 1;
+// these compuet the dx and dys for the dial position function
+// which ive reverse engineered to be able to input a pocentage and get out a dx, dy that could have caused that
+// and then apply that to the dial. messy code reuse but oh well.
+function interpolate(v,vmin, vmax, outstart, outend){
+	return outstart + (outend-outstart) * ((v-vmin)/(vmax-vmin));
 }
 
-function toRadians(angle){
-	// divide through  by ratio
-	return angle;
+function getX(value){
+	if(0 <= value && value <= 13){
+		return interpolate(value, 0, 13, 45, 0);
+	}
+	else if(14 <= value && value <= 38){
+		return 0;
+	}
+	else if(39 <= value && value <= 63){
+		return interpolate(value, 39, 63, 5, 100);
+	}
+	else if(64 <= value && value <= 88){
+			return 100;
+	}
+	else if(89 <= value && value <= 100){
+			return interpolate(value, 89, 100, 96, 52);
+	}
+	
 }
 
-function getdy(angle){
-	return Math.sin(angle);
+function getY(value){
+	if(0 <= value && value <= 13){
+		return 0;
+	}
+	else if(14 <= value && value <= 38){
+		return interpolate(value, 14, 38, 5, 100);
+	}
+	else if(39 <= value && value <= 63){
+		return 100;
+	}
+	else if(64 <= value && value <= 88){
+		return interpolate(value, 64, 88, 95, 0);
+	}
+	else if(89 <= value && value <= 100){
+		return 0;
+	}
 }
 
-function getdx(angle){
-	return Math.cos(angle);
+function getAngle(value){
+	if(value < 50){
+		return interpolate(value, 0, 49, 2, 176);
+	} else {
+		return interpolate(value, 50, 100, -176, -2);
+	}
 }
 
 function computeStartAngle(slider, percentage){
+
+	let dX = getX(percentage);
+	let dY = getY(percentage);
+	let angle = getAngle(percentage);
 	
-	let rads = toRadians(getAngle(percentage));
-	let dY = getdy(rads) * 100;
-	let dX = getdx(rads) * 100;
-	
-	let styleafter = document.head.appendChild(document.createElement("style"));
-	let text = slider.getElementsByClassName("slidertext")[0];
-	let output = slider.getElementsByClassName("selection")[0];
-	let value = 100;
+	let output = slider.getElementsByClassName("selection")[0],
+		text = slider.getElementsByClassName("slidertext")[0],
+		styleafter = document.head.appendChild(document.createElement("style")),
+		value = 100;
 
 	if (0 <= dX && dX < 50 && dY == 0) {
 		output.style = "clip-path: polygon(" + dX + "% " + dY + "%, 50% 0%, 50% 50%);";
@@ -72,13 +104,15 @@ function computeStartAngle(slider, percentage){
 	} else if (50 <= dX && dX <= 100 && dY == 0) {
 		output.style = "clip-path: polygon(" + dX + "% " + dY + "%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, 50% 0%, 50% 50%);";
 		value = Math.round(87.5 + (100 - dX) / 50 * 12.5);
-	}	
+	}
 	
-	styleafter.innerHTML = ".round-slider .selection:after {transform: rotate(" + -rads + "deg);}";
+	styleafter.innerHTML = ".round-slider .selection:after {transform: rotate(" + -angle + "deg);}";
 	let hue = Math.floor(value / 100 * 120),
 		saturation = Math.abs(value - 50);
 	text.innerHTML = percentage + "%";
 	text.style = "color: hsl(" + hue + ", 100%, " + saturation + "%);";
+
+	console.log("dx, dy, angle, value, percentage: " + dX + "%", dY + "% " + angle, value, percentage);
 	
 }
 
@@ -115,7 +149,7 @@ function round_slider_tune(event) {
 	}
 	dX = Math.round(dX / 150 * 100)
 	dY = Math.round(dY / 150 * 100)
-	//console.log(dX + "%", dY + "%");
+	//console.log("dx, dy: " + dX + "%", dY + "%");
 	/*if (0 < angle && angle <= 45) {
 	} else if (45 < angle && angle <= 120) {
 	} else if ((120 < angle && angle <= 180) || (-180 < angle && angle <= -120)) {
@@ -143,6 +177,7 @@ function round_slider_tune(event) {
 	text.innerHTML = value + "%";
 	text.style = "color: hsl(" + hue + ", 100%, " + saturation + "%);";
 
+	console.log("dx, dy, angle, value: " + dX + "%", dY + "% " + angle, value);
 	communicateChange(value, event.target);
 }
 

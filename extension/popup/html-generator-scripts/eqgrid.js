@@ -174,7 +174,7 @@ eqParentGroup.style.display = 'none';
     eqParentGroup.appendChild(eqPane);
 
     // get new controllers for each dial - method from the dials.js script
-    generateSliderHandle(sliderLow);
-    generateSliderHandle(sliderMid);
-    generateSliderHandle(sliderHigh);
+    generateSliderHandle(sliderLow, low);
+    generateSliderHandle(sliderMid, mid);
+    generateSliderHandle(sliderHigh, high);
  }
