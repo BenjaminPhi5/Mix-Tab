@@ -104,7 +104,7 @@ function generateSliderGrid(id, value, title, audioSource, mute, solo){
     rangeLine.type = "range";
     rangeLine.min = "0";
     rangeLine.max = "200";
-    rangeLine.value = String(value);
+    rangeLine.value = String(Math.round(value));
     rangeLine.setAttribute('audiosource', audioSource); 
     rangeLine.setAttribute("tabid", id);
     //audio source is page for contents script extracted audio, and load for popup loaded audio

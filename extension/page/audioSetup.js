@@ -29,10 +29,10 @@ function setupAudioContext(){
 
     // create the filters
     // the gain on all of these eq ranges from -20db to +20db thats the range okay. good.
-    // freq: low = 315,   mid = 2950 high = 7500
+    // freq: low = 126,   mid = 1250 high = 7500
     // Q:    low = 0.553, mid = 0.517 high = 0.567
-    var lowEq = createFilter("lowEq", 315, 0.553);
-    var midEq = createFilter("midEq", 2950, 0.517);
+    var lowEq = createFilter("lowEq", 126, 0.553);
+    var midEq = createFilter("midEq", 1250, 0.517);
     var highEq = createFilter("highEq", 7500, 0.567);
 
     // add mute node

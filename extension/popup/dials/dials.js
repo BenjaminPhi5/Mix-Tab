@@ -192,9 +192,9 @@ function communicateChange(value, target){
 	if(audios.has(tabid)){
 		let audioControl = audios.get(tabid);
 		switch(eqType){
-			case "low": audioControl.lowEq.gain.value = converted;
-			case "mid": audioControl.midEq.gain.value = converted;
-			case "high": audioControl.highEq.gain.value = converted;
+			case "low": audioControl.lowEq.gain.value = converted; break;
+			case "mid": audioControl.midEq.gain.value = converted; break;
+			case "high": audioControl.highEq.gain.value = converted; break;
 		}
 	} else {
 		// must be a page audio, send to contents script

@@ -96,7 +96,7 @@ eqParentGroup.style.display = 'none';
 
     labelLow.className = "slidertext";
     labelLow.id = strId + "lltext";
-    labelLow.innerHTML = String(mid) + "%";
+    labelLow.innerHTML = String(Math.round(low)) + "%";
 
     // mid
     sliderMid.className = "grid-item round-slider";
@@ -113,7 +113,7 @@ eqParentGroup.style.display = 'none';
 
     labelMid.className = "slidertext";
     labelMid.id = strId + "lmtext";
-    labelMid.innerHTML = String(low) + "%"; 
+    labelMid.innerHTML = String(Math.round(mid)) + "%"; 
     
     // high
     sliderHigh.className = "grid-item round-slider";
@@ -130,7 +130,7 @@ eqParentGroup.style.display = 'none';
 
     labelHigh.className = "slidertext";
     labelHigh.id = strId + "lhtext";
-    labelHigh.innerHTML = String(high) + "%";
+    labelHigh.innerHTML = String(Math.round(high)) + "%";
 
     textLow.innerHTML = "low";
     textLow.className = "infolabel eqlabel";

@@ -226,7 +226,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
             action: 'page-param-delivery', 
             key: tabid, 
             gain: audioNodes.get("gainNode").gain.value,
-            pan: audioNodes.get("panNode").gain.value,
+            pan: audioNodes.get("panNode").pan.value,
             low: audioNodes.get("lowEq").gain.value,
             mid: audioNodes.get("midEq").gain.value,
             high: audioNodes.get("highEq").gain.value,
@@ -238,9 +238,9 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
 
     else if(request.action === 'dials-param-delivery'){
         switch(request.eqType){
-			case "low": audioNodes.get("lowEq").gain.value = request.value;
-			case "mid": audioNodes.get("midEq").gain.value = request.value;
-			case "high": audioNodes.get("highEq").gain.value = request.value;
+			case "low": audioNodes.get("lowEq").gain.value = request.value; break;
+			case "mid": audioNodes.get("midEq").gain.value = request.value; break;
+			case "high": audioNodes.get("highEq").gain.value = request.value; break;
 		}
     }
 

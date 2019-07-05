@@ -186,8 +186,10 @@ function addExtraPageTab(key){
         chrome.tabs.get(key, function(tab){
             console.log("sucess to here!: ", String(pAudCont.gain * 100));
             generateSliderGrid(key, pAudCont.gain * 100, tab.title, "page",
-        pAudCont.mute, pAudCont.solo);});
-            generateEqGrid(key, ctp(pAudCont.lowEq.gain.value), ctp(pAudCont.midEq.gain.value), ctp(pAudCont.highEq.gain.value), pAudCont.title)
+            pAudCont.mute, pAudCont.solo);
+            generateEqGrid(key, ctp(pAudCont.low), ctp(pAudCont.mid), ctp(pAudCont.high), tab.title);
+        });
+            
     } else {
         pageAudios.delete(key);
     }
