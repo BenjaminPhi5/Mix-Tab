@@ -3,29 +3,29 @@
  * and some message passing for connecting to the rest of the extension,
  * for communicating values to content scripts etc etc.
  */
-var sliders = document.getElementsByClassName("round-slider");
+//var sliders = document.getElementsByClassName("round-slider");
 
-function generateSliderHandles(){
-	sliders = document.getElementsByClassName("round-slider");
-	console.log("Sliders:", sliders);
-	for (let i = 0; i < sliders.length; i++) {
+function generateSliderHandle(slider){
+	//sliders = document.getElementsByClassName("round-slider");
+	console.log("Slider:", slider);
+	
 
 		// the angle should be fetched here from the popup, and message passing should
 		// also be set up here, so that the param is passed through,
 		// however, wait until actually have frequency stuff properly setup.
-		computeStartAngle(sliders[i], 60);
+		computeStartAngle(slider, 60);
 
-		sliders[i].addEventListener("click", round_slider_tune, false);
-		sliders[i].addEventListener("mousedown", function(event) {
-			sliders[i].onmousemove = function(event) {
+		slider.addEventListener("click", round_slider_tune, false);
+		slider.addEventListener("mousedown", function(event) {
+			slider.onmousemove = function(event) {
 				if (event.buttons == 1 || event.buttons == 3) {
 					round_slider_tune(event);
 				}
 			}
 		});
-	}
+	
 }
-generateSliderHandles();
+
 
 function getAngle(percentage){
 	// -1 so that it does not wrap around to 0 when its on 100 and on max
@@ -163,7 +163,7 @@ function communicateChange(value, target){
 		}
 	} else {
 		// must be a page audio, send to contents script
-		chrome.runtime.sendMessage(tabid, {
+		chrome.tabs.sendMessage(tabid, {
 			action: "dials-param-delivery",
 			eqType: target.getAttribute("eq-type"),
 			value: converted

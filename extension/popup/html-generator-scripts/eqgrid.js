@@ -1,5 +1,5 @@
 let eqParentGroup = document.getElementById("eqControlHolder");
-
+// set eq to be invisible at start
 eqParentGroup.style.display = 'none';
 /**
  * Generates the eq container with the dials and labels
@@ -174,5 +174,7 @@ eqParentGroup.style.display = 'none';
     eqParentGroup.appendChild(eqPane);
 
     // get new controllers for each dial - method from the dials.js script
-    generateSliderHandles();
+    generateSliderHandle(sliderLow);
+    generateSliderHandle(sliderMid);
+    generateSliderHandle(sliderHigh);
  }
