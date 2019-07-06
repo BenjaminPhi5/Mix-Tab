@@ -1,6 +1,6 @@
 body {
 	min-height: 95vh;
-	min-width: 80vh;
+	width: 95vh;
 	background: linear-gradient(180deg,#DB302A 0%,#62186B 100%) no-repeat;
 	/*display: grid;*/
 	font-family: 'Ubuntu', sans-serif;

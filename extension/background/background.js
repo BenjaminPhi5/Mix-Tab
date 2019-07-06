@@ -66,7 +66,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         console.log("tabid: ", request.tabid);
         console.log("page audios before: ", pageAudioControlList);
 
-        if(!pageAudioControlList.has(request.tabid)){
+        if(!pageAudioControlList.has(request.tabid) && !audioControlList.has(request.tabid)){
 
             pageAudioControlList.set(request.tabid, {
                 gain: request.gain,
