@@ -107,3 +107,9 @@
         letter-spacing: 0.07em;
         margin-top: -2px;
 }
+.slider-lower-bound::selection{
+    background: rgba(255, 255, 255, 0);
+}
+.slider-upper-bound::selection{
+    background: rgba(255, 255, 255, 0);
+  }
