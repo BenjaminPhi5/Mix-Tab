@@ -210,11 +210,30 @@ window.addEventListener("load", function(){
 
 });
 
-
-
 window.addEventListener("close", function(){
     chrome.storage.sync.set({'sliderValue': event.target.value});
 });
 
 // should instead out the audio_stream_fetch here if you want it, and then put a button for load
 // netflix audio instead or something..? not quite sure okay.
+
+
+chrome.tabs.onUpdated.addListener(function(tabid, changeInfo, tab){
+    // update popup sliders with pages updated titles.
+    if(changeInfo.title){
+        console.log("changeInfo: ", tabid, changeInfo);
+        console.log("audios, pagesaudios: ", audios, pageAudios);
+        if(audios.has(tabid)){
+            console.log("audios");
+            audios.get(tabid).title = changeInfo.title;
+            
+        } else if(pageAudios.has(tabid)){
+            console.log("page audios");
+            pageAudios.get(tabid).title = changeInfo.title;
+        } else {
+            return;
+        }
+        document.getElementById(tabid + " info").innerHTML = changeInfo.title;
+        document.getElementById(tabid + " eqInfo").innerHTML = changeInfo.title;
+    }
+});

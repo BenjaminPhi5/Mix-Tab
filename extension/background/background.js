@@ -147,9 +147,15 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo){
 // Find out the id of a tab from when a page is loaded and pass it to the content script, so it knows its id.
 chrome.webNavigation.onCompleted.addListener(function(details){
     console.log("details found: ", details);
+    // send tab id to the page
     chrome.tabs.sendMessage(details.tabId, {
         action: 'background-tab-id-load-delivery',
         tabid: details.tabId,
         url: details.url,
     });
+});
+
+chrome.tabs.onUpdated.addListener(function(tabid, changeInfo, tab){
+    // update popup sliders with pages updated titles.
+    //console.log("change: ", changeInfo);
 });
