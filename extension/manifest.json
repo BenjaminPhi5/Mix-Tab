@@ -35,7 +35,8 @@
 
     "browser_action": {
         "default_title":"Mix Tab: Alt Z to mute, Alt S to solo",
-        "default_popup": "popup/popup.html"
+        "default_popup": "popup/popup.html",
+        "default_icon": "icons/128.png"
         
     },
 
@@ -50,6 +51,14 @@
             "all_frames": true
         }
     ],
+
+    "icons": {
+        "16": "icons/16.png",
+        "32": "icons/32.png",
+		"48": "icons/48.png",
+		"128": "icons/128.png",
+		"256": "icons/256.png"
+	},
 
     "manifest_version": 2
 
