@@ -119,7 +119,7 @@ function soloTab(tabid){
     unmuteTab(tabid);
 
     // visually solo
-    chrome.runtime.sendMessage({action: "background-visual-solo-request", id:tabid, type: " mute"});
+    chrome.runtime.sendMessage({action: "background-visual-solo-request", id:tabid, type: " solo"});
     // now set solo enabled to tru
     soloEnabled = true;
     soloTabId = tabid;
@@ -138,7 +138,7 @@ function soloTab(tabid){
             // set visual
             chrome.runtime.sendMessage({action: "background-visual-mute-request", id:key, type: " mute"});
             // send message - note MUTE IS FALSE HERE, WE DON'T SET IT TO MUTE
-            chrome.tabs.sendMessage(tabid, {action: "backgroundAudioSetup-mute-request", mute:false}); 
+            chrome.tabs.sendMessage(key, {action: "backgroundAudioSetup-mute-request", mute:false}); 
         }
     });
     
