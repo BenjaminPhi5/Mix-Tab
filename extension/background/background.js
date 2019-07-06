@@ -144,7 +144,26 @@ chrome.tabs.onRemoved.addListener(function(tabId, removeInfo){
     }
 });
 
+
+// When a tab becomes audio, send the tab id to the page script and set it running, setting up the audio context.
+// changed to this from the webkit on load thing since that was buggy and often failed. this version should not
+// since it waits for the tab to be audiable before doing anything (and therefore fulfilling the 'only init after user guesture'
+// requirement that chrome now insists on for audio).
+chrome.tabs.onUpdated.addListener(function(tabid, changeInfo, tab){
+    // update popup sliders with pages updated titles.
+    console.log("change: ", changeInfo);
+    if(changeInfo.audible){
+        chrome.tabs.sendMessage(tabid, {
+            action: 'background-tab-id-load-delivery',
+            tabid: tabid,
+            url: "",
+        });
+    }
+});
+
 // Find out the id of a tab from when a page is loaded and pass it to the content script, so it knows its id.
+/* THIS IS THE OLD WAY - SEE BELOW. NOW AUDIO ONLY LOADED UPON A USER GUESTURE THAT CAUSES AUDIO - INLINE WITH THE 
+ CHANGES TO CHROME
 chrome.webNavigation.onCompleted.addListener(function(details){
     console.log("details found: ", details);
     // send tab id to the page
@@ -154,8 +173,5 @@ chrome.webNavigation.onCompleted.addListener(function(details){
         url: details.url,
     });
 });
+*/
 
-chrome.tabs.onUpdated.addListener(function(tabid, changeInfo, tab){
-    // update popup sliders with pages updated titles.
-    //console.log("change: ", changeInfo);
-});

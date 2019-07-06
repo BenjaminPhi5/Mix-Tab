@@ -233,7 +233,13 @@ chrome.tabs.onUpdated.addListener(function(tabid, changeInfo, tab){
         } else {
             return;
         }
+        // note due to a concurrency issue, by the time it gets here, the element may have been removed from the popup
+        try{
         document.getElementById(tabid + " info").innerHTML = changeInfo.title;
         document.getElementById(tabid + " eqInfo").innerHTML = changeInfo.title;
+        } catch(err) {
+            // concurrency resolved, sliders have been removed
+            console.log(err);
+        }
     }
 });
