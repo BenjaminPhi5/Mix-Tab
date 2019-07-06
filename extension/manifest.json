@@ -3,7 +3,24 @@
     "version": "0.1",
     "description": "control all tabs' audio via one simple extension!",
 
-    "permissions": ["storage", "<all_urls>", "tabs", "activeTab", "tabCapture", "webNavigation"],
+    "permissions": ["contextMenus","storage", "<all_urls>", "tabs", "activeTab", "tabCapture", "webNavigation"],
+
+    "commands": {
+        "mute-tab": {
+            "cmMute": {
+                "default": "Alt+z",
+                "mac": "Option+z"
+            },
+            "description": "mute this tab"
+        },
+        "solo-tab": {
+            "cmSolo": {
+                "default": "Alt+s",
+                "mac": "Option+s"
+            },
+            "description": "solo this tab"
+        }
+    },
 
     "web_accessible_resources": ["popup/general.css", "popup/buttons/controlbuttons.css",
         "popup/dials/dials.css", "popup/sliders/sliders.css", "popup/dials/dials.js"],

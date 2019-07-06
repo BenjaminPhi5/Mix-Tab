@@ -8,12 +8,6 @@ var pageAudioControlList = new Map();
  * action: sender-param/info-request/modify/delivery   (where info is the specific info)
  */
 
-// on install, eventually should setup settings, for now just write to console
-chrome.runtime.onInstalled.addListener(function (){
-    console.log("extension installed");
-});
-
-
 // setup message listener, when tab audio requested, just output a log of the stream
 chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // the message listener will recieve a request message, who sent it and a callback? I think, not sure
