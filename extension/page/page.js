@@ -185,7 +185,6 @@ function sendToBackground(){
         low: audioNodes.get("lowEq").gain.value,
         mid: audioNodes.get("midEq").gain.value,
         high: audioNodes.get("highEq").gain.value,
-        title: title,
         valid:true,
         mute: mute,
         solo: solo

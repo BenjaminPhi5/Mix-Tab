@@ -76,7 +76,7 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
                 high: request.high,
                 valid: request.valid,
                 mute: request.mute,
-                title: request.title,
+                title: "unknown",
                 solo:request.solo
             });
 

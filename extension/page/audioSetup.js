@@ -17,9 +17,14 @@ function setupAudioContext(){
     audioNodes = new Map();
 
     // init the audio context
+    try{
     audioContext = new AudioContext();
     audioContextCreated = true;
     audioNodes.set("audioContext", audioContext);
+    } catch(err) {
+        audioContextCreated = false;
+        console.log("err caught:", err);
+    }
 
     // add a gain node and a pan node
     var gainNode = audioContext.createGain();
