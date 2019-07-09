@@ -210,8 +210,8 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
     // update gain node with audio
     else if(request.action === 'popup-param-modify'){
         console.log("recieved param update: ", request);
-        if(request.param === "panNode"){
-            audioNodes.get("panNode").pan.value = request.value;
+        if(request.param === 'panNode'){
+            audioNodes.get('panNode').pan.value = request.value;
         } else {
             audioNodes.get(request.param).gain.value = request.value;
         }

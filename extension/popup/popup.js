@@ -88,10 +88,10 @@ window.addEventListener("input", function(event){
     }
 
     else if(event.target.getAttribute('audiosource') === 'page'){
-        pagetabid = parseInt(event.target.id);
+        let pagetabid = parseInt(event.target.getAttribute("tabid"));
 
         if(currentStatus === "gain"){
-            gainvalue = parseInt(evvalue)/100;
+            let gainvalue = parseInt(evvalue)/100;
             // send message to page context script
             chrome.tabs.sendMessage(pagetabid, {
                 action: 'popup-param-modify',
@@ -101,7 +101,7 @@ window.addEventListener("input", function(event){
         }
         
         else if(currentStatus === "pan"){
-            panvalue = parseInt(evvalue)/100 - 1;
+            let panvalue = parseInt(evvalue)/100 - 1;
             // send message to page context script
             chrome.tabs.sendMessage(pagetabid, {
                 action: 'popup-param-modify',
@@ -159,9 +159,11 @@ function loadCapturedTabs(){
         }
     });
 }
-
+// THIS IS WHERE THINGS ARE GOING WRONG, ITS NOT GETTING CALLED ONCE FOR EACH TAB...? HMMM
+// ENSURE NO DUPLICATES AND!! SEE WHY ITS NOT ALLIGN THE TWO DIFFERETN TABS
 // load a new tab into the popup
 function addExtraTab(key){
+    console.log("add extra tab: key, pageaudios: ", key, pageAudios);
     // sanity check - if its valid
     audioCont = audios.get(key);
     if(audioCont.valid){
