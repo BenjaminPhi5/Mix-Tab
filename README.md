@@ -1,5 +1,6 @@
-# Mix-Tab:
 ![alt text](extension/icons/128.png)
+
+# Mix-Tab:
 Mix-Tab is a chromium based web extension for managing the audio of tabs currently open in your browser.
 Mix-Tab enables a number of features:
 * increase the volume to double its normal output or reduce it down to zero
