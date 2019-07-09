@@ -8,6 +8,7 @@ var gainNode;
 var audios = new Map();
 var pageAudios = new Map();
 var soloEnabled = false;
+var soloTabId = 0;
 /*
     Getting updates from UI
 */
@@ -42,8 +43,8 @@ chrome.runtime.onMessage.addListener(function(request, sendResponse){
         audioControl.low = request.low;
         audioControl.mid = request.mid;
         audioControl.high = request.high;
-        audioControl.mute = request.mute;
-        audioControl.solo = request.solo;
+        //audioControl.mute = request.mute;
+        //audioControl.solo = request.solo;
         console.log("updates value: ", pageAudios.get(request.key), pageAudios);
         addExtraPageTab(request.key);
 
@@ -128,6 +129,7 @@ function loadCapturedTabs(){
     audios = chrome.extension.getBackgroundPage().audioControlList;
     pageAudios = chrome.extension.getBackgroundPage().pageAudioControlList;
     soloEnabled = chrome.extension.getBackgroundPage().soloEnabled;
+    soloTabId = chrome.extension.getBackgroundPage().soloEnabled;
     console.log("audios:", audios);
     console.log("page audios", pageAudios);
 
@@ -136,8 +138,9 @@ function loadCapturedTabs(){
         // sanity check - if its valid
         // value is audios.get(key)
         if(value.valid){
+            // value.mute || (soloEnabled && (soloTabId != key)) means mute it visually if its muted or if something else is soloed.
             generateSliderGrid(key, value.gainNode.gain.value * 100, value.title, "load", 
-            value.mute, value.solo);
+            value.mute || (soloEnabled & !value.solo), value.solo);
             generateEqGrid(key, ctp(value.lowEq.gain.value), ctp(value.midEq.gain.value), ctp(value.highEq.gain.value), value.title);
         } else {
             // popup is the only section to modify params, therefore it is safe for the popup to do deletion
@@ -167,8 +170,9 @@ function addExtraTab(key){
     // sanity check - if its valid
     audioCont = audios.get(key);
     if(audioCont.valid){
+        // audioCont.mute || (soloEnabled && (soloTabId != key)) means mute it visually if its muted or if something else is soloed.
         generateSliderGrid(key, audioCont.gainNode.gain.value * 100, audioCont.title, "load", 
-        audioCont.mute, audioCont.solo);
+        audioCont.mute || (soloEnabled & !audioCont.solo), audioCont.solo);
         generateEqGrid(key, ctp(audioCont.lowEq.gain.value), ctp(audioCont.midEq.gain.value), ctp(audioCont.highEq.gain.value), audioCont.title);
     } else {
         // popup is the only section to modify params, therefore it is safe for the popup to do deletion
@@ -183,8 +187,9 @@ function addExtraPageTab(key){
     if(pAudCont.valid){
         chrome.tabs.get(key, function(tab){
             console.log("sucess to here!: ", String(pAudCont.gain * 100));
+            // pAudCont.mute || (soloEnabled && (soloTabId != key)) means mute it visually if its muted or if something else is soloed.
             generateSliderGrid(key, pAudCont.gain * 100, tab.title, "page",
-            pAudCont.mute, pAudCont.solo);
+            pAudCont.mute || (soloEnabled & !pAudCont.solo), pAudCont.solo);
             generateEqGrid(key, ctp(pAudCont.low), ctp(pAudCont.mid), ctp(pAudCont.high), tab.title);
         });
             

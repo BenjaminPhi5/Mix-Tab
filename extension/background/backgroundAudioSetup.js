@@ -84,9 +84,11 @@ function muteTab(tabid){
     if(audioControlList.has(tabid)){
         audioControlList.get(tabid).muteNode.gain.value = 0;
         audioControlList.get(tabid).mute = true;
+        audioControlList.get(tabid).solo = false;
     
     } else if(pageAudioControlList.has(tabid)){
         pageAudioControlList.get(tabid).mute = true;
+        pageAudioControlList.get(tabid).solo = false;
         chrome.tabs.sendMessage(tabid, {action: "backgroundAudioSetup-mute-request", mute:true});
     }
 }
@@ -120,7 +122,7 @@ function soloTab(tabid){
 
     // visually solo
     chrome.runtime.sendMessage({action: "background-visual-solo-request", id:tabid, type: " solo"});
-    // now set solo enabled to tru
+    // now set solo enabled to true
     soloEnabled = true;
     soloTabId = tabid;
     // mute everything other than this thing - but dont sent the mute param to true
@@ -128,8 +130,11 @@ function soloTab(tabid){
         if(key !== tabid){
             // set mute value
             value.muteNode.gain.value = 0;
+            value.solo = false;
             // set visual
             chrome.runtime.sendMessage({action: "background-visual-mute-request", id:key, type: " mute"});
+        } else {
+            value.solo = true;
         }
     });
 
@@ -139,9 +144,13 @@ function soloTab(tabid){
             chrome.runtime.sendMessage({action: "background-visual-mute-request", id:key, type: " mute"});
             // send message - note MUTE IS FALSE HERE, WE DON'T SET IT TO MUTE
             chrome.tabs.sendMessage(key, {action: "backgroundAudioSetup-mute-request", mute:false}); 
+            value.solo = false;
+        } else {
+            value.solo = true;
         }
     });
     
+
     // have you considered is it on mute!!!
     // have you considered something else is on solo - only let one thing solo okay DONT try a counter too faffy
 
@@ -160,6 +169,8 @@ function unsoloTab(tabid){
                 // undo mute visual
                 chrome.runtime.sendMessage({action: "background-visual-undo-request", id:key, type: " mute"});
             }
+        } else {
+            value.solo = false;
         }
     });
     pageAudioControlList.forEach(function(value, key, map){
@@ -171,6 +182,8 @@ function unsoloTab(tabid){
                 // undo mute visual
                 chrome.runtime.sendMessage({action: "background-visual-undo-request", id:key, type: " mute"});
             }
+        } else {
+            value.solo = false;
         }
     });
     
